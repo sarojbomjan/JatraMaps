@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Sun, Moon, Menu, X, Search, User } from 'lucide-react';
 import LoginModal from "./login_modal"; 
+import { Link } from "react-router-dom";
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -15,6 +16,7 @@ export default function Navbar() {
   const closeLoginModal = () => {
     setLoginModalOpen(false);
   };
+
 
   return (
     <>
@@ -55,9 +57,9 @@ export default function Navbar() {
               <button className="p-2 rounded-full text-gray-700 hover:bg-gray-100">
                 <Sun className="h-5 w-5" />
               </button>
-              <button onClick={openLoginModal} className="hidden md:block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md cursor-pointer">
+              <Link to={'/login'} className="hidden md:block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md cursor-pointer">
                 Login
-              </button>
+              </Link>
               <button className="hidden md:block px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 cursor-pointer">
                 Register
               </button>
