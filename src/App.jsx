@@ -1,10 +1,9 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 import Home from './pages/home'
-import AboutUs from './pages/about'
-import EventPage from './pages/event'
-import Navbar from './components/navbar'
-import Footer from './components/footer'
+import { Routes , Route } from 'react-router-dom'
+import Login from './pages/Login'
+import SignUp from './pages/SignUp'
 
 const App = () => {
   return (
@@ -19,6 +18,8 @@ const App = () => {
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<AboutUs/>} />
             <Route path="/events" element={<EventPage />} />
+            <Route path='/login' element={<Login/>}/>
+      <Route path='/signup' element={<SignUp/>}/>
           </Routes>
         </div>
 
