@@ -16,26 +16,26 @@ export default function Navbar() {
             {/* Logo */}
             <img src={Wheel} alt="" width={100} height={90}/>
             <div className="flex-shrink-0 flex items-center">
-              <a href="/" className="text-xl md:text-2xl font-bold text-blue-600">
+              <a href="/" className=" text-xl md:text-2xl font-bold text-orange-600">
                 JatraMaps
               </a>
             </div>
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-4">
-              <a href="/" className="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md">
+              <a href="/" className="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-orange-600 rounded-md">
                 Home
               </a>
-              <a href="/events" className="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md">
+              <a href="/events" className="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-orange-600 rounded-md">
                 Events
               </a>
-              <a href="/about" className="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md">
+              <a href="/about" className="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-orange-600 Lrounded-md">
                 About Us
               </a>
-              <a href="/blog" className="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md">
+              <a href="/blog" className="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-orange-600 rounded-md">
                 Blog
               </a>
-              <a href="/contact" className="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md">
+              <a href="/contact" className="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-orange-600 rounded-md">
                 Contact
               </a>
             </div>
@@ -48,13 +48,11 @@ export default function Navbar() {
               <button className="p-2 rounded-full text-gray-700 hover:bg-gray-100">
                 <Sun className="h-5 w-5" />
               </button>
-              <Link to={'/login'} className="hidden md:block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md cursor-pointer">
+              <Link to={'/login'} className="hidden md:block px-4 py-2 bg-white-100 text-black font-medium hover:bg-orange-600 hover:text-white rounded-md cursor-pointer">
                 Login
               </Link>
               <button>
-              <Link to={'/signup'} className="hidden md:block px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 cursor-pointer">
-                Register
-              </Link>
+            
               </button>
               <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden p-2 rounded-md text-gray-700 hover:bg-gray-100">
                 {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
