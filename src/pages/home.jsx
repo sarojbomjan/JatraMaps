@@ -1,6 +1,4 @@
 import React from 'react'
-import Navbar from '../components/navbar'
-import Footer from '../components/footer'
 import HeroSection from '../components/hero_section'
 import FeaturedEvent from '../components/featured_event'
 import UpcomingEvents from '../components/upcoming_event'
