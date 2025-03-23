@@ -8,6 +8,7 @@ const AboutUs = lazy(() => import('./pages/about'));
 const EventPage = lazy(() => import('./pages/event'));
 const Login = lazy(() => import('./pages/Login'));
 const SignUp = lazy(() => import('./pages/SignUp'));
+const Calendar = lazy(() => import('./pages/calendar'));
 
 const App = () => {
   return (
@@ -25,6 +26,7 @@ const App = () => {
               <Route path="/events" element={<EventPage />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<SignUp />} />
+              <Route path='/calendar' element={<Calendar />}/>
             </Routes>
           </Suspense>
         </div>
@@ -36,3 +38,4 @@ const App = () => {
 };
 
 export default App;
+

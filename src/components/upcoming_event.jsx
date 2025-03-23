@@ -2,12 +2,14 @@ import BiksetJatra from "../assets/Bisketjatra.jpg";
 import GhodeJatra from "../assets/GhodeJatra.jpg";
 import Dashain from "../assets/dashain.jpg";
 import Machindranath from "../assets/Machindranath.jpg";
+import { Link } from "react-router-dom";
 
 const events = [
   {
     id: 1,
-    title: "Dashain Celebration",
-    description: "Join us for Dashain in Kathmandu – Celebrate victory, family, and tradition!",
+    title: "Dashain Celebration ",
+    description:
+      "Join us for Dashain in Kathmandu – Celebrate victory, family, and tradition!",
     date: "June 22, 2024",
     location: "Nationwide (Mainly Kathmandu)",
     category: "Religious & Cultural Festival",
@@ -15,8 +17,9 @@ const events = [
   },
   {
     id: 2,
-    title: "Ghode Jatra",
-    description: "Join us for Ghode Jatra in Kathmandu – Witness thrilling horse races and cultural pride!",
+    title: "Ghode Jata",
+    description:
+      "Join us for Ghode Jatra in Kathmandu – Witness thrilling horse races and cultural pride!",
     date: "July 5, 2024",
     location: "Kathmandu",
     category: "Cultural & Equestrian Festival",
@@ -25,7 +28,8 @@ const events = [
   {
     id: 3,
     title: "Bisket Jatra",
-    description: "Join us for Bisket Jatra in Bhaktapur – Ring in the New Year with chariots and cheers!",
+    description:
+      "Join us for Bisket Jatra in Bhaktapur – Ring in the New Year with chariots and cheers!",
     date: "July 15, 2024",
     location: "Bhaktapur",
     category: "Cultural & Historical Festival",
@@ -34,15 +38,17 @@ const events = [
   {
     id: 4,
     title: "Seto Machindranath Jatra",
-    description: "Join us for Seto Machhindranath Jatra in Kathmandu – Celebrate peace and prosperity with divine chariot processions!",
+    description:
+      "Join us for Seto Machhindranath Jatra in Kathmandu – Celebrate peace and prosperity with divine chariot processions!",
     date: "August 3, 2024",
-    location: "Kathmandu",
+    location: "Kathmanduy",
     category: "Religious & Spiritual Festival",
     image: Machindranath,
   },
 ];
 
 export default function UpcomingEvents() {
+ // const navigate = useNavigate();
   return (
     <div className="py-8">
       {/* Header Section */}
@@ -50,6 +56,12 @@ export default function UpcomingEvents() {
         <div className="flex items-center justify-center w-full gap-2">
           <h2 className="text-center text-2xl font-bold">Upcoming Events</h2>
         </div>
+        <Link
+          to="/calendar"
+          className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100 transition-colors cursor-pointer"
+        >
+          View Calendar
+        </Link>
       </div>
 
       {/* Events Grid */}
@@ -57,7 +69,7 @@ export default function UpcomingEvents() {
         {events.map((event) => (
           <div
             key={event.id}
-            className="bg-white dark:bg-gray-500 rounded-lg shadow-md overflow-hidden flex flex-col"
+            className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden"
           >
             {/* Event Image */}
             <div className="aspect-video w-full overflow-hidden">
@@ -69,7 +81,7 @@ export default function UpcomingEvents() {
             </div>
 
             {/* Event Content */}
-            <div className="p-4 flex flex-col flex-grow"> 
+            <div className="p-4">
               {/* Event Title and Category */}
               <div className="flex justify-between items-start mb-2">
                 <h3 className="text-lg font-semibold">{event.title}</h3>
