@@ -30,7 +30,7 @@ const Footer = () => {
               <a href="mailto:info@jatramaps.com" className="text-gray-400 hover:text-white transition-colors">
                 <Mail className="w-5 h-5" />
               </a>
-              <a href="tel:+1234567890" className="text-gray-400 hover:text-white transition-colors">
+              <a href="tel:+9823122186" className="text-gray-400 hover:text-white transition-colors">
                 <Phone className="w-5 h-5" />
               </a>
               <a href="https://maps.google.com" className="text-gray-400 hover:text-white transition-colors">
