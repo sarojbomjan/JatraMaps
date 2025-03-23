@@ -1,13 +1,11 @@
 import { useState } from "react";
-import { Sun, Moon, Menu, X, Search, User } from 'lucide-react';
+import {  Menu, X,  User } from 'lucide-react';
 import { Link } from "react-router-dom";
 import Wheel from "../assets/Wheel.png"; 
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
-
-
+ 
   return (
     <>
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white shadow-md">
@@ -42,12 +40,7 @@ export default function Navbar() {
 
             {/* Right side buttons */}
             <div className="flex items-center space-x-2">
-              <button className="p-2 rounded-full text-gray-700 hover:bg-gray-100">
-                <Search className="h-5 w-5" />
-              </button>
-              <button className="p-2 rounded-full text-gray-700 hover:bg-gray-100">
-                <Sun className="h-5 w-5" />
-              </button>
+            
               <Link to={'/login'} className="hidden md:block px-4 py-2 bg-white-100 text-black font-medium hover:bg-orange-600 hover:text-white rounded-md cursor-pointer">
                 Login
               </Link>
@@ -81,6 +74,8 @@ export default function Navbar() {
             <a href="/contact" className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100 rounded-md">
               Contact
             </a>
+
+
             <div className="pt-4 pb-3 border-t border-gray-200">
               <div className="flex items-center px-3">
                 <div className="flex-shrink-0">
