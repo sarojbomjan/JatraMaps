@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Sun, Moon, Menu, X, Search, User } from 'lucide-react';
+import {  Menu, X,  User } from 'lucide-react';
 import { Link } from "react-router-dom";
 import Wheel from "../assets/Wheel.png"; 
 
@@ -42,12 +42,7 @@ export default function Navbar() {
 
             {/* Right side buttons */}
             <div className="flex items-center space-x-2">
-              <button className="p-2 rounded-full text-gray-700 hover:bg-gray-100">
-                <Search className="h-5 w-5" />
-              </button>
-              <button className="p-2 rounded-full text-gray-700 hover:bg-gray-100">
-                <Sun className="h-5 w-5" />
-              </button>
+            
               <Link to={'/login'} className="hidden md:block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md cursor-pointer">
                 Login
               </Link>

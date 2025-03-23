@@ -27,10 +27,10 @@ const Home = () => {
             and discover new events together.
           </p>
           <div className="flex flex-wrap justify-center gap-4 pt-4">
-            <button className="bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-2 rounded-md">
+            <button className="bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-2 rounded-md border cursor-pointer">
               Join Now
             </button>
-            <button className="bg-background border hover:bg-muted px-6 py-2 rounded-md">
+            <button className="bg-background border hover:bg-muted px-6 py-2 rounded-md cursor-pointer">
               Learn More
             </button>
           </div>

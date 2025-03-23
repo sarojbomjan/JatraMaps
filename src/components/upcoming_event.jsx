@@ -65,7 +65,7 @@ export default function UpcomingEvents() {
       </div>
 
       {/* Events Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 px-4">
         {events.map((event) => (
           <div
             key={event.id}
@@ -84,10 +84,10 @@ export default function UpcomingEvents() {
             <div className="p-4">
               {/* Event Title and Category */}
               <div className="flex justify-between items-start mb-2">
-                <h3 className="text-lg font-semibold">{event.title}</h3>
-                <span className="px-2.5 py-0.5 text-xs font-medium bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full">
+                <h3 className="text-lg font-semibold text-white">{event.title}</h3>
+                {/* <span className="px-2.5 py-0.5 text-xs font-medium bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full">
                   {event.category}
-                </span>
+                </span> */}
               </div>
 
               {/* Event Description */}
@@ -104,7 +104,7 @@ export default function UpcomingEvents() {
 
             {/* Event Footer */}
             <div className="p-4 pt-0">
-              <button className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+              <button className="w-full px-4 py-2 border text-white border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors cursor-pointer">
                 View Details
               </button>
             </div>

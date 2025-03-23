@@ -11,8 +11,8 @@ export default function FeaturedEvent() {
 
 </div>
 
-     <div className="relative overflow-hidden rounded-xl bg-gradient-to-r from-blue-500/10 to-green-500/5 border">
-      <div className="absolute inset-0 bg-[url('/placeholder.svg?height=600&width=1200')] opacity-20 bg-cover bg-center" />
+     <div className="relative rounded-xl bg-gradient-to-r from-blue-500/10 to-green-500/5 border m-5">
+      <div className="absolute inset-0 bg-orange-500 opacity-20 bg-cover bg-center" />
       <div className="relative grid grid-cols-1 md:grid-cols-2 gap-6 p-6 md:p-10">
         <div className="space-y-4">
           <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Indra Jatra</h2>
@@ -36,8 +36,8 @@ export default function FeaturedEvent() {
           </div>
 
           <div className="flex flex-wrap gap-3 pt-2">
-            <button className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-500/90">Register Now</button>
-            <button className="px-6 py-2 border border-blue-500 text-blue-500 rounded-lg hover:bg-blue-500/10">Learn More</button>
+            <button className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-500/90 cursor-pointer">Register Now</button>
+            <button className="px-6 py-2 border border-blue-500 text-blue-500 rounded-lg hover:bg-blue-500/10 cursor-pointer">Learn More</button>
           </div>
         </div>
 
@@ -56,7 +56,5 @@ export default function FeaturedEvent() {
       </div>
     </div>
     </>
-    
-   
   );
 }
