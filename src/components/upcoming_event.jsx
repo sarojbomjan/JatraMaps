@@ -2,19 +2,14 @@ import BiksetJatra from "../assets/Bisketjatra.jpg";
 import GhodeJatra from "../assets/GhodeJatra.jpg";
 import Dashain from "../assets/dashain.jpg";
 import Machindranath from "../assets/Machindranath.jpg";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const events = [
   {
     id: 1,
-<<<<<<< HEAD
     title: "Dashain Celebration ",
     description:
       "Join us for Dashain in Kathmandu – Celebrate victory, family, and tradition!",
-=======
-    title: "Dashain Celebration",
-    description: "Join us for Dashain in Kathmandu – Celebrate victory, family, and tradition!",
->>>>>>> 8fd64afb0fb73a95cbe8aeb2e19fbcdee33cb300
     date: "June 22, 2024",
     location: "Nationwide (Mainly Kathmandu)",
     category: "Religious & Cultural Festival",
@@ -22,14 +17,9 @@ const events = [
   },
   {
     id: 2,
-<<<<<<< HEAD
     title: "Ghode Jata",
     description:
       "Join us for Ghode Jatra in Kathmandu – Witness thrilling horse races and cultural pride!",
-=======
-    title: "Ghode Jatra",
-    description: "Join us for Ghode Jatra in Kathmandu – Witness thrilling horse races and cultural pride!",
->>>>>>> 8fd64afb0fb73a95cbe8aeb2e19fbcdee33cb300
     date: "July 5, 2024",
     location: "Kathmandu",
     category: "Cultural & Equestrian Festival",
@@ -38,12 +28,8 @@ const events = [
   {
     id: 3,
     title: "Bisket Jatra",
-<<<<<<< HEAD
     description:
       "Join us for Bisket Jatra in Bhaktapur – Ring in the New Year with chariots and cheers!",
-=======
-    description: "Join us for Bisket Jatra in Bhaktapur – Ring in the New Year with chariots and cheers!",
->>>>>>> 8fd64afb0fb73a95cbe8aeb2e19fbcdee33cb300
     date: "July 15, 2024",
     location: "Bhaktapur",
     category: "Cultural & Historical Festival",
@@ -52,16 +38,10 @@ const events = [
   {
     id: 4,
     title: "Seto Machindranath Jatra",
-<<<<<<< HEAD
     description:
       "Join us for Seto Machhindranath Jatra in Kathmandu – Celebrate peace and prosperity with divine chariot processions!",
     date: "August 3, 2024",
     location: "Kathmanduy",
-=======
-    description: "Join us for Seto Machhindranath Jatra in Kathmandu – Celebrate peace and prosperity with divine chariot processions!",
-    date: "August 3, 2024",
-    location: "Kathmandu",
->>>>>>> 8fd64afb0fb73a95cbe8aeb2e19fbcdee33cb300
     category: "Religious & Spiritual Festival",
     image: Machindranath,
   },
@@ -85,7 +65,7 @@ export default function UpcomingEvents() {
           className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100 transition-colors"
         >
           View Calendar
-        </button>
+        </Link>
       </div>
 
       {/* Events Grid */}

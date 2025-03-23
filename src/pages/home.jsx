@@ -1,26 +1,12 @@
-<<<<<<< HEAD
-import React from "react";
-import Navbar from "../components/navbar";
-import Footer from "../components/footer";
-import HeroSection from "../components/hero_section";
-import FeaturedEvent from "../components/featured_event";
-import UpcomingEvents from "../components/upcoming_event";
-=======
 import React from 'react'
 import HeroSection from '../components/hero_section'
 import FeaturedEvent from '../components/featured_event'
 import UpcomingEvents from '../components/upcoming_event'
->>>>>>> 8fd64afb0fb73a95cbe8aeb2e19fbcdee33cb300
 
 const Home = () => {
   return (
     <>
-<<<<<<< HEAD
-      <Navbar />
-      <HeroSection />
-=======
      <HeroSection />
->>>>>>> 8fd64afb0fb73a95cbe8aeb2e19fbcdee33cb300
 
       {/* Featured Event */}
       <section style={{ margin: "60px 0" }}>
@@ -51,12 +37,7 @@ const Home = () => {
         </div>
       </section>
 
-<<<<<<< HEAD
-      {/* Footer */}
-      <Footer />
-=======
   
->>>>>>> 8fd64afb0fb73a95cbe8aeb2e19fbcdee33cb300
     </>
   );
 };

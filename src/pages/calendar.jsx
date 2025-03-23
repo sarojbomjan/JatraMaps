@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../components/navbar";
-import Footer from "../components/footer";
 
 function CalendarPage() {
   const [date, setDate] = useState(new Date());
@@ -26,7 +24,7 @@ function CalendarPage() {
   }
   return (
     <>
-      <Navbar />
+  
       <div style={{ textAlign: "center", padding: "20px" }}>
         <h1 className="text-5xl">Event Calendar</h1>
         <Calendar onChange={setDate} value={date} tileContent={({ date }) => {
@@ -58,7 +56,7 @@ function CalendarPage() {
           Back to Home
         </button>
       </div>
-      <Footer />
+  
     </>
   );
 }
