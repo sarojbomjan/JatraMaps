@@ -8,7 +8,6 @@ import UpcomingEvents from '../components/upcoming_event'
 const Home = () => {
   return (
     <>
-     <Navbar />
      <HeroSection />
 
      {/* Featured Event */}
@@ -38,8 +37,7 @@ const Home = () => {
                 </div>
               </section>
 
-     {/* Footer */}
-     <Footer />
+  
     </>
    
   )
