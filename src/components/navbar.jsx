@@ -1,27 +1,20 @@
 import { useState } from "react";
 import { Sun, Moon, Menu, X, Search, User } from 'lucide-react';
-import LoginModal from "./login_modal"; 
+import { Link } from "react-router-dom";
+import Wheel from "../assets/Wheel.png"; 
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [loginModalOpen, setLoginModalOpen] = useState(false);
 
-  const openLoginModal = () => {
-    setLoginModalOpen(true);
-    setMobileMenuOpen(false);
-  };
-
-  const closeLoginModal = () => {
-    setLoginModalOpen(false);
-  };
 
   return (
     <>
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white shadow-md">
         <div className="container mx-auto px-4">
-          <div className="flex justify-between items-center h-16 md:h-20">
+          <div className="flex justify-between items-center">
             {/* Logo */}
+            <img src={Wheel} alt="" width={100} height={90}/>
             <div className="flex-shrink-0 flex items-center">
               <a href="/" className="text-xl md:text-2xl font-bold text-blue-600">
                 JatraMaps
@@ -55,11 +48,13 @@ export default function Navbar() {
               <button className="p-2 rounded-full text-gray-700 hover:bg-gray-100">
                 <Sun className="h-5 w-5" />
               </button>
-              <button onClick={openLoginModal} className="hidden md:block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md cursor-pointer">
+              <Link to={'/login'} className="hidden md:block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md cursor-pointer">
                 Login
-              </button>
-              <button className="hidden md:block px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 cursor-pointer">
+              </Link>
+              <button>
+              <Link to={'/signup'} className="hidden md:block px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 cursor-pointer">
                 Register
+              </Link>
               </button>
               <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden p-2 rounded-md text-gray-700 hover:bg-gray-100">
                 {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -98,7 +93,7 @@ export default function Navbar() {
                 </div>
               </div>
               <div className="mt-3 space-y-1">
-                <button onClick={openLoginModal} className="block w-full text-left px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100 rounded-md">
+                <button className="block w-full text-left px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100 rounded-md">
                   Login
                 </button>
                 <button className="block w-full text-left px-3 py-2 text-base font-medium bg-blue-600 text-white hover:bg-blue-700 rounded-md">
@@ -112,9 +107,6 @@ export default function Navbar() {
 
       {/* Spacer for fixed navbar */}
       <div className="h-16 md:h-20"></div>
-
-      {/* Login Modal */}
-      <LoginModal isOpen={loginModalOpen} onClose={closeLoginModal} />
     </>
   );
 }

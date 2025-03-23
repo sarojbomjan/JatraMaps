@@ -6,7 +6,7 @@ export default function FeaturedEvent() {
     <>
     <div className="flex items-center justify-between mb-6">
   <div className="flex items-center justify-center gap-2 w-full">
-    <h2 className="text-2xl font-bold text-center">Upcoming Events</h2>
+    <h2 className="text-2xl font-bold text-center">Featured Events</h2>
   </div>
 
 </div>
@@ -15,7 +15,6 @@ export default function FeaturedEvent() {
       <div className="absolute inset-0 bg-[url('/placeholder.svg?height=600&width=1200')] opacity-20 bg-cover bg-center" />
       <div className="relative grid grid-cols-1 md:grid-cols-2 gap-6 p-6 md:p-10">
         <div className="space-y-4">
-          {/* <div className="bg-blue-500/20 text-blue-500 hover:bg-blue-500/30 px-3 py-1 rounded-full inline-block">Featured Event</div> */}
           <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Indra Jatra</h2>
           <p className="text-muted-foreground">
           Join us for the vibrant celebration of <span className="font-bold">Indra Jatra</span>, one of Nepal's most iconic festivals! Experience the grandeur of traditional dances, colorful processions, and the divine presence of Kumari. Immerse yourself in the rich culture, music, and rituals that bring the streets of Kathmandu to life. Don't miss this unforgettable cultural extravaganza!
