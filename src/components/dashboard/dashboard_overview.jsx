@@ -196,6 +196,8 @@ const DashboardOverview = () => {
           </div>
         </div>
       </div>
+
+      {/* Recent Activity */}
    </div>    
   )
 }
