@@ -67,6 +67,20 @@ const AboutUs = () => {
           </p>
         </div>
       </div>
+        {/* Join Us Section */}
+        <div className='mt-10'>
+        <section className="text-center bg-orange-100 py-8 rounded-lg shadow-md">
+        <h2 className="text-2xl font-bold text-orange-600">Join Us!</h2>
+        <p className="text-gray-700 mt-4">
+          Be a part of the <strong>JatraMaps</strong> community and never miss
+          out on an amazing experience!<br/> Whether you’re looking to attend an
+          event or organize one, JatraMaps is your go-to platform.
+        </p>
+        <button className="mt-6 px-6 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700">
+          Start Exploring Today!
+        </button>
+      </section>
+      </div>
     </div>
   )
 }
