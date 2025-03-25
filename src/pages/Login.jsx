@@ -1,9 +1,13 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../index.css";
 import MachindranathImage from "../assets/Machindranath.jpg";
+import axios from "axios";
 
 const Login = () => {
+
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -17,9 +21,30 @@ const Login = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Login attempt with:", formData);
+    setLoading(true);
+    try{
+      const response = await axios.post("http://localhost:5000/users/login", formData);
+      console.log("Success", response.data);
+
+      if (response.data) {
+        // store tokens and user data
+        localStorage.setItem("jatramap-token", response.data.token);
+        localStorage.setItem("refreshToken", response.data.rToken)
+        localStorage.setItem("user", JSON.stringify(response.data.user));
+
+        // navigate to dashboard
+        navigate('/dashboard');
+      }
+    } catch (error){
+      console.log("Login error: ", error);
+      setError(
+        error.response?.data?.msg || error.message || "Login Failed"
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

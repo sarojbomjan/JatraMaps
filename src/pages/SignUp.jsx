@@ -1,9 +1,12 @@
 import { useState } from "react"
-import { Link } from "react-router-dom" 
+import { Link, useNavigate } from "react-router-dom" 
 import "../index.css"
 import MachindranathImage from "../assets/Machindranath.jpg" 
+import axios from "axios";
 
 const SignUp = () => {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -19,15 +22,34 @@ const SignUp = () => {
     }))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
+    setLoading(true);
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match!")
       return
     }
-    console.log("Sign up attempt with:", formData)
-    // Add your sign-up logic here (e.g., API call to register the user)
-  }
+    
+    try {
+      const response = await axios.post("http://localhost:5000/users/register", formData);
+     
+      if (response.data.success) {
+        alert("Registration Successful");
+        setFormData({
+          name: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+        });
+        navigate("/login");
+      }
+    }
+    catch(e){ 
+      alert(e.response?.data?.message || "Registration failed");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4 md:p-6 lg:p-8">
@@ -108,11 +130,12 @@ const SignUp = () => {
 
               {/* Submit Button */}
               <button
-                type="submit"
-                className="w-full py-2.5 px-4 rounded-md bg-orange-600 hover:bg-orange-700 text-white font-medium transition-colors duration-200"
-              >
-                Sign Up
-              </button>
+                  type="submit"
+                  disabled={loading}
+                  className={`w-full py-2.5 px-4 rounded-md bg-orange-600 hover:bg-orange-700 text-white font-medium transition-colors duration-200 ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
+                  >
+                  { loading ? 'Signing Up...' : 'Sign Up'}
+                </button>
             </form>
 
             {/* Divider */}

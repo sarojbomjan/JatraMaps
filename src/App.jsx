@@ -1,7 +1,7 @@
 import React, { Suspense, lazy } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Navbar from './components/navbar';
-import Footer from './components/footer';
+import { Routes, Route } from 'react-router-dom'; // Removed BrowserRouter import
+import MainLayout from './components/main_layout';
+import DashboardLayout from './components/dashboard/DashboardLayout';
 
 const Home = lazy(() => import('./pages/Home'));
 const AboutUs = lazy(() => import('./pages/about'));
@@ -12,30 +12,25 @@ const Calendar = lazy(() => import('./pages/calendar'));
 
 const App = () => {
   return (
-  
-      <div className="flex flex-col min-h-screen">
-        {/* Navbar */}
-        <Navbar />
-
-        {/* Routes */}
-        <div className="flex-grow">
-          <Suspense fallback={<div className="text-center">Loading...</div>}>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/about" element={<AboutUs />} />
-              <Route path="/events" element={<EventPage />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<SignUp />} />
-              <Route path='/calendar' element={<Calendar />}/>
-            </Routes>
-          </Suspense>
-        </div>
-
-        {/* Footer */}
-        <Footer />
-      </div>
+    <Suspense fallback={<div className="text-center">Loading...</div>}>
+      <Routes>
+        {/* Main routes with layout */}
+        <Route element={<MainLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<AboutUs />} />
+          <Route path="/events" element={<EventPage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/calendar" element={<Calendar />} />
+        </Route>
+        
+        {/* Dashboard routes with its own layout */}
+        <Route path="/dashboard" element={<DashboardLayout />}>
+          <Route index element={<div>Dashboard Home</div>} />
+        </Route>
+      </Routes>
+    </Suspense>
   );
 };
 
 export default App;
-
