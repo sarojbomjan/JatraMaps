@@ -13,9 +13,10 @@ const Calendar = lazy(() => import('./pages/calendar'));
 const App = () => {
   return (
   
-      <div className="flex flex-col min-h-screen">
+      <div className="flex flex-col min-h-screen overflow-auto scrollbar-hidden">
         {/* Navbar */}
         <Navbar />
+        
 
         {/* Routes */}
         <div className="flex-grow">
