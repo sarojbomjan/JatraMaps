@@ -16,16 +16,18 @@ export default function DashboardLayout() {
 
   return (
     <div className="dashboard min-h-screen bg-gray-50">
+
       {/* Dashboard Navigation Bar */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white shadow-md">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center">
+            
             {/* Logo */}
             <img src={Wheel} alt="Logo" width={100} height={90} />
             <div className="flex-shrink-0 flex items-center">
-              <a href="" className="text-xl md:text-2xl font-bold text-orange-600">
+              <Link to="/dashboard" className="text-xl md:text-2xl font-bold text-orange-600">
                 JatraMaps
-              </a>
+              </Link>
             </div>
 
             {/* Desktop Navigation */}
@@ -43,15 +45,16 @@ export default function DashboardLayout() {
 
             {/* Right side buttons */}
             <div className="flex items-center justify-between space-x-2">
+
               {/* Notification Icon */}
-              <button className='p-2 rounded-md text-gray-700 hover:bg-gray-100 cursor-pointer'>
+              <Link to='notification' className='p-2 rounded-md text-gray-700 hover:bg-gray-100 cursor-pointer'>
                 <Bell className='h-6 w-6'/>
-              </button>
+              </Link>
 
               {/* Profile Icon */}
-              <button className='p-2 rounded-md text-gray-700 hover:bg-gray-100 cursor-pointer'>
+              <Link to='profile-page' className='p-2 rounded-md text-gray-700 hover:bg-gray-100 cursor-pointer'>
                 <User className='h-6 w-6'/>
-              </button>
+              </Link>
 
               {/* Logout Button */}
               <button onClick={handleLogout} className="hidden md:block px-4 py-2 bg-white-100 text-black font-medium hover:bg-orange-600 hover:text-white rounded-md cursor-pointer">

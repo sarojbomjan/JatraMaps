@@ -8,6 +8,8 @@ const Login = () => {
 
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -24,14 +26,20 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setError(null); 
+
     try{
-      const response = await axios.post("http://localhost:5000/users/login", formData);
+      const response = await axios.post("http://localhost:5000/users/login", formData, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
       console.log("Success", response.data);
 
       if (response.data) {
         // store tokens and user data
-        localStorage.setItem("jatramap-token", response.data.token);
-        localStorage.setItem("refreshToken", response.data.rToken)
+        localStorage.setItem('accessToken', response.data.accessToken); 
+        localStorage.setItem('refreshToken', response.data.refreshToken);
         localStorage.setItem("user", JSON.stringify(response.data.user));
 
         // navigate to dashboard

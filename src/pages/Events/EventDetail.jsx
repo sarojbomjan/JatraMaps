@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
@@ -24,6 +24,8 @@ const EventDetail = () => {
   const { eventId } = useParams();
   const [event, setEvent] = useState(null);
   const [commentText, setCommentText] = useState("");
+  const navigate = useNavigate();
+
   const [comments, setComments] = useState([
     {
       id: "1",
@@ -128,13 +130,13 @@ const EventDetail = () => {
     <div className="max-w-4xl mx-auto px-4 py-8">
       {/* Back Button and Title */}
       <div className="mb-8">
-        <Link 
-          to="/dashboard/events"
-          className="inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
+        <button
+          onClick={() => navigate(-1)}
+          className="inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-colors cursor-pointer"
         >
           <ChevronLeft className="h-5 w-5 mr-1"/>
           Back to events
-        </Link>
+        </button>
         <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-600 mt-4">{event.title}</h1>
       </div>
 
@@ -163,6 +165,7 @@ const EventDetail = () => {
 
         {/* Event Content */}
         <div className="p-6">
+
           {/* Basic Info Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <div className="space-y-4">

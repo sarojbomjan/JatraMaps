@@ -6,6 +6,8 @@ import DashboardOverview from './pages/dashboard/dashboard_overview';
 import EventsPage from './pages/Events/event';
 import EventDetail from './pages/Events/EventDetail';
 import SavedEvent from './pages/SavedEvents/SavedEvent';
+import ProfilePage from './pages/Profile/ProfilePage';
+import Notification from './pages/Notification/Notification';
 
 const Home = lazy(() => import('./pages/Home'));
 const AboutUs = lazy(() => import('./pages/about'));
@@ -34,6 +36,8 @@ const App = () => {
           <Route path='events' element={<EventsPage />}/>
           <Route path='events/:eventId' element={<EventDetail />}/>
           <Route path='saved-events' element={<SavedEvent />}/>
+          <Route path='profile-page' element={<ProfilePage />}/>
+          <Route path='notification' element={<Notification />}/>
         </Route>
       </Routes>
     </Suspense>

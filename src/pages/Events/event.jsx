@@ -121,7 +121,7 @@ const EventsPage = () => {
               {filteredUpcomingEvents.length > 0 ? (
                 <div className="space-y-4">
                   {filteredUpcomingEvents.map((event) => (
-                    <Link to={`/dashboard/events/${event.id}`} key={event.id}>
+                    <Link to={`/dashboard/events/${event.id}`}  key={event.id}>
                       <div className="flex flex-col md:flex-row items-start md:items-center gap-4 p-4 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                         <div className="relative h-24 w-40 rounded-lg overflow-hidden flex-shrink-0">
                           <img
