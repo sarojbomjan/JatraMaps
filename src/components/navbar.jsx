@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Wheel from "../assets/Wheel.png";
 
 export default function Navbar() {
+
   const handleScrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId);
     if (element) {
@@ -30,34 +31,25 @@ export default function Navbar() {
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-4">
-              <a href="/"
-                className="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-orange-600 rounded-md"
+              <button onClick={() => handleScrollToSection("header-section")}
+                className="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-orange-600 rounded-md cursor-pointer"
               >
                 Home
-              </a>
+              </button>
               <button
                 onClick={() =>
                  handleScrollToSection("upcoming-section")
                 }
-                className="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-orange-600 rounded-md"
+                className="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-orange-600 rounded-md cursor-pointer"
               >
                 Events
               </button>
               <button onClick={() => handleScrollToSection("about-section")}
-                className="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-orange-600 Lrounded-md"
+                className="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-orange-600 Lrounded-md cursor-pointer"
               >
                 About Us
               </button>
-              <a href="/blog"
-                className="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-orange-600 rounded-md"
-              >
-                Blog
-              </a>
-              <a href="/contact"
-                className="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-orange-600 rounded-md"
-              >
-                Contact
-              </a>
+         
             </div>
 
             {/* Right side buttons */}

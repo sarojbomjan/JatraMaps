@@ -12,7 +12,7 @@ const Home = () => {
       <HeroSection />
 
       {/* Featured Event */}
-      <section style={{ margin: "60px 0" }}>
+      <section>
         <FeaturedEvent />
       </section>
 

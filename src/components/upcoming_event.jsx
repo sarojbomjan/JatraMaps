@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Home from "../pages/home";
 import HeroSection from "./hero_section";
 import FeaturedEvent from "./featured_event";
+import {Calendar} from "lucide-react";
 
 const events = [
   {
@@ -53,7 +54,7 @@ const events = [
 export default function UpcomingEvents() {
   const navigate = useNavigate();
   return (
-    <div className="py-8">
+    <div className="py-15">
       {/* <section>
         <HeroSection />
       </section> */}
@@ -63,7 +64,7 @@ export default function UpcomingEvents() {
               <FeaturedEvent />
             </section> */}
       {/* Header Section */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-6 mt-7">
         <div className="flex items-center justify-center w-full gap-2">
           <h2 className="text-center text-2xl font-bold">Upcoming Events</h2>
         </div>
@@ -71,8 +72,8 @@ export default function UpcomingEvents() {
           to="/calendar"
           className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100 transition-colors cursor-pointer m-5"
         >
-          View Calendar
-        </button>
+          {<Calendar />}
+        </Link>
       </div>
 
       {/* Events Grid */}
