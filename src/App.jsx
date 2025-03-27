@@ -9,9 +9,9 @@ import SavedEvent from './pages/SavedEvents/SavedEvent';
 import ProfilePage from './pages/Profile/ProfilePage';
 import Notification from './pages/Notification/Notification';
 
-const Home = lazy(() => import('./pages/Home'));
+const Home = lazy(() => import('./pages/home'));
 const AboutUs = lazy(() => import('./pages/about'));
-const EventPage = lazy(() => import('./pages/event'));
+// const EventPage = lazy(() => import('./pages/event'));
 const Login = lazy(() => import('./pages/Login'));
 const SignUp = lazy(() => import('./pages/SignUp'));
 const Calendar = lazy(() => import('./pages/calendar'));

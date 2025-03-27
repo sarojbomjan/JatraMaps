@@ -1,12 +1,15 @@
-import React from 'react'
-import HeroSection from '../components/hero_section'
-import FeaturedEvent from '../components/featured_event'
-import UpcomingEvents from '../components/upcoming_event'
+import React, {useRef} from "react";
+import HeroSection from "../components/hero_section";
+import FeaturedEvent from "../components/featured_event";
+import UpcomingEvents from "../components/upcoming_event";
+import AboutUs from "./about";
 
 const Home = () => {
+  const upcomingRef = useRef(null)
+  const aboutRef = useRef(null)
   return (
     <>
-     <HeroSection />
+      <HeroSection />
 
       {/* Featured Event */}
       <section style={{ margin: "60px 0" }}>
@@ -14,11 +17,15 @@ const Home = () => {
       </section>
 
       {/* Upcoming Events Section */}
-      <section>
+      <section id="upcoming-section" ref={upcomingRef}>
         <UpcomingEvents />
       </section>
 
-      {/* Community Section */}
+      <section id="about-section" ref={aboutRef}>
+        <AboutUs/>
+      </section>
+
+      {/* Community Section
       <section className="py-8 bg-muted/30 rounded-xl p-8">
         <div className="text-center space-y-4 max-w-2xl mx-auto">
           <h2 className="text-3xl font-bold">Join Our Community</h2>
@@ -35,9 +42,7 @@ const Home = () => {
             </button>
           </div>
         </div>
-      </section>
-
-  
+      </section> */}
     </>
   );
 };

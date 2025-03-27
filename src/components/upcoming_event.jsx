@@ -2,7 +2,10 @@ import BiksetJatra from "../assets/Bisketjatra.jpg";
 import GhodeJatra from "../assets/GhodeJatra.jpg";
 import Dashain from "../assets/dashain.jpg";
 import Machindranath from "../assets/Machindranath.jpg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Home from "../pages/home";
+import HeroSection from "./hero_section";
+import FeaturedEvent from "./featured_event";
 
 const events = [
   {
@@ -48,9 +51,17 @@ const events = [
 ];
 
 export default function UpcomingEvents() {
- // const navigate = useNavigate();
+  const navigate = useNavigate();
   return (
     <div className="py-8">
+      {/* <section>
+        <HeroSection />
+      </section> */}
+
+      {/* Featured Event */}
+      {/* <section style={{ margin: "60px 0" }}>
+              <FeaturedEvent />
+            </section> */}
       {/* Header Section */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center justify-center w-full gap-2">
@@ -61,7 +72,7 @@ export default function UpcomingEvents() {
           className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100 transition-colors cursor-pointer m-5"
         >
           View Calendar
-        </Link>
+        </button>
       </div>
 
       {/* Events Grid */}
@@ -84,7 +95,9 @@ export default function UpcomingEvents() {
             <div className="p-4">
               {/* Event Title and Category */}
               <div className="flex justify-between items-start mb-2">
-                <h3 className="text-lg font-semibold text-white">{event.title}</h3>
+                <h3 className="text-lg font-semibold text-white">
+                  {event.title}
+                </h3>
                 {/* <span className="px-2.5 py-0.5 text-xs font-medium bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full">
                   {event.category}
                 </span> */}
@@ -111,6 +124,9 @@ export default function UpcomingEvents() {
           </div>
         ))}
       </div>
+      {/* <section id="about">
+        <AboutUs/>
+      </section> */}
     </div>
   );
 }

@@ -27,10 +27,27 @@ function CalendarPage() {
   
       <div style={{ textAlign: "center", padding: "20px" }}>
         <h1 className="text-5xl">Event Calendar</h1>
-        <Calendar onChange={setDate} value={date} tileContent={({ date }) => {
-          const event = getEventForDate(date);
-          return event ? <div style={{ color: "red", fontWeight: "bold" }}>♡</div> : null;
-        }}/>
+        <Calendar
+  onChange={setDate}
+  value={date}
+  tileContent={({ date, view }) => {
+    const formattedDate = date.toISOString().split("T")[0];
+    const event = events.find((event) => event.date === formattedDate);
+    
+    return event ? (
+      <div style={{ 
+        background: "#ff5252", 
+        color: "white", 
+        padding: "5px", 
+        borderRadius: "5px",
+        fontWeight: "bold"
+      }}>
+        {event.title}
+      </div>
+    ) : null;
+  }}
+/>
+
         <div style={{ marginTop: "20px", padding: "10px", background: "#f8f9fa", borderRadius: "8px" }}>
         <h3>Selected Date: {date.toDateString()}</h3>
         {getEventForDate(date) ? (
