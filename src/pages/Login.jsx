@@ -42,14 +42,31 @@ const Login = () => {
         localStorage.setItem('refreshToken', response.data.refreshToken);
         localStorage.setItem("user", JSON.stringify(response.data.user));
 
-        // navigate to dashboard
-        navigate('/dashboard');
+        const userRole = response.data.user?.role?.toLowerCase();
+
+        switch(userRole) {
+          case 'admin':
+            navigate('/admin/dashboard');
+            break;
+          case 'moderator':
+            navigate('/moderator/dashboard');
+            break;
+          case 'customer':
+            navigate('/customer/dashboard');
+            break;
+          default:
+            navigate('/dashboard');
+        }
+      } else {
+        throw new Error("Invalid response from server");
       }
-    } catch (error){
-      console.log("Login error: ", error);
-      setError(
-        error.response?.data?.msg || error.message || "Login Failed"
-      );
+    } catch (error) {
+      console.error("Login error:", error);
+      const errorMessage = error.response?.data?.message || 
+                         error.message || 
+                         "Login failed. Please try again.";
+      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }

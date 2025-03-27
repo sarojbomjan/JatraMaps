@@ -25,14 +25,14 @@ export default function DashboardLayout() {
             {/* Logo */}
             <img src={Wheel} alt="Logo" width={100} height={90} />
             <div className="flex-shrink-0 flex items-center">
-              <Link to="/dashboard" className="text-xl md:text-2xl font-bold text-orange-600">
+              <Link to="/customer/dashboard" className="text-xl md:text-2xl font-bold text-orange-600">
                 JatraMaps
               </Link>
             </div>
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-4">
-              <Link to="/dashboard" className="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-orange-600 rounded-md cursor-pointer">
+              <Link to="/customer/dashboard" className="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-orange-600 rounded-md cursor-pointer">
                 Dashboard
               </Link>
               <Link to="events" className="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-orange-600 rounded-md cursor-pointer">
@@ -108,7 +108,6 @@ export default function DashboardLayout() {
     </div>
   </div>
 )}
-
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pt-20 bg-gray-200">
        <Outlet /> {/* This renders the nested routes */}
