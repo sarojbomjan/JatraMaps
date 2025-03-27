@@ -75,7 +75,7 @@ const EventsPage = () => {
       </div>
 
       {/* Search and filter */}
-      <div className='mb-6'>
+      <div className='mt-6'>
         <div className='relative'>
             <input 
             type="text" 
@@ -89,7 +89,7 @@ const EventsPage = () => {
       </div>
 
       {/* Events */}
-      <div className='bg-white dark:bg-gray-800 rounded-lg shadow'>
+      <div className='bg-white dark:bg-gray-800 rounded-lg shadow mt-6'>
         <div className='border-b border-gray-200 dark:border-gray-700'>
             <div className='flex'>
             <button

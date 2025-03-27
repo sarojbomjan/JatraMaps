@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect} from 'react'
 import UpcomingEvents from '../../components/upcoming_event';
 import { Link } from 'react-router-dom';
 import { Calendar, MapPin, Users, Clock, ChevronRight } from "lucide-react"
@@ -6,10 +6,21 @@ import BiksetJatra from "../../assets/BisketJatra.jpg"
 import GhodeJatra from "../../assets/GhodeJatra.jpg";
 import Dashain from "../../assets/dashain.jpg";
 import Machindranath from "../../assets/Machindranath.jpg";
+import { getAccessToken } from '../../utils/auth';
 
 const DashboardOverview = () => {
 
     const [activeTab, setActiveTab] = useState("upcoming");
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [user, setUser] = useState({
+        username: '',
+      });
+
+      const [formData, setFormData] = useState({
+          username: '',
+         
+        });
 
     const stats = [
         { label: "Events Attended", value: 12 },
@@ -84,15 +95,58 @@ const DashboardOverview = () => {
         },
       ]
 
+      useEffect(() => {
+        const fetchUserData = async () => {
+          try {
+            const token = getAccessToken();
+            if (!token) {
+              setError('No authentication token found');
+              setLoading(false);
+              return;
+            }
+    
+            const response = await axios.get('http://localhost:5000/users/profile', {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+              }
+            });
+            
+            const userData = {
+              username: response.data?.username,
+            }
+            setUser(userData);
+            setFormData(userData);
+            setLoading(false);
+    
+          } catch (err) {
+            if (err.response?.status === 401) {
+              clearTokens();
+              setError('Session expired. Please login again.');
+            } else {
+              setError(
+                err.response?.data?.message ||
+                err.message ||
+                'Failed to fetch user data. Please try again later.'
+              );
+            }
+            setLoading(false);
+          }
+        };
+    
+        fetchUserData();
+      }, []);
+    
+
   return (
    <div>
-    <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Dashboard</h1>
-        <p className="text-gray-600 dark:text-gray-400">Welcome back, Alex!</p>
+    <div className="mt-6">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-800">Dashboard</h1>
+        <p className="text-gray-600 dark:text-gray-400">Welcome back,{user.username}</p>
       </div>
 
       {/* Stats */}
-      <div className='grid grid-cols-2 md:grid-cols-4 gap-4 mb-8'>
+      <div className='grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 mt-5'>
         {stats.map((stats, index) => (
             <div key={index} className='bg-white dark:bg-gray-800 rounded-lg shadow p-4'>
                 <p className='text-sm text-gray-500 dark:text-gray-400'>
