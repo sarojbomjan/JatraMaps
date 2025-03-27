@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom"
 import "../index.css"
 import MachindranathImage from "../assets/Machindranath.jpg" 
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -40,14 +41,16 @@ const SignUp = () => {
       const response = await axios.post("http://localhost:5000/users/register", userData);
      
       if (response.data) {
-        alert("Registration Successful");
+        toast.success("Registration Successful! Redirecting to login...");
         setFormData({
           name: "",
           email: "",
           password: "",
           confirmPassword: "",
         });
-        navigate("/login");
+        setTimeout(() => {
+          navigate("/login");
+        }, 2000);
       }
     }
     catch(e){ 
@@ -59,6 +62,32 @@ const SignUp = () => {
 
   return (
     <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4 md:p-6 lg:p-8">
+
+       {/* Toast Notifications */}
+       <Toaster 
+        position="top-center"
+        toastOptions={{
+          style: {
+            background: '#1e293b', // slate-800
+            color: '#fff',
+          },
+          success: {
+            duration: 3000,
+            iconTheme: {
+              primary: '#22c55e', // green-500
+              secondary: '#fff',
+            },
+          },
+          error: {
+            duration: 4000,
+            iconTheme: {
+              primary: '#ef4444', // red-500
+              secondary: '#fff',
+            },
+          },
+        }}
+      />
+
       <div className="max-w-5xl w-full flex flex-col md:flex-row rounded-xl overflow-hidden shadow-2xl">
         {/* Image section */}
         <div className="relative w-full md:w-1/2 h-56 sm:h-64 md:h-auto">
