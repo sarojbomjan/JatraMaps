@@ -121,7 +121,7 @@ const EventsPage = () => {
               {filteredUpcomingEvents.length > 0 ? (
                 <div className="space-y-4">
                   {filteredUpcomingEvents.map((event) => (
-                    <Link to={`/dashboard/events/${event.id}`}  key={event.id}>
+                    <Link to={`/customer/dashboard/events/${event.id}`}  key={event.id}>
                       <div className="flex flex-col md:flex-row items-start md:items-center gap-4 p-4 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                         <div className="relative h-24 w-40 rounded-lg overflow-hidden flex-shrink-0">
                           <img
@@ -170,7 +170,7 @@ const EventsPage = () => {
                       Clear search
                     </button>
                   ) : (
-                    <Link to="/events" className="mt-2 inline-block text-blue-600 dark:text-blue-400 hover:underline">
+                    <Link to="/customer/dashboard/events" className="mt-2 inline-block text-blue-600 dark:text-blue-400 hover:underline">
                       Browse events
                     </Link>
                   )}
@@ -182,7 +182,7 @@ const EventsPage = () => {
               {filteredPastEvents.length > 0 ? (
                 <div className="space-y-4">
                   {filteredPastEvents.map((event) => (
-                    <Link to={`/dashboard/events/${event.id}`} key={event.id}>
+                    <Link to={`/customer/dashboard/events/${event.id}`} key={event.id}>
                       <div className="flex flex-col md:flex-row items-start md:items-center gap-4 p-4 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                         <div className="relative h-24 w-40 rounded-lg overflow-hidden flex-shrink-0">
                           <img

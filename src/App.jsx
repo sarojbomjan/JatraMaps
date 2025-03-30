@@ -9,8 +9,9 @@ import SavedEvent from './pages/SavedEvents/SavedEvent';
 import ProfilePage from './pages/Profile/ProfilePage';
 import Notification from './pages/Notification/Notification';
 import EventPage from './pages/event';
-import AdminDashboard from './pages/admindashboard/dashboard';
 import ModeratorDashboard from './pages/moderatordashboard/dashboard';
+import AdminDashboardLayout from './pages/Admin/dashboard/dashboard_layout';
+import AdminDashboardOverview from './pages/Admin/dashboard/dashboard_overview';
 
 const Home = lazy(() => import('./pages/home'));
 const AboutUs = lazy(() => import('./pages/about'));
@@ -43,7 +44,11 @@ const App = () => {
           <Route path='notification' element={<Notification />}/>
         </Route>
 
-        <Route path='/admin/dashboard' element={<AdminDashboard />}/>
+        <Route path='/admin/dashboard' element={<AdminDashboardLayout />}>
+          <Route index element={<AdminDashboardOverview />}/>
+        </Route>
+        
+        
         <Route path='/moderator/dashboard' element={<ModeratorDashboard />}/>
       </Routes>
     </Suspense>

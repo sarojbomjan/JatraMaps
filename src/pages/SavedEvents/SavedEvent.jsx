@@ -86,7 +86,7 @@ const SavedEvent = () => {
                     </div>
                     <div className="flex-grow">
                       <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                        <Link to={`/dashboard/events/${event.id}`}  >{event.title}</Link>
+                        <Link to={`/customer/dashboard/events/${event.id}`}  >{event.title}</Link>
                       </h3>
                       <div className="mt-2 space-y-1">
                         <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
@@ -109,7 +109,7 @@ const SavedEvent = () => {
                     </div>
                     <div className="flex space-x-2">
                       <Link
-                      to={`/dashboard/events/${event.id}`}
+                      to={`/customer/dashboard/events/${event.id}`}
                         className="text-blue-600 dark:text-blue-400 hover:underline text-sm font-medium"
                       >
                         View
@@ -139,7 +139,7 @@ const SavedEvent = () => {
                   Clear search
                 </button>
               ) : (
-                <Link to="/events" className="inline-block text-blue-600 dark:text-blue-400 hover:underline">
+                <Link to="/customer/dashboard/events" className="inline-block text-blue-600 dark:text-blue-400 hover:underline">
                   Browse events
                 </Link>
               )}

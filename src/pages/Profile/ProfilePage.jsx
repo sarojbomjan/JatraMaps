@@ -202,7 +202,7 @@ const ProfilePage = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className='mt-6'>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Profile Settings</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-700">Profile Settings</h1>
         <p className="text-gray-600 dark:text-gray-400">Manage your account settings</p>
       </div>
 

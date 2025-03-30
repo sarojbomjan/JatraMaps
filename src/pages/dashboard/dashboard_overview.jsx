@@ -178,7 +178,7 @@ const DashboardOverview = () => {
               {upcomingEvents.length > 0 ? (
                 <div className="space-y-4">
                   {upcomingEvents.map((event) => (
-                    <Link to={`/dashboard/events/${event.id}`} key={event.id}>
+                    <Link to={`/customer/dashboard/events/${event.id}`} key={event.id}>
                       <div className="flex flex-col md:flex-row items-start md:items-center gap-4 p-4 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                         <div className="relative h-24 w-40 rounded-lg overflow-hidden flex-shrink-0">
                             <img src={event.image} alt={event.title} className='object-cover'/>
@@ -213,7 +213,7 @@ const DashboardOverview = () => {
               ) : (
                 <div className="text-center py-8">
                   <p className="text-gray-500 dark:text-gray-400">You don't have any upcoming events.</p>
-                  <Link to="/events" className="mt-2 inline-block text-blue-600 dark:text-blue-400 hover:underline">
+                  <Link to="/customer/dashboard/events" className="mt-2 inline-block text-blue-600 dark:text-blue-400 hover:underline">
                     Browse events
                   </Link>
                 </div>
@@ -224,7 +224,7 @@ const DashboardOverview = () => {
               {pastEvents.length > 0 ? (
                 <div className="space-y-4">
                   {pastEvents.map((event) => (
-                    <Link to={`/dashboard/events/${event.id}`} key={event.id}>
+                    <Link to={`/customer/dashboard/events/${event.id}`} key={event.id}>
                       <div className="flex flex-col md:flex-row items-start md:items-center gap-4 p-4 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                         <div className="relative h-24 w-40 rounded-lg overflow-hidden flex-shrink-0">
                             <img src={event.image} alt={event.title} className='object-cover'/>
