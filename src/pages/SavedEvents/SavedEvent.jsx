@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Calendar, MapPin, Users, Clock, Search, Bookmark, X } from "lucide-react"
-import BiksetJatra from "../../assets/BisketJatra.jpg"
+import BiksetJatra from "../../assets/Bisketjatra.jpg"
 import GhodeJatra from "../../assets/GhodeJatra.jpg";
 import { Link } from 'react-router-dom';
 

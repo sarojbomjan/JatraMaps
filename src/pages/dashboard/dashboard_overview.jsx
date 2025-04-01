@@ -2,7 +2,7 @@ import React, { useState, useEffect} from 'react'
 import UpcomingEvents from '../../components/upcoming_event';
 import { Link } from 'react-router-dom';
 import { Calendar, MapPin, Users, Clock, ChevronRight } from "lucide-react"
-import BiksetJatra from "../../assets/BisketJatra.jpg"
+import BiksetJatra from "../../assets/Bisketjatra.jpg"
 import GhodeJatra from "../../assets/GhodeJatra.jpg";
 import Dashain from "../../assets/dashain.jpg";
 import Machindranath from "../../assets/Machindranath.jpg";
@@ -266,7 +266,7 @@ const DashboardOverview = () => {
 
           <div className="mt-4 text-center">
             <Link
-              to="/dashboard/events"
+              to="/customer/dashboard/events"
               className="text-blue-600 dark:text-blue-400 hover:underline text-sm font-medium"
             >
               View all events
