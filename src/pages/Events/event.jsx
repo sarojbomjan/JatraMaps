@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import BiksetJatra from "../../assets/BisketJatra.jpg"
+import BiksetJatra from "../../assets/Bisketjatra.jpg"
 import GhodeJatra from "../../assets/GhodeJatra.jpg";
 import Dashain from "../../assets/dashain.jpg";
 import Machindranath from "../../assets/Machindranath.jpg";

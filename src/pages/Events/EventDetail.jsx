@@ -17,7 +17,7 @@ import {
   Building,
   Ticket
 } from "lucide-react"
-import BiksetJatra from "../../assets/BisketJatra.jpg"
+import BiksetJatra from "../../assets/Bisketjatra.jpg"
 import GhodeJatra from "../../assets/GhodeJatra.jpg";
 
 const EventDetail = () => {
