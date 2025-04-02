@@ -1,5 +1,5 @@
 import React, { useState, useContext, createContext } from 'react'
-import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Link, Outlet, replace, useLocation, useNavigate } from 'react-router-dom';
 import {
   Calendar,
   Users,
@@ -26,6 +26,7 @@ import {
 import UserLogo from "../../../assets/user.jpg";
 import { Sidebar, SidebarContext, SidebarItem } from '../sidebar';
 import { useSidebar } from '../../../utils/useSiderbar';
+import { clearTokens } from '../../../utils/auth';
 
 const AdminDashboardLayout = () => {
   const [expanded, setExpanded] = useState(false);
@@ -34,17 +35,27 @@ const AdminDashboardLayout = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleLogout = () => {
-    console.log('User logged out');
-    navigate('/login');
+    try{
+      clearTokens();
+
+      navigate('/login', {replace: true});
+  
+      window.location.reload();
+    } catch (err) {
+      console.error('Logout failed:', error);
+      // Fallback: Clear tokens even if API call fails
+      clearTokens();
+     // navigate('/login');
+    }
+    
   };
 
   const navigation = [
     { name: "Dashboard", to: "/admin/dashboard", icon: <LayoutDashboard className="h-5 w-5" />, active: location.pathname === "/admin" },
     { name: "Events", to: "/admin/dashboard/manageevents", icon: <Calendar className="h-5 w-5" />, active: location.pathname.startsWith("/admin/events") },
     { name: "Users", to: "/admin/users", icon: <Users className="h-5 w-5" />, active: location.pathname.startsWith("/admin/users") },
-    { name: "Categories", to: "/admin/categories", icon: <Tag className="h-5 w-5" />, active: location.pathname.startsWith("/admin/categories") },
-    { name: "Site Settings", to: "/admin/settings", icon: <Settings className="h-5 w-5" />, active: location.pathname.startsWith("/admin/settings") },
-  ];
+  ]
+    
 
   return (
     <SidebarContext.Provider value={{ expanded, setExpanded }}>
@@ -87,6 +98,13 @@ const AdminDashboardLayout = () => {
                 <span className="ml-3">{item.name}</span>
               </Link>
             ))}
+            <button
+              onClick={handleLogout}
+              className="flex items-center w-full px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-md transition"
+            >
+              <LogOut className="h-5 w-5" />
+              <span className="ml-3">Logout</span>
+            </button>
           </nav>
         </div>
 
@@ -102,6 +120,12 @@ const AdminDashboardLayout = () => {
                 to={item.to}
               />
             ))}
+            <SidebarItem
+              icon={<LogOut className="h-5 w-5" />}
+              text="Logout"
+              onClick={handleLogout}
+              className="text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20"
+            />
           </Sidebar>   
         </div>
         

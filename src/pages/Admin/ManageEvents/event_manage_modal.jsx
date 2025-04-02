@@ -1,15 +1,12 @@
 import { useState, useRef } from "react";
 import { X, Calendar, Clock, MapPin, Tag, ImageIcon, Save, Upload } from "lucide-react";
-import axios from "axios";
-import CustomToaster from "../../../utils/toast";
 import toast from "react-hot-toast";
+import { createEvent } from "../../../utils/eventService";
 
-export default function EventFormModal({ isOpen, onClose, onSave }) {
+export default function EventFormModal({ isOpen, onClose, onEventCreated}) {
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [successMessage, setSuccessMessage] = useState(null);
-
 
   const [formData, setFormData] = useState({
     title: "",
@@ -57,14 +54,15 @@ export default function EventFormModal({ isOpen, onClose, onSave }) {
     fileInputRef.current.click();
   };
 
+  // create event
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
     setIsLoading(true);
     setError(null);
   
     try {
       const formDataToSend = new FormData();
-      // Append ALL required fields
       formDataToSend.append('title', formData.title);
       formDataToSend.append('description', formData.description);
       formDataToSend.append('date', formData.date);
@@ -74,44 +72,31 @@ export default function EventFormModal({ isOpen, onClose, onSave }) {
       formDataToSend.append('organizer', formData.organizer);
       formDataToSend.append('price', formData.price);
       formDataToSend.append('status', formData.status);
+      
       if (formData.image) {
         formDataToSend.append('image', formData.image);
       }
   
-      const response = await axios.post('http://localhost:5000/events', formDataToSend, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
-  
-      if (!response.data) {
-        throw new Error('Empty response from server');
-      }
+      // Call createEvent with the form data
+      const createdEvent = await createEvent(formDataToSend);
       
-      toast.success("Event created successfully")
-      onSave(response.data);
+      // Show success message
+      toast.success("Event created successfully!", { id: "event-success" });
+
+      if (onEventCreated) {
+        onEventCreated();
+      }
+      // Reset the form after successful submission
       resetForm();
+      onClose();
     } catch (error) {
-      console.error('Full error:', error);
-      
-      // Improved error message handling
-      let errorMessage = 'Failed to create event';
-      
-      if (error.response) {
-        // The request was made and the server responded
-        errorMessage = error.response.data?.error || 
-                      error.response.data?.message || 
-                      `Server error: ${error.response.status}`;
-      } else if (error.request) {
-        // The request was made but no response received
-        errorMessage = 'No response from server - check if backend is running';
-      }
-      
-      setError(errorMessage);
+      console.error("Error creating event", error);
+      //setError(error.message || "Failed to create event");
+      toast.error("Failed to create event");
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
   const resetForm = () => {
     if (formData.previewImage) {
@@ -321,7 +306,7 @@ export default function EventFormModal({ isOpen, onClose, onSave }) {
                 <button
                   type="button"
                   onClick={triggerFileInput}
-                  className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-md text-gray-100 hover:bg-gray-50"
+                  className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-md text-gray-100 hover:bg-gray-800"
                 >
                   <Upload className="h-4 w-4" />
                   Upload Image

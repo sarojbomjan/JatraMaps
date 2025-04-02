@@ -14,10 +14,12 @@ import {
     Upload,
     MoreHorizontal,
   } from "lucide-react"
-import { useEffect, useState } from "react"
+import { useEffect, useReducer, useState } from "react"
 import EventFormModal from "./event_manage_modal"
 import BisketJatra from "../../../assets/Bisketjatra.jpg"
-import { createEvent, deleteEvent, getEvents } from "../../../utils/eventService"
+import { deleteEvent, getEvents } from "../../../utils/eventService"
+import toast,{ Toaster} from "react-hot-toast"
+import { showConfirmationToast } from "../../../utils/toast"
 
 export default function EventManagement(){
 
@@ -26,11 +28,12 @@ export default function EventManagement(){
   const [filterCategory, setFilterCategory] = useState("all")
   const [sortBy, setSortBy] = useState("newest")
   const [selectedEvents, setSelectedEvents] = useState([])
-  const [showBulkActions, setShowBulkActions] = useState(false)
   const [showEventModal, setShowEventModal] = useState(false)
   const [isLoading, setIsLoading] = useState(false);
   const [events, setEvents] = useState([]);
   const [error, setError] = useState(null);
+
+  const [reducerValue, forceUpdate] = useReducer(x=> x+1,0);
 
   // fetch events
   useEffect(() => {
@@ -50,7 +53,7 @@ export default function EventManagement(){
     };
 
     fetchEvents();
-  }, []);
+  }, [reducerValue]);
 
 
   // Filter events based on search query, status and category
@@ -96,61 +99,52 @@ export default function EventManagement(){
     if (selectedEvents.length === sortedEvents.length) {
       setSelectedEvents([])
     } else {
-      setSelectedEvents(sortedEvents.map((event) => event.id))
+      setSelectedEvents(sortedEvents.map((event) => event._id))
     }
   }
 
-  // create the event
-  const handleSaveEvent = async (eventData) => {
-      try{
-        const savedEvent = await createEvent(eventData);
-        setEvents([...events, savedEvent]);
-        setShowEventModal(false);
-      } catch (err) {
-        console.log("Error creating event;", err);
-      }
-    }
+ // Single delete
+ const handleDeleteEvent = async (id) => {
+  if (!selectedEvents.includes(id)) {
+    toast.error("Please select the event first");
+    return;
+  }
 
-  // handle delete event
-  // const handleDeleteEvent = async (id) => {
-  //   try {
-  //     await deleteEvent(id);
-  //     setEvents(events.filter(event => event.id !== id));
-  //     setSelectedEvents(selectedEvents.filter(eventId => eventId !== id));
-  //   } catch (err) {
-  //     console.error("Error deleting evenr", err);
-  //   }
-  // };
-
-  const handleDeleteEvent = async (id) => {
-    try {
-      await deleteEvent(id);
-      setEvents(events.filter(event => event._id !== id));
-      setSelectedEvents(selectedEvents.filter(eventId => eventId !== id));
-      // Show success toast
-      toast.success('Event deleted successfully');
-    } catch (error) {
-      console.error("Delete error:", error);
-      toast.error(`Delete failed: ${error.message}`);
-      
-      // Special case - if not found, remove from UI anyway
-      if (error.status === 404) {
+  showConfirmationToast(
+    "Are you sure you want to delete this event?",
+    async () => {
+      try {
+        await deleteEvent(id);
         setEvents(events.filter(event => event._id !== id));
+        setSelectedEvents(selectedEvents.filter(eventId => eventId !== id));
+        toast.success("Event deleted successfully");
+      } catch (error) {
+        toast.error(`Delete failed: ${error.message}`);
       }
     }
-  };
+  );
+};
 
-  // handler for bulk delete
-  const handleBulkDelete = async () => {
-    try {
-      await Promise.all(selectedEvents.map(id => deleteEvent(id)));
-      setEvents(events.filter(event => !selectedEvents.includes(event.id)));
-      setSelectedEvents([]);
-    } catch (error) {
-      console.error("Error during bulk delete:", error);
-      // Show error message to user
+// Bulk delete
+const handleBulkDelete = async () => {
+  if (selectedEvents.length === 0) {
+    toast.error("Please select events to delete");
+    return;
+  }
+  showConfirmationToast(
+    `Are you sure you want to delete ${selectedEvents.length} selected events?`,
+    async () => {
+      try {
+        await Promise.all(selectedEvents.map(id => deleteEvent(id)));
+        setEvents(events.filter(event => !selectedEvents.includes(event._id)));
+        setSelectedEvents([]);
+        toast.success(`${selectedEvents.length} events deleted successfully`);
+      } catch (error) {
+        toast.error("Failed to delete selected events");
+      }
     }
-  };
+  );
+};
 
   const getStatusBadge = (status) => {
     switch (status) {
@@ -198,13 +192,9 @@ export default function EventManagement(){
     }
   }
 
-  // const handleEventSave = (savedEvent) => {
-  //   // You can update your events list here if needed
-  //   console.log('New event created:', savedEvent);
-  // }
-
     return (
         <div>
+           <Toaster position="top-center" />
             <div className="m-6 flex justify-between items-center">
                 <div>
                     <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Event Management</h1>
@@ -312,7 +302,11 @@ export default function EventManagement(){
                 </div>
                 <div className="flex gap-2">
                     <button className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded">Approve</button>
-                    <button className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-sm rounded">Delete</button>
+                    <button className={`px-3 py-1 bg-red-600 text-white text-sm rounded ${
+                          selectedEvents.length === 0 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-red-700'
+                          }`}
+                        onClick={handleBulkDelete}
+                        disabled={selectedEvents.length === 0}>Delete</button>
                     <button className="px-3 py-1 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded">
                         Export
                     </button>
@@ -379,23 +373,26 @@ export default function EventManagement(){
             <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
               {sortedEvents.length > 0 ? (
                 sortedEvents.map((event) => (
-                  <tr key={event.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                  <tr key={event._id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <input
                         type="checkbox"
                         className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                        checked={selectedEvents.includes(event.id)}
-                        onChange={() => handleSelectEvent(event.id)}
+                        checked={selectedEvents.includes(event._id)} 
+                        onChange={() => handleSelectEvent(event._id)} 
                       />
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <div className="flex-shrink-0 h-10 w-10">
-                          <img
-                            src={event.image || "/placeholder.svg"}
-                            alt={event.title}
-                            className="h-10 w-10 rounded object-cover"
-                          />
+                        
+                      {event.image && (
+                          <img 
+                                src={event.image.url} 
+                               alt={event.title}
+                                className="event-image"
+                                  />
+                        )}
                         </div>
                         <div className="ml-4">
                           <div className="text-sm font-medium text-gray-900 dark:text-gray-100">{event.title}</div>
@@ -422,9 +419,15 @@ export default function EventManagement(){
                         <button className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300">
                           <Edit className="h-4 w-4" />
                         </button>
-                        <button onClick={() => handleDeleteEvent(event.id)} className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">
-                          <Trash2 className="h-4 w-4" />
-                        </button>
+                        <button 
+                           onClick={() => handleDeleteEvent(event._id)}
+                               className={`text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 ${
+                            !selectedEvents.includes(event._id) ? 'opacity-50 cursor-not-allowed' : ''
+                                }`}
+                                  disabled={!selectedEvents.includes(event._id)}
+                                  >
+                                <Trash2 className="h-4 w-4" />
+                          </button>
                         <div className="relative">
                           <button className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
                             <MoreHorizontal className="h-4 w-4" />
@@ -510,7 +513,7 @@ export default function EventManagement(){
       </div>
 
         {/* Event Form Modal */}
-      <EventFormModal isOpen={showEventModal} onClose={() => setShowEventModal(false)} onSave={handleSaveEvent} />
+      <EventFormModal isOpen={showEventModal} onClose={() => setShowEventModal(false)}  onEventCreated={forceUpdate} />
         </div>
     )
 }
