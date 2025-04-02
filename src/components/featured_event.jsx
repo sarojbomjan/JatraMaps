@@ -4,7 +4,7 @@ import ShwetBhairav from "../assets/ShwetBhairav.jpg";
 export default function FeaturedEvent() {
   return (
     <>
-    <div className="flex items-center justify-between mb-6">
+    <div className="flex items-center justify-between mb-6 mt-20">
   <div className="flex items-center justify-center gap-2 w-full">
     <h2 className="text-2xl font-bold text-center">Featured Events</h2>
   </div>

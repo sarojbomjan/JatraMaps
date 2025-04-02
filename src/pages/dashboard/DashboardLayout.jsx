@@ -16,42 +16,45 @@ export default function DashboardLayout() {
 
   return (
     <div className="dashboard min-h-screen bg-gray-50">
+
       {/* Dashboard Navigation Bar */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white shadow-md">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center">
+            
             {/* Logo */}
             <img src={Wheel} alt="Logo" width={100} height={90} />
             <div className="flex-shrink-0 flex items-center">
-              <a href="" className="text-xl md:text-2xl font-bold text-orange-600">
+              <Link to="/customer/dashboard" className="text-xl md:text-2xl font-bold text-orange-600">
                 JatraMaps
-              </a>
+              </Link>
             </div>
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-4">
-              <a href="#" className="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-orange-600 rounded-md">
+              <Link to="/customer/dashboard" className="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-orange-600 rounded-md cursor-pointer">
                 Dashboard
-              </a>
-              <a href="#" className="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-orange-600 rounded-md">
+              </Link>
+              <Link to="events" className="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-orange-600 rounded-md cursor-pointer">
                 My Events
-              </a>
-              <a href="#" className="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-orange-600 rounded-md">
+              </Link>
+              <Link to="saved-events" className="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-orange-600 rounded-md cursor-pointer">
                 Saved Events
-              </a>
+              </Link>
             </div>
 
             {/* Right side buttons */}
             <div className="flex items-center justify-between space-x-2">
+
               {/* Notification Icon */}
-              <button className='p-2 rounded-md text-gray-700 hover:bg-gray-100 cursor-pointer'>
+              <Link to='notification' className='p-2 rounded-md text-gray-700 hover:bg-gray-100 cursor-pointer'>
                 <Bell className='h-6 w-6'/>
-              </button>
+              </Link>
 
               {/* Profile Icon */}
-              <button className='p-2 rounded-md text-gray-700 hover:bg-gray-100 cursor-pointer'>
+              <Link to='profile-page' className='p-2 rounded-md text-gray-700 hover:bg-gray-100 cursor-pointer'>
                 <User className='h-6 w-6'/>
-              </button>
+              </Link>
 
               {/* Logout Button */}
               <button onClick={handleLogout} className="hidden md:block px-4 py-2 bg-white-100 text-black font-medium hover:bg-orange-600 hover:text-white rounded-md cursor-pointer">
@@ -88,7 +91,7 @@ export default function DashboardLayout() {
           My Events
         </Link>
         <Link 
-          to="/about" 
+          to="/saved" 
           className="block w-full text-center py-3 text-lg font-medium text-gray-700 hover:bg-gray-100 hover:text-orange-600 rounded-md"
           onClick={() => setMobileMenuOpen(false)}
         >
@@ -105,9 +108,8 @@ export default function DashboardLayout() {
     </div>
   </div>
 )}
-
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pt-20">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pt-20 bg-gray-200">
        <Outlet /> {/* This renders the nested routes */}
       </main>
     </div>

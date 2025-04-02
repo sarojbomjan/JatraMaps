@@ -2,7 +2,7 @@ import React from 'react';
 
 const HeroSection = () => {
   return (
-    <section className="relative bg-gradient-to-r from-orange-600 to-red-500 dark:from-orange-800 dark:to-red-800 text-white py-16 md:py-24">
+    <section className="relative bg-gradient-to-r from-orange-600 to-red-500 dark:from-orange-800 dark:to-red-800 text-white py-16 md:py-28" id='header-section'>
       {/* Background Image with Transparency */}
       <div 
         className="absolute inset-0 bg-cover bg-center opacity-50"
