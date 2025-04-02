@@ -28,7 +28,7 @@ import { Sidebar, SidebarContext, SidebarItem } from '../sidebar';
 import { useSidebar } from '../../../utils/useSiderbar';
 
 const AdminDashboardLayout = () => {
-  const [expanded, setExpanded] = useState(true);
+  const [expanded, setExpanded] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -39,8 +39,8 @@ const AdminDashboardLayout = () => {
   };
 
   const navigation = [
-    { name: "Dashboard", to: "/admin", icon: <LayoutDashboard className="h-5 w-5" />, active: location.pathname === "/admin" },
-    { name: "Events", to: "/admin/events", icon: <Calendar className="h-5 w-5" />, active: location.pathname.startsWith("/admin/events") },
+    { name: "Dashboard", to: "/admin/dashboard", icon: <LayoutDashboard className="h-5 w-5" />, active: location.pathname === "/admin" },
+    { name: "Events", to: "/admin/dashboard/manageevents", icon: <Calendar className="h-5 w-5" />, active: location.pathname.startsWith("/admin/events") },
     { name: "Users", to: "/admin/users", icon: <Users className="h-5 w-5" />, active: location.pathname.startsWith("/admin/users") },
     { name: "Categories", to: "/admin/categories", icon: <Tag className="h-5 w-5" />, active: location.pathname.startsWith("/admin/categories") },
     { name: "Site Settings", to: "/admin/settings", icon: <Settings className="h-5 w-5" />, active: location.pathname.startsWith("/admin/settings") },

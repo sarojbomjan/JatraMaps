@@ -7,7 +7,7 @@ import {
   Users,
   Settings,
   Tag,
-  MoreVertical
+  MoreVertical,
 } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 import Userimg from "../../assets/user.jpg"
@@ -15,7 +15,7 @@ import Userimg from "../../assets/user.jpg"
 export const SidebarContext = createContext();
 
 export function Sidebar({ children }) {
-  const [expanded, setExpanded] = useState(true);
+  const [expanded, setExpanded] = useState(false);
   
   return (
     <SidebarContext.Provider value={{ expanded, setExpanded}}>

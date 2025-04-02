@@ -12,6 +12,7 @@ import EventPage from './pages/event';
 import ModeratorDashboard from './pages/moderatordashboard/dashboard';
 import AdminDashboardLayout from './pages/Admin/dashboard/dashboard_layout';
 import AdminDashboardOverview from './pages/Admin/dashboard/dashboard_overview';
+import EventManagement from './pages/Admin/ManageEvents/eventmanagement';
 
 const Home = lazy(() => import('./pages/home'));
 const AboutUs = lazy(() => import('./pages/about'));
@@ -46,6 +47,7 @@ const App = () => {
 
         <Route path='/admin/dashboard' element={<AdminDashboardLayout />}>
           <Route index element={<AdminDashboardOverview />}/>
+          <Route path='manageevents' element={<EventManagement />}/>
         </Route>
         
         
