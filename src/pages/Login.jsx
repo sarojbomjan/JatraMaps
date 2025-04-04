@@ -44,7 +44,7 @@ const Login = () => {
     setError(null);
 
     try {
-      const response = await axios.post("http://localhost:5000/users/login", formData, {
+      const response = await axios.post("http://localhost:5000/login", formData, {
         headers: { "Content-Type": "application/json" },
       });
 
