@@ -65,10 +65,18 @@ export function Sidebar({ children }) {
 }
 
 // Sidebar Item Component
-export function SidebarItem({ icon, text, active, alert, to }) {
+export function SidebarItem({ icon, text, active, alert, to, onClick}) {
   const { expanded } = useContext(SidebarContext);
   const navigate = useNavigate();
   
+  const handleClick = (e) => {
+    if (onClick) {
+      onClick(e);
+    } else if (to) {
+      navigate(to);
+    }
+  };
+
   return (
     <li
       className={`
@@ -81,7 +89,7 @@ export function SidebarItem({ icon, text, active, alert, to }) {
             : "hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
         }
       `}
-      onClick={() => to && navigate(to)}
+      onClick={handleClick}
     >
       {icon}
       <span

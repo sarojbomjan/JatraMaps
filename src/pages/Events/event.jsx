@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import BiksetJatra from "../../assets/Bisketjatra.jpg"
 import GhodeJatra from "../../assets/GhodeJatra.jpg";
 import Dashain from "../../assets/dashain.jpg";
@@ -6,53 +6,39 @@ import Machindranath from "../../assets/Machindranath.jpg";
 
 import { Calendar, MapPin, Users, Clock, ChevronRight, Search } from "lucide-react"
 import { Link } from 'react-router-dom';
+import { getPastEvents, getUpcomingEvents } from '../../utils/eventService';
 
 const EventsPage = () => {
 
     const [activeTab, setActiveTab] = useState("upcoming");
     const [searchQuery, setSearchQuery] = useState("");
+    const [upcomingEvents, setUpcomingEvents] = useState([]);
+    const [pastEvents, setPastEvents] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
 
-    const upcomingEvents = [
-        {
-            id: "1",
-              title: "Bisket Jatra",
-              date: "June 15, 2024",
-              time: "9:00 AM - 5:00 PM",
-              location: "Kathmandu",
-              attendees: 1240,
-              image: BiksetJatra,
-            },
-            {
-              id: "2",
-              title: "Ghode Jatra",
-              date: "July 2, 2024",
-              time: "4:00 PM - 11:00 PM",
-              location: "City Park",
-              attendees: 3500,
-              image: GhodeJatra,
-            },
-          ]
 
-      const pastEvents = [
-            {
-              id: "3",
-              title: "Dashain",
-              date: "May 10, 2024",
-              time: "10:00 AM - 6:00 PM",
-              location: "Modern Art Gallery",
-              attendees: 850,
-              image: Dashain,
-            },
-            {
-              id: "4",
-              title: "Machindranath",
-              date: "April 22, 2024",
-              time: "12:00 PM - 8:00 PM",
-              location: "Downtown Square",
-              attendees: 1500,
-              image: Machindranath,
-            },
-          ]
+    useEffect(() => {
+      const fetchEvents = async () => {
+        try {
+            setIsLoading(true);
+            const [upcoming, past] = await Promise.all(
+              [
+                getUpcomingEvents(),
+                getPastEvents(),
+              ]
+            );
+
+            setUpcomingEvents(upcoming);
+            setPastEvents(past);
+
+            setIsLoading(false)
+        } catch (error) {
+            console.error("Failed to fetch events", error)
+        }
+      }
+
+      fetchEvents();
+    })
 
 // Filter events based on search query
   const filteredUpcomingEvents = upcomingEvents.filter(
@@ -125,7 +111,7 @@ const EventsPage = () => {
                       <div className="flex flex-col md:flex-row items-start md:items-center gap-4 p-4 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                         <div className="relative h-24 w-40 rounded-lg overflow-hidden flex-shrink-0">
                           <img
-                            src={event.image || "/placeholder.svg"}
+                            src={event.image.url || "/placeholder.svg"}
                             alt={event.title}
                             fill
                             className="object-cover"
@@ -186,7 +172,7 @@ const EventsPage = () => {
                       <div className="flex flex-col md:flex-row items-start md:items-center gap-4 p-4 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                         <div className="relative h-24 w-40 rounded-lg overflow-hidden flex-shrink-0">
                           <img
-                            src={event.image || "/placeholder.svg"}
+                            src={event.image.url || "/placeholder.svg"}
                             alt={event.title}
                             fill
                             className="object-cover"

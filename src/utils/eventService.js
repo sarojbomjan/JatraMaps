@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getAccessToken } from "./auth";
 
 const API_BASE_URL = "http://localhost:5000/events"
 
@@ -25,9 +26,7 @@ export const getEventById = async(id) => {
     }
 };
 
-
 //create event
-// API function to create event
 export const createEvent = async (formData) => {
   try {
     const response = await axios.post(API_BASE_URL, formData, {
@@ -76,4 +75,68 @@ export const deleteEvent = async (id) => {
         console.error('Error deleting event:', error);
         throw error;
       }
+};
+
+// get upcoming events
+export const getUpcomingEvents = async () => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/upcoming`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching upcoming events: ", error);
+    throw error;
+  }
+};
+
+// get past events
+export const getPastEvents = async () => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/past`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching past events: ", error);
+    throw error;
+  }
+};
+
+// Add comment to event
+export const addComment = async (eventId, text) => {
+  try {
+    const token = getAccessToken();
+
+    const response = await axios.post(
+      `${API_BASE_URL}/${eventId}/comments`,  
+      { text },
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error adding comment", error);
+    throw error;
+  }
+};
+
+// Get comments for event
+export const getEventComments = async (eventId) => {
+  try {
+    const token = getAccessToken();
+
+    const response = await axios.get(
+      `${API_BASE_URL}/${eventId}/comments`,
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching comments", error);
+    throw error;
+  }
 };

@@ -7,70 +7,30 @@ import GhodeJatra from "../../assets/GhodeJatra.jpg";
 import Dashain from "../../assets/dashain.jpg";
 import Machindranath from "../../assets/Machindranath.jpg";
 import { getAccessToken } from '../../utils/auth';
+import { getPastEvents, getUpcomingEvents } from '../../utils/eventService';
 
 const DashboardOverview = () => {
 
     const [activeTab, setActiveTab] = useState("upcoming");
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [upcomingEvents, setUpcomingEvents] = useState([]);
+    const [pastEvents, setPastEvents] = useState([]);
     const [user, setUser] = useState({
         username: '',
       });
 
       const [formData, setFormData] = useState({
           username: '',
-         
         });
 
     const stats = [
         { label: "Events Attended", value: 12 },
-        { label: "Upcoming Events", value: 3 },
+        { label: "Upcoming Events", value: 0 },
         { label: "Comments", value: 28 },
         { label: "Saved Events", value: 15 },
       ]
 
-      const upcomingEvents = [
-        {
-          id: "1",
-          title: "Bisket Jatra",
-          date: "June 15, 2024",
-          time: "9:00 AM - 5:00 PM",
-          location: "Kathmandu",
-          attendees: 1240,
-          image: BiksetJatra,
-        },
-        {
-          id: "2",
-          title: "Ghode Jatra",
-          date: "July 2, 2024",
-          time: "4:00 PM - 11:00 PM",
-          location: "City Park",
-          attendees: 3500,
-          image: GhodeJatra,
-        },
-      ]
-    
-      const pastEvents = [
-        {
-          id: "3",
-          title: "Dashain",
-          date: "May 10, 2024",
-          time: "10:00 AM - 6:00 PM",
-          location: "Modern Art Gallery",
-          attendees: 850,
-          image: Dashain,
-        },
-        {
-          id: "4",
-          title: "Machindranath",
-          date: "April 22, 2024",
-          time: "12:00 PM - 8:00 PM",
-          location: "Downtown Square",
-          attendees: 1500,
-          image: Machindranath,
-        },
-      ]
-      
       const recentActivity = [
         {
           id: "1",
@@ -133,9 +93,39 @@ const DashboardOverview = () => {
             setLoading(false);
           }
         };
+
+        const fetchEvents = async () => {
+          try {
+            setLoading(true);
+            const [upcoming, past] = await Promise.all(
+              [
+                getUpcomingEvents(),
+                getPastEvents,
+              ]
+            );
+
+            setUpcomingEvents(upcoming);
+            setPastEvents(past);
+
+            // update stats
+            stats[1].value = upcoming.length;
+
+            setLoading(false);
+          } catch (error){
+            setError("Failed to fetch events:");
+            setLoading(false);
+          }
+        };
     
         fetchUserData();
+        fetchEvents();
       }, []);
+
+  // Format date to display as "Month Day, Year"
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
     
 
   return (
@@ -181,8 +171,7 @@ const DashboardOverview = () => {
                     <Link to={`/customer/dashboard/events/${event.id}`} key={event.id}>
                       <div className="flex flex-col md:flex-row items-start md:items-center gap-4 p-4 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                         <div className="relative h-24 w-40 rounded-lg overflow-hidden flex-shrink-0">
-                            <img src={event.image} alt={event.title} className='object-cover'/>
-                         
+                              <img src={event.image.url} alt={event.title} className='object-cover'/>
                         </div>
                         <div className="flex-grow">
                           <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{event.title}</h3>
@@ -227,7 +216,7 @@ const DashboardOverview = () => {
                     <Link to={`/customer/dashboard/events/${event.id}`} key={event.id}>
                       <div className="flex flex-col md:flex-row items-start md:items-center gap-4 p-4 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                         <div className="relative h-24 w-40 rounded-lg overflow-hidden flex-shrink-0">
-                            <img src={event.image} alt={event.title} className='object-cover'/>
+                            <img src={event.image.url} alt={event.title} className='object-cover'/>
                          
                         </div>
                         <div className="flex-grow">

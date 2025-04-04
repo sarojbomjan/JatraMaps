@@ -25,8 +25,7 @@ import {
 
 import UserLogo from "../../../assets/user.jpg";
 import { Sidebar, SidebarContext, SidebarItem } from '../sidebar';
-import { useSidebar } from '../../../utils/useSiderbar';
-import { clearTokens } from '../../../utils/auth';
+import { useAuth } from '../../../utils/authContext';
 
 const AdminDashboardLayout = () => {
   const [expanded, setExpanded] = useState(false);
@@ -34,20 +33,12 @@ const AdminDashboardLayout = () => {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const handleLogout = () => {
-    try{
-      clearTokens();
+  const { logout } = useAuth();
 
-      navigate('/login', {replace: true});
-  
-      window.location.reload();
-    } catch (err) {
-      console.error('Logout failed:', error);
-      // Fallback: Clear tokens even if API call fails
-      clearTokens();
-     // navigate('/login');
-    }
-    
+  const handleLogout = () => {
+    console.log('Logout initiated from AdminDashboard');
+    logout();
+    console.log('Logout function completed');
   };
 
   const navigation = [

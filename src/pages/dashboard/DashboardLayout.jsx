@@ -3,15 +3,16 @@ import { useState, useEffect } from 'react';
 import { Menu, X, User, Bell } from 'lucide-react';
 import { Link } from "react-router-dom";
 import Wheel from "../../assets/Wheel.png";
+import { useAuth } from '../../utils/authContext';
 
 export default function DashboardLayout() {
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  const { logout } = useAuth();
+
   const handleLogout = () => {
-    // Perform logout logic here (clear tokens, etc.)
-    console.log('User logged out');
-    navigate('/login'); // Redirect to login page
+      logout();
   };
 
   return (

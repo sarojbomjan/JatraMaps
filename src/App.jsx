@@ -13,6 +13,7 @@ import ModeratorDashboard from './pages/moderatordashboard/dashboard';
 import AdminDashboardLayout from './pages/Admin/dashboard/dashboard_layout';
 import AdminDashboardOverview from './pages/Admin/dashboard/dashboard_overview';
 import EventManagement from './pages/Admin/ManageEvents/eventmanagement';
+import { AuthProvider } from './utils/authContext';
 
 const Home = lazy(() => import('./pages/home'));
 const AboutUs = lazy(() => import('./pages/about'));
@@ -23,6 +24,7 @@ const Calendar = lazy(() => import('./pages/calendar'));
 
 const App = () => {
   return (
+    <AuthProvider>
     <Suspense fallback={<div className="text-center">Loading...</div>}>
       <Routes>
         {/* Main routes with layout */}
@@ -54,6 +56,7 @@ const App = () => {
         <Route path='/moderator/dashboard' element={<ModeratorDashboard />}/>
       </Routes>
     </Suspense>
+  </AuthProvider>
   );
 };
 
