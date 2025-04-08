@@ -341,6 +341,8 @@ export default function EventFormModal({ isOpen, onClose, onEventCreated}) {
                 <option value="draft">Draft</option>
                 <option value="pending">Pending</option>
                 <option value="active">Active</option>
+                <option value="ended">Ended</option>
+
               </select>
             </div>
           </div>
