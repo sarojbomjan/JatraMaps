@@ -47,7 +47,7 @@ const ProfilePage = () => {
           return;
         }
 
-        const response = await axios.get('http://localhost:5000/users/profile', {
+        const response = await axios.get('http://localhost:5000/profile', {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',

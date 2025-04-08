@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from "react-router-dom";
 import {
   Users,
@@ -15,43 +15,61 @@ import {
   Plus,
 } from "lucide-react";
 import UserImg from "../../../assets/user.jpg"
+import { getEvents } from '../../../utils/eventService';
 
 const AdminDashboardOverview = () => {
     const [timeRange, setTimeRange] = useState("month");
+    const [users, setUsers] = useState([]);
+    const [events, setEvents] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+      // Fetch users from API
+      fetch("http://localhost:5000/users")
+        .then(response => response.json())
+        .then(data => {
+          if (data.success && Array.isArray(data.users)) {
+            setUsers(data.users);  
+          } else {
+            console.error("Failed to load users:", data.message);
+          }
+        })
+        .catch(error => console.error("Error fetching users:", error));
+  
+      // Fetch events from API
+      const fetchEvents = async () => {
+        try {
+          setIsLoading(true);
+          const data = await getEvents();  
+
+          console.log('Fetched Events:', data);
+          
+          setEvents(data);
+          setError(null);
+        } catch (err) {
+          console.log("Failed to fetch events", err);
+          setError("Failed to load events. Please try again later.");
+        } finally {
+          setIsLoading(false);
+        }
+      };
+  
+      fetchEvents(); // Call the function to fetch events
+    }, []); 
+
+    
 
     const statsData = {
-      totalUsers: 300,
-      totalEvents: 150,
+      totalUsers: users.length,
+      totalEvents: events.length,
       revenue: 2500,
       pendingEvents: 23,
-      userGrowth: 12.5,
-      eventGrowth: 8.3,
-      revenueGrowth: 15.7
     };
 
-    const recentUsers = [
-      {
-        id: "1",
-        name: "Sarah Johnson",
-        email: "sarah@example.com",
-        joined: "2 hours ago",
-        avatar: UserImg,
-      },
-      {
-        id: "2",
-        name: "Michael Chen",
-        email: "michael@example.com",
-        joined: "5 hours ago",
-        avatar: UserImg,
-      },
-      {
-        id: "3",
-        name: "Emily Rodriguez",
-        email: "emily@example.com",
-        joined: "1 day ago",
-        avatar: UserImg,
-      },
-    ]
+    const recentUsers = users.slice(0, 3); // Showing first 3 users for recent users section
+
+    
   
     const pendingEvents = [
       {
@@ -165,7 +183,7 @@ const AdminDashboardOverview = () => {
               <Users className='h-6 w-6 text-blue-600 dark:text-blue-700'/>
             </div>
           </div>
-          <div className='mt-2 flex items-center text-xs'>
+          {/* <div className='mt-2 flex items-center text-xs'>
             <span className={`flex items-center ${statsData.userGrowth >=0 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"}`}>
               {statsData.userGrowth >=0 ? (
                 <TrendingUp className="h-3 w-3 mr-1" />
@@ -175,7 +193,7 @@ const AdminDashboardOverview = () => {
               {Math.abs(statsData.userGrowth)}%
             </span>
             <span className="text-gray-500 dark:text-gray-900 ml-1">from last {timeRange}</span>
-          </div>
+          </div> */}
         </div>
         
         {/* Event Card */}
@@ -189,7 +207,7 @@ const AdminDashboardOverview = () => {
               <Calendar className='h-6 w-6 text-blue-600 dark:text-blue-700'/>
             </div>
           </div>
-          <div className='mt-2 flex items-center text-xs'>
+          {/* <div className='mt-2 flex items-center text-xs'>
             <span className={`flex items-center ${statsData.eventGrowth >= 0 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"}`}>
               {statsData.eventGrowth >= 0 ? (
                 <TrendingUp className="h-3 w-3 mr-1" />
@@ -199,7 +217,7 @@ const AdminDashboardOverview = () => {
               {Math.abs(statsData.eventGrowth)}%
             </span>
             <span className="text-gray-500 dark:text-gray-900 ml-1">from last {timeRange}</span>
-          </div>
+          </div> */}
         </div>
 
         {/* Revenue Card */}
@@ -213,7 +231,7 @@ const AdminDashboardOverview = () => {
               <DollarSign className='h-6 w-6 text-blue-600 dark:text-blue-700'/>
             </div>
           </div>
-          <div className='mt-2 flex items-center text-xs'>
+          {/* <div className='mt-2 flex items-center text-xs'>
             <span className={`flex items-center ${statsData.revenueGrowth >=0 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"}`}>
               {statsData.revenueGrowth >=0 ? (
                 <TrendingUp className="h-3 w-3 mr-1" />
@@ -223,7 +241,7 @@ const AdminDashboardOverview = () => {
               {Math.abs(statsData.revenueGrowth)}%
             </span>
             <span className="text-gray-500 dark:text-gray-900 ml-1">from last {timeRange}</span>
-          </div>
+          </div> */}
         </div>
 
         {/* Pending Events Card */}
@@ -380,16 +398,15 @@ const AdminDashboardOverview = () => {
                   <div key={user.id} className="flex items-center">
                     <div className="flex-shrink-0 h-10 w-10 rounded-full overflow-hidden">
                       <img
-                        src={user.avatar || "/placeholder.svg"}
+                        src={`${UserImg}`}
                         alt={user.name}
                         className="h-full w-full object-cover"
                       />
                     </div>
                     <div className="ml-3 min-w-0">
-                      <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">{user.name}</p>
+                      <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">{user.username}</p>
                       <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{user.email}</p>
                     </div>
-                    <span className="text-xs text-gray-500 dark:text-gray-400 ml-auto whitespace-nowrap">{user.joined}</span>
                   </div>
                 ))}
               </div>

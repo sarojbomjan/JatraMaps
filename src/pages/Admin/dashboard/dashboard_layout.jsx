@@ -44,7 +44,7 @@ const AdminDashboardLayout = () => {
   const navigation = [
     { name: "Dashboard", to: "/admin/dashboard", icon: <LayoutDashboard className="h-5 w-5" />, active: location.pathname === "/admin" },
     { name: "Events", to: "/admin/dashboard/manageevents", icon: <Calendar className="h-5 w-5" />, active: location.pathname.startsWith("/admin/events") },
-    { name: "Users", to: "/admin/users", icon: <Users className="h-5 w-5" />, active: location.pathname.startsWith("/admin/users") },
+    { name: "Users", to: "/admin/dashboard/manageusers", icon: <Users className="h-5 w-5" />, active: location.pathname.startsWith("/admin/users") },
   ]
     
 

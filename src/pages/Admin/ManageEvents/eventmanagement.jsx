@@ -248,7 +248,7 @@ const handleBulkDelete = async () => {
                                 className="h-9 pl-3 pr-8 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             >
                                 <option value="all">All Categories</option>
-                                <option value="Technology">Technology</option>
+                                <option value="Cultural">Cultural</option>
                                 <option value="Music">Music</option>
                                 <option value="Art">Art</option>
                                 <option value="Business">Business</option>
@@ -260,7 +260,7 @@ const handleBulkDelete = async () => {
                     </div>
 
                     <div className="flex flex-col sm:flex-row gap-3">
-                        <div className="flex gap-2">
+                        {/* <div className="flex gap-2">
                             <button lassName="flex items-center gap-1 px-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded-md text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"> 
                                 <Download className="h-4 w-4" />
                                 <span className="hidden sm:inline">Export</span>    
@@ -273,7 +273,7 @@ const handleBulkDelete = async () => {
                                 <Filter className="h-4 w-4" />
                                 <span className="hidden sm:inline">Filter</span>
                             </button>
-                        </div>
+                        </div> */}
 
                         <div className="relative">
                         <select
