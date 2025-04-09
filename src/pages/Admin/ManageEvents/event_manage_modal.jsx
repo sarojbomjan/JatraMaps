@@ -120,8 +120,8 @@ export default function EventFormModal({ isOpen, onClose, onEventCreated}) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="bg-gray-600 rounded-lg shadow-xl max-w-3xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center ">
+      <div className="bg-gray-200 dark:bg-gray-600 rounded-lg shadow-xl max-w-3xl w-full mx-4 max-h-[90vh] overflow-y-auto">
         <div className="sticky top-0 bg-gray-600 z-10 flex justify-between items-center border-b border-gray-200 px-6 py-4">
           <h2 className="text-xl font-bold text-white">Create New Event</h2>
           <button
@@ -139,8 +139,8 @@ export default function EventFormModal({ isOpen, onClose, onEventCreated}) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Title */}
             <div className="md:col-span-2">
-              <label htmlFor="title" className="block text-sm font-medium text-gray-100 mb-1">
-                Event Title*
+              <label htmlFor="title" className="block text-sm font-medium text-gray-600 dark:text-gray-100 mb-1">
+                Event Title
               </label>
               <input
                 type="text"
@@ -156,8 +156,8 @@ export default function EventFormModal({ isOpen, onClose, onEventCreated}) {
 
             {/* Description */}
             <div className="md:col-span-2">
-              <label htmlFor="description" className="block text-sm font-medium text-gray-100 mb-1">
-                Description*
+              <label htmlFor="description" className="block text-sm font-medium text-gray-600 dark:text-gray-100 mb-1">
+                Description
               </label>
               <textarea
                 id="description"
@@ -173,8 +173,8 @@ export default function EventFormModal({ isOpen, onClose, onEventCreated}) {
 
             {/* Date */}
             <div>
-              <label htmlFor="date" className="block text-sm font-medium text-gray-100 mb-1">
-                <Calendar className="inline-block h-4 w-4 mr-1" /> Date*
+              <label htmlFor="date" className="block text-sm font-medium  text-gray-600 dark:text-gray-100 mb-1">
+                <Calendar className="inline-block h-4 w-4 mr-1" /> Date
               </label>
               <input
                 type="date"
@@ -189,8 +189,8 @@ export default function EventFormModal({ isOpen, onClose, onEventCreated}) {
 
             {/* Time */}
             <div>
-              <label htmlFor="time" className="block text-sm font-medium text-gray-100 mb-1">
-                <Clock className="inline-block h-4 w-4 mr-1" /> Time*
+              <label htmlFor="time" className="block text-sm font-medium text-gray-600 dark:text-gray-100 mb-1">
+                <Clock className="inline-block h-4 w-4 mr-1" /> Time
               </label>
               <input
                 type="text"
@@ -206,8 +206,8 @@ export default function EventFormModal({ isOpen, onClose, onEventCreated}) {
 
             {/* Location */}
             <div>
-              <label htmlFor="location" className="block text-sm font-medium text-gray-100 mb-1">
-                <MapPin className="inline-block h-4 w-4 mr-1" /> Location*
+              <label htmlFor="location" className="block text-sm font-medium  text-gray-600 dark:text-gray-100 mb-1">
+                <MapPin className="inline-block h-4 w-4 mr-1" /> Location
               </label>
               <input
                 type="text"
@@ -223,8 +223,8 @@ export default function EventFormModal({ isOpen, onClose, onEventCreated}) {
 
             {/* Category */}
             <div>
-              <label htmlFor="category" className="block text-sm font-medium text-gray-100 mb-1">
-                <Tag className="inline-block h-4 w-4 mr-1" /> Category*
+              <label htmlFor="category" className="block text-sm font-medium text-gray-600 dark:text-gray-100 mb-1">
+                <Tag className="inline-block h-4 w-4 mr-1" /> Category
               </label>
               <select
                 id="category"
@@ -247,8 +247,8 @@ export default function EventFormModal({ isOpen, onClose, onEventCreated}) {
 
             {/* Organizer */}
             <div>
-              <label htmlFor="organizer" className="block text-sm font-medium text-gray-100 mb-1">
-                Organizer*
+              <label htmlFor="organizer" className="block text-sm font-medium text-gray-600 dark:text-gray-100 mb-1">
+                Organizer
               </label>
               <input
                 type="text"
@@ -264,7 +264,7 @@ export default function EventFormModal({ isOpen, onClose, onEventCreated}) {
 
             {/* Price */}
             <div>
-                <label htmlFor="price" className="block text-sm font-medium text-gray-100 mb-1">
+                <label htmlFor="price" className="block text-sm font-medium  text-gray-600 dark:text-gray-100 mb-1">
                         Price
                 </label>
                     <select
@@ -292,7 +292,7 @@ export default function EventFormModal({ isOpen, onClose, onEventCreated}) {
                     </div>
             {/* Image Upload */}
             <div>
-              <label className="block text-sm font-medium text-gray-100 mb-1">
+              <label className="block text-sm font-medium text-gray-600 dark:text-gray-100 mb-1">
                 <ImageIcon className="inline-block h-4 w-4 mr-1" /> Event Image
               </label>
               <input
@@ -306,7 +306,7 @@ export default function EventFormModal({ isOpen, onClose, onEventCreated}) {
                 <button
                   type="button"
                   onClick={triggerFileInput}
-                  className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-md text-gray-100 hover:bg-gray-800"
+                  className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-md text-gray-600 dark:text-gray-100 hover:bg-gray-800 hover:text-gray-400"
                 >
                   <Upload className="h-4 w-4" />
                   Upload Image
