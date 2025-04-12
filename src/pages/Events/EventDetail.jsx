@@ -16,6 +16,8 @@ import {
 } from "lucide-react";
 import { addComment, getEventById, getEventComments, getEvents } from '../../utils/eventService';
 import { getAccessToken } from '../../utils/auth';
+import MyMap from '../Customer/Map/Map';
+import { removeBookmark, saveBookmark, isBookmarked } from '../../utils/bookmarkEventService';
 
 const EventDetail = () => {
   const { eventId } = useParams();
@@ -25,6 +27,8 @@ const EventDetail = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [comments, setComments] = useState([]);
   const [commentError, setCommentError] = useState("");
+  const [showMap, setShowMap] = useState(false);
+  const [isSaved, setIsSaved] = useState(isBookmarked(eventId));
 
   const [reducerValue, forceUpdate] = useReducer(x=> x+1,0);
 
@@ -62,6 +66,9 @@ useEffect(() => {
       const commentsResponse = await getEventComments(eventId);
       const commentsArray = commentsResponse?.comments || [];
       setComments(Array.isArray(commentsArray) ? commentsArray : []);
+
+      // // checks if event is bookmark
+      // setIsSaved(isBookmarked(eventId));
     } catch (error) {
       console.error("Failed to fetch data", error);
       if (error.response?.status === 404) {
@@ -75,40 +82,52 @@ useEffect(() => {
   fetchData();
 }, [eventId, navigate, reducerValue]);
 
-const handleCommentSubmit = async (e) => {
-  e.preventDefault();
-  setCommentError("");
 
-  if (!commentText.trim()) {
-    setCommentError("Comment cannot be empty");
-    return;
-  }
 
-  const token = getAccessToken();
-  if (!token) {
-    setCommentError("Please login to comment");
-    return;
-  }
+  const handleCommentSubmit = async (e) => {
+    e.preventDefault();
+    setCommentError("");
 
-  try {
-    const newComment = await addComment(eventId, commentText);
-    console.log("New comment response:", newComment);
-    setComments(prev => [...prev, newComment]);
-    setCommentText("");
-    forceUpdate();
-  } catch (error) {
-    console.error("Failed to post comment:", error);
-    let errorMsg = "Failed to post comment";
-    if (error.response) {
-      if (error.response.status === 401) {
-        errorMsg = "Session expired. Please login again.";
-      } else if (error.response.data?.message) {
-        errorMsg = error.response.data.message;
-      }
+    if (!commentText.trim()) {
+      setCommentError("Comment cannot be empty");
+      return;
     }
-    setCommentError(errorMsg);
-  }
-};
+
+    const token = getAccessToken();
+    if (!token) {
+      setCommentError("Please login to comment");
+      return;
+    }
+
+    try {
+      const newComment = await addComment(eventId, commentText);
+      console.log("New comment response:", newComment);
+      setComments(prev => [...prev, newComment]);
+      setCommentText("");
+      forceUpdate();
+    } catch (error) {
+      console.error("Failed to post comment:", error);
+      let errorMsg = "Failed to post comment";
+      if (error.response) {
+        if (error.response.status === 401) {
+          errorMsg = "Session expired. Please login again.";
+        } else if (error.response.data?.message) {
+          errorMsg = error.response.data.message;
+        }
+      }
+      setCommentError(errorMsg);
+    }
+  };
+
+  const handleSaveEvent = () => {
+    if (isSaved) {
+      removeBookmark(eventId);
+    } else {
+      saveBookmark(eventId);
+    }
+    setIsSaved(!isSaved);
+  };
+
 
   if (isLoading) {
     return <div className="flex justify-center items-center h-screen">Loading...</div>;
@@ -217,21 +236,31 @@ const handleCommentSubmit = async (e) => {
             <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{event.description}</p>
           </div>
 
-
+          
           {/* Action Buttons */}
           <div className="flex flex-wrap gap-4 mb-8">
-            <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-3 rounded-lg transition-colors shadow-md">
-              Register now
+            <button onClick={() => setShowMap(!showMap)} className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-3 rounded-lg transition-colors shadow-md">
+                {showMap ? 'Hide Map' : 'Show Location'}
             </button>
-            <button className="flex items-center gap-2 border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 font-medium px-4 py-3 rounded-lg transition-colors">
-              <Bookmark className="h-5 w-5" />
-              Save
-            </button>
-            <button className="flex items-center gap-2 border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 font-medium px-4 py-3 rounded-lg transition-colors">
-              <Share2 className="h-5 w-5" />
-              Share
-            </button>
+            <button 
+  onClick={handleSaveEvent}
+  className={`flex items-center gap-2 border ${
+    isSaved 
+      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300' 
+      : 'border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200'
+  } hover:bg-gray-100 dark:hover:bg-gray-700 font-medium px-4 py-3 rounded-lg transition-colors`}
+>
+  <Bookmark className={`h-5 w-5 ${isSaved ? 'fill-blue-500 text-blue-500' : ''}`} />
+  {isSaved ? 'Saved' : 'Save'}
+</button>
           </div>
+
+          {showMap && event?.location && (
+            <div className="mb-8">
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Event Location</h2>
+            <MyMap location={event.location} />
+            </div>
+          )}
         </div>
       </div>
 
