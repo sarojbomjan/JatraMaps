@@ -5,6 +5,7 @@ import "../index.css";
 import MachindranathImage from "../assets/Machindranath.jpg";
 import axios from "axios";
 import { useAuth } from "../utils/authContext";
+import { toast, ToastContainer } from "react-toastify";
 
 const Login = () => {
   const { login } = useAuth();
@@ -66,6 +67,8 @@ const Login = () => {
           localStorage.removeItem("rememberedPassword");
         }
 
+        toast.success("Login Sucessfull");
+
         const userRole = response.data.user?.role?.toLowerCase();
         switch (userRole) {
           case "admin":
@@ -84,17 +87,40 @@ const Login = () => {
         throw new Error("Invalid response from server");
       }
     } catch (error) {
-      console.error("Login error:", error);
       const errorMessage =
         error.response?.data?.message || error.message || "Login failed. Please try again.";
       setError(errorMessage);
+
+      // Show error toast based on the error type
+      if (error.response?.status === 401) {
+        if (error.response.data.message === "User with this email doesn't exist") {
+          toast.error("User with this email doesn't exist");
+        } else if (error.response.data.message === "Incorrect password") {
+          toast.error("Incorrect password");
+        }
+      } else {
+        toast.error("Login Failed");
+      }
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-slate-900">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-gray-800 dark:bg-gray-400">
+      <ToastContainer 
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+
+      />
       <div className="w-full max-w-4xl flex flex-col md:flex-row rounded-xl overflow-hidden shadow-xl bg-slate-800">
         
         <div className="relative w-full md:w-1/2 h-60 md:h-auto">

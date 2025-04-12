@@ -24,7 +24,8 @@
     "react-icons-kit": "^2.0.0",
     "react-leaflet": "^5.0.0",
     "react-responsive": "^10.0.1",
-    "react-router-dom": "^7.4.0"
+    "react-router-dom": "^7.4.0",
+    "react-toastify": "^11.0.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
