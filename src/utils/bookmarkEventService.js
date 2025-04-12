@@ -1,4 +1,3 @@
-// src/utils/bookmarkEventService.js
 
 // Save event ID to bookmarks
 export const saveBookmark = (eventId) => {
@@ -29,7 +28,6 @@ export const saveBookmark = (eventId) => {
     return bookmarks.includes(eventId);
   };
   
-  // Export all functions as named exports
   export default {
     saveBookmark,
     removeBookmark,
