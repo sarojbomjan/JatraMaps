@@ -1,13 +1,9 @@
 import React, { useState, useEffect} from 'react'
-import UpcomingEvents from '../../components/upcoming_event';
 import { Link } from 'react-router-dom';
 import { Calendar, MapPin, Users, Clock, ChevronRight } from "lucide-react"
-import BiksetJatra from "../../assets/Bisketjatra.jpg"
-import GhodeJatra from "../../assets/GhodeJatra.jpg";
-import Dashain from "../../assets/dashain.jpg";
-import Machindranath from "../../assets/Machindranath.jpg";
 import { getAccessToken } from '../../utils/auth';
 import { getPastEvents, getUpcomingEvents } from '../../utils/eventService';
+import { getBookmarks } from '../../utils/bookmarkEventService';
 
 const DashboardOverview = () => {
 
@@ -24,12 +20,12 @@ const DashboardOverview = () => {
           username: '',
         });
 
-    const stats = [
-        { label: "Events Attended", value: 12 },
+    const [stats, setStats] = useState([
+        { label: "Events Attended", value: 0 },
         { label: "Upcoming Events", value: 0 },
-        { label: "Comments", value: 28 },
-        { label: "Saved Events", value: 15 },
-      ]
+        { label: "Comments", value: 0 },
+        { label: "Saved Events", value: 0 },
+      ]);
 
       const recentActivity = [
         {
@@ -97,10 +93,11 @@ const DashboardOverview = () => {
         const fetchEvents = async () => {
           try {
             setLoading(true);
-            const [upcoming, past] = await Promise.all(
+            const [upcoming, past, bookmarks] = await Promise.all(
               [
                 getUpcomingEvents(),
                 getPastEvents,
+                Promise.resolve(getBookmarks())
               ]
             );
 
@@ -108,7 +105,12 @@ const DashboardOverview = () => {
             setPastEvents(past);
 
             // update stats
-            stats[1].value = upcoming.length;
+            setStats([
+              { label: "Events Attended", value: past.length },
+              { label: "Upcoming Events", value: upcoming.length },
+              { label: "Comments", value: 0 }, 
+              { label: "Saved Events", value: bookmarks.length },
+          ]);
 
             setLoading(false);
           } catch (error){
@@ -120,13 +122,6 @@ const DashboardOverview = () => {
         fetchUserData();
         fetchEvents();
       }, []);
-
-  // Format date to display as "Month Day, Year"
-  const formatDate = (dateString) => {
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString(undefined, options);
-  };
-    
 
   return (
    <div>

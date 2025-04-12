@@ -100,7 +100,7 @@ const ProfilePage = () => {
       const token = getAccessToken();
       
       const response = await axios.put(
-        'http://localhost:5000/users/profile',
+        'http://localhost:5000/profile',
         formData,
         {
           headers: {

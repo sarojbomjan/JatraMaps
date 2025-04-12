@@ -101,12 +101,11 @@ useEffect(() => {
 
     try {
       const newComment = await addComment(eventId, commentText);
-      console.log("New comment response:", newComment);
+      
       setComments(prev => [...prev, newComment]);
       setCommentText("");
       forceUpdate();
     } catch (error) {
-      console.error("Failed to post comment:", error);
       let errorMsg = "Failed to post comment";
       if (error.response) {
         if (error.response.status === 401) {
@@ -328,7 +327,7 @@ useEffect(() => {
                     <div>
                       <div className="flex items-center">
                         <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                          {comment.user?.name || "Anonymous"}
+                          {comment.user?.username || "Anonymous"}
                         </h3>
                         <span className="ml-2 text-xs text-gray-500 dark:text-gray-400">
                           {formatDate(comment.createdAt || comment.date)}

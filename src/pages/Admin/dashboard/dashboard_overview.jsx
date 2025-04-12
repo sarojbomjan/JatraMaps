@@ -30,7 +30,6 @@ const AdminDashboardOverview = () => {
   const [events, setEvents] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [activePerformanceTab, setActivePerformanceTab] = useState("users");
 
   useEffect(() => {
     // Fetch users from API
@@ -66,9 +65,8 @@ const AdminDashboardOverview = () => {
   const statsData = {
     totalUsers: users.length,
     totalEvents: events.length,
-    revenue: 2500,
     pendingEvents: events.filter(event => event.status === 'pending').length,
-    activeUsers: Math.floor(users.length * 0.7), // 70% of total users as active
+    activeUsers: Math.floor(users.length * 0.7), 
   };
 
   const recentUsers = users.slice(0, 4); // Showing first 4 users for recent users section
@@ -97,39 +95,7 @@ const AdminDashboardOverview = () => {
     colors: ["#6366F1", "#3B82F6", "#EF4444", "#EC4899", "#10B981", "#F59E0B"],
   }
   
-  const userActivityData = {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-    datasets: [
-      {
-        label: "New Users",
-        data: [120, 150, 180, 220, 280, 250],
-        color: "#3B82F6",
-        fill: true,
-      },
-      {
-        label: "Active Users",
-        data: [100, 120, 140, 160, 200, 220],
-        color: "#10B981",
-      },
-    ],
-  }
-
-  const revenueComparisonData = {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-    datasets: [
-      {
-        label: "2023",
-        data: [900, 1200, 1500, 1800, 2100, 2400],
-        color: "#8B5CF6",
-      },
-      {
-        label: "2024",
-        data: [1200, 1900, 2300, 2800, 3200, 3800],
-        color: "#F59E0B",
-      },
-    ],
-  }
-
+ 
 return (
   <div className="w-full px-4 sm:px-6 lg:px-8 pb-8">
     {/* Header */}
@@ -159,7 +125,7 @@ return (
     </div>
 
     {/* Stats Cards */}
-    <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-6'>
+    <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-6'>
       {/* Users Card */}
       <div className='bg-white dark:bg-gray-700 rounded-lg shadow p-5 transition-all hover:shadow-md hover:-translate-y-0.5'>
         <div className='flex items-center justify-between'>
@@ -190,23 +156,6 @@ return (
           </div>
           <div className='bg-purple-100 dark:bg-purple-900/30 p-3 rounded-full'>
             <Calendar className='h-6 w-6 text-purple-600 dark:text-purple-400'/>
-          </div>
-        </div>
-      </div>
-
-      {/* Revenue Card */}
-      <div className='bg-white dark:bg-gray-700 rounded-lg shadow p-5 transition-all hover:shadow-md hover:-translate-y-0.5'>
-        <div className='flex items-center justify-between'>
-          <div>
-            <p className='text-sm font-medium text-gray-500 dark:text-gray-400'>Total Revenue</p>
-            <p className='text-2xl font-bold text-gray-900 dark:text-white mt-1'>${statsData.revenue.toLocaleString()}</p>
-            <div className="flex items-center mt-2">
-              <TrendingUp className="h-4 w-4 text-green-500" />
-              <span className="text-xs text-green-600 dark:text-green-400 ml-1">24% from last month</span>
-            </div>
-          </div>
-          <div className='bg-green-100 dark:bg-green-900/30 p-3 rounded-full'>
-            <DollarSign className='h-6 w-6 text-green-600 dark:text-green-400'/>
           </div>
         </div>
       </div>
