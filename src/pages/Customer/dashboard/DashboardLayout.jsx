@@ -2,8 +2,8 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { Menu, X, User, Bell } from 'lucide-react';
 import { Link } from "react-router-dom";
-import Wheel from "../../assets/Wheel.png";
-import { useAuth } from '../../utils/authContext';
+import Wheel from "../../../assets/Wheel.png";
+import { useAuth } from '../../../utils/authContext';
 
 export default function DashboardLayout() {
   const navigate = useNavigate();

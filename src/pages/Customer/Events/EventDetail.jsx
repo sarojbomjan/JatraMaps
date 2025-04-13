@@ -14,10 +14,11 @@ import {
   Building,
   Ticket
 } from "lucide-react";
-import { addComment, getEventById, getEventComments, getEvents } from '../../utils/eventService';
-import { getAccessToken } from '../../utils/auth';
-import MyMap from '../Customer/Map/Map';
-import { removeBookmark, saveBookmark, isBookmarked } from '../../utils/bookmarkEventService';
+import { addComment, getEventById, getEventComments, getEvents } from '../../../utils/eventService';
+import { getAccessToken } from '../../../utils/auth';
+import MyMap from '../../Customer/Map/Map';
+import { isBookmarked, removeBookmark, saveBookmark } from '../../../utils/bookmarkEventService';
+import UserImg from '../../../assets/user.jpg';
 
 const EventDetail = () => {
   const { eventId } = useParams();
@@ -277,8 +278,10 @@ useEffect(() => {
           <form onSubmit={handleCommentSubmit} className="mb-6">
             <div className="flex items-start space-x-4">
               <div className="flex-shrink-0">
-                {/* User avatar - you might want to use the logged-in user's avatar */}
-                <div className="h-10 w-10 rounded-full bg-gray-200 dark:bg-gray-700"></div>
+  
+                <div className="h-10 w-10 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-700">
+                  <img src={UserImg} alt="" />
+                </div>
               </div>
               <div className="min-w-0 flex-1">
                 <div className="border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm overflow-hidden focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500">
@@ -314,13 +317,14 @@ useEffect(() => {
                 <div key={comment._id || comment.id} className="flex space-x-4">
                   <div className="flex-shrink-0">
                     <div className="h-10 w-10 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-700">
-                      {comment.user?.avatar && (
+                      {/* {comment.user?.avatar && ( */}
                         <img
-                          src={comment.user.avatar}
+                          src={UserImg}
                           alt={comment.user.name || 'User'}
                           className="h-full w-full object-cover"
+                          
                         />
-                      )}
+                      {/* // )} */}
                     </div>
                   </div>
                   <div className="flex-1 min-w-0">

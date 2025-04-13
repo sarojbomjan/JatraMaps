@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, MapPin, Users, Clock, Search, Bookmark, X } from "lucide-react";
 import { Link } from 'react-router-dom';
-import { getBookmarks } from '../../utils/bookmarkEventService';
-import { getEventById } from '../../utils/eventService';
+import { getBookmarks } from '../../../utils/bookmarkEventService';
+import { getEventById } from '../../../utils/eventService';
 
 const SavedEvent = () => {
   const [searchQuery, setSearchQuery] = useState("");

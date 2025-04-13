@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import BiksetJatra from "../../assets/Bisketjatra.jpg"
-import GhodeJatra from "../../assets/GhodeJatra.jpg";
-import Dashain from "../../assets/dashain.jpg";
-import Machindranath from "../../assets/Machindranath.jpg";
-
 import { Calendar, MapPin, Users, Clock, ChevronRight, Search } from "lucide-react"
 import { Link } from 'react-router-dom';
-import { getPastEvents, getUpcomingEvents } from '../../utils/eventService';
+import { getPastEvents, getUpcomingEvents } from '../../../utils/eventService';
 
 const EventsPage = () => {
 

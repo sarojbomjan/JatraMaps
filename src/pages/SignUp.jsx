@@ -44,7 +44,7 @@ const SignUp = () => {
         password: formData.password,
       };
 
-      const response = await axios.post("http://localhost:5000/users/register", userData);
+      const response = await axios.post("http://localhost:5000/register", userData);
 
       if (response.data) {
         toast.success("Registration Successful! Redirecting...");
@@ -64,7 +64,7 @@ const SignUp = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-slate-900">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-gray-800 dark:bg-gray-400">
       <Toaster position="top-center" />
 
       <div className="w-full max-w-5xl flex flex-col md:flex-row rounded-xl overflow-hidden shadow-2xl">

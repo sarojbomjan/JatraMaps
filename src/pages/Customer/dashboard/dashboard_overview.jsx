@@ -1,9 +1,9 @@
 import React, { useState, useEffect} from 'react'
 import { Link } from 'react-router-dom';
 import { Calendar, MapPin, Users, Clock, ChevronRight } from "lucide-react"
-import { getAccessToken } from '../../utils/auth';
-import { getPastEvents, getUpcomingEvents } from '../../utils/eventService';
-import { getBookmarks } from '../../utils/bookmarkEventService';
+import { getAccessToken } from '../../../utils/auth';
+import { getPastEvents, getUpcomingEvents } from '../../../utils/eventService';
+import { getBookmarks } from '../../../utils/bookmarkEventService';
 
 const DashboardOverview = () => {
 

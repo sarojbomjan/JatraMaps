@@ -8,9 +8,9 @@ import {
   Trash2,
   Loader2
 } from "lucide-react";
-import UserLogo from "../../assets/user.jpg";
+import UserLogo from "../../../assets/user.jpg";
 import axios from 'axios';
-import { getAccessToken, clearTokens } from '../../utils/auth';
+import { getAccessToken, clearTokens } from '../../../utils/auth';
 
 const ProfilePage = () => {
   const [user, setUser] = useState({
