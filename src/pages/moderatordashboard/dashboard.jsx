@@ -54,7 +54,7 @@ export default function ModeratorDashboard() {
     <div
       className="flex min-h-screen bg-white"
       style={{
-        backgroundImage: `url(${backgroundImage})`, // Corrected syntax here
+        backgroundImage: `url(${backgroundImage})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundAttachment: 'fixed',
@@ -110,7 +110,7 @@ export default function ModeratorDashboard() {
                     )}
                   </td>
                   <td
-                    className={`px-6 py-4 font-semibold ${status === 'Approved' ? 'text-green-600' : status === 'Flagged' ? 'text-yellow-600' : status === 'Edited' ? 'text-blue-600' : status === 'Banned' ? 'text-black' : 'text-red-600'}`}
+                    className={`px-6 py-4 font-semibold ${status === 'Approved' ? 'text-green-600' : status === 'Deleted' ? 'text-red-600' : status === 'Edited' ? 'text-blue-600' : status === 'Banned' ? 'text-black' : 'text-red-600'}`}
                   >
                     {status}
                   </td>
