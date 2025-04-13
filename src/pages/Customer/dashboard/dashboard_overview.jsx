@@ -23,7 +23,7 @@ const DashboardOverview = () => {
     const [stats, setStats] = useState([
         { label: "Events Attended", value: 0 },
         { label: "Upcoming Events", value: 0 },
-        { label: "Comments", value: 0 },
+        // { label: "Comments", value: 0 },
         { label: "Saved Events", value: 0 },
       ]);
 
@@ -96,7 +96,7 @@ const DashboardOverview = () => {
             const [upcoming, past, bookmarks] = await Promise.all(
               [
                 getUpcomingEvents(),
-                getPastEvents,
+                getPastEvents(),
                 Promise.resolve(getBookmarks())
               ]
             );
@@ -108,7 +108,7 @@ const DashboardOverview = () => {
             setStats([
               { label: "Events Attended", value: past.length },
               { label: "Upcoming Events", value: upcoming.length },
-              { label: "Comments", value: 0 }, 
+              // { label: "Comments", value: 0 }, 
               { label: "Saved Events", value: bookmarks.length },
           ]);
 
@@ -131,7 +131,7 @@ const DashboardOverview = () => {
       </div>
 
       {/* Stats */}
-      <div className='grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 mt-5'>
+      <div className='grid grid-cols-2 md:grid-cols-3 gap-4 mb-8 mt-5'>
         {stats.map((stats, index) => (
             <div key={index} className='bg-white dark:bg-gray-800 rounded-lg shadow p-4'>
                 <p className='text-sm text-gray-500 dark:text-gray-400'>
