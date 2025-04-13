@@ -1,13 +1,14 @@
-import { Check, Edit, Trash2, Ban, Shield } from 'lucide-react'; 
-import backgroundImage from '../../assets/Shikali-Jatra.jpg'
+import { Check, Edit, Trash2, Ban, Shield, LogOut } from 'lucide-react';
+import backgroundImage from '../../assets/Shikali-Jatra.jpg';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const initialComments = [
   {
     id: 1,
     user: 'Siris Tandukar',
     eventTitle: 'Machindranath Jatra',
-    comment: 'This Jatra is most popular. ',
+    comment: 'This Jatra is most popular.',
     status: 'Edited',
   },
   {
@@ -30,6 +31,7 @@ export default function ModeratorDashboard() {
   const [comments, setComments] = useState(initialComments);
   const [editingId, setEditingId] = useState(null);
   const [editText, setEditText] = useState('');
+  const navigate = useNavigate();
 
   const updateStatus = (id, newStatus) => {
     setComments(prev =>
@@ -50,6 +52,11 @@ export default function ModeratorDashboard() {
     updateStatus(id, 'Edited');
   };
 
+  const handleLogout = () => {
+    localStorage.clear(); 
+    navigate('/login');
+  };
+
   return (
     <div
       className="flex min-h-screen bg-white"
@@ -61,18 +68,25 @@ export default function ModeratorDashboard() {
       }}
     >
       {/* Sidebar */}
-      <aside className="w-64 bg-orange-500 text-white p-6 bg-opacity-90"> 
+      <aside className="w-64 bg-orange-500 text-white p-6 bg-opacity-90">
         <div className="flex items-center space-x-2 mb-6">
-          <Shield className="text-white text-2xl" /> 
+          <Shield className="text-white text-2xl" />
           <h2 className="text-2xl font-bold">Moderator Panel</h2>
         </div>
         <ul className="space-y-4">
           <li className="font-medium hover:text-orange-200 cursor-pointer">Dashboard</li>
+          <li
+            onClick={handleLogout}
+            className="flex items-center space-x-2 font-medium text-white hover:text-orange-200 cursor-pointer mt-8"
+          >
+            <LogOut className="w-5 h-5" />
+            <span>Logout</span>
+          </li>
         </ul>
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 px-4 md:px-10 py-10 bg-gray-100 bg-opacity-70"> 
+      <main className="flex-1 px-4 md:px-10 py-10 bg-gray-100 bg-opacity-70">
         <h1 className="text-3xl font-bold text-orange-600 mb-8">Comment Moderation</h1>
 
         <div className="max-w-7xl mx-auto overflow-x-auto bg-white shadow-md rounded-lg">
@@ -110,7 +124,17 @@ export default function ModeratorDashboard() {
                     )}
                   </td>
                   <td
-                    className={`px-6 py-4 font-semibold ${status === 'Approved' ? 'text-green-600' : status === 'Deleted' ? 'text-red-600' : status === 'Edited' ? 'text-blue-600' : status === 'Banned' ? 'text-black' : 'text-red-600'}`}
+                    className={`px-6 py-4 font-semibold ${
+                      status === 'Approved'
+                        ? 'text-green-600'
+                        : status === 'Deleted'
+                        ? 'text-red-600'
+                        : status === 'Edited'
+                        ? 'text-blue-600'
+                        : status === 'Banned'
+                        ? 'text-black'
+                        : 'text-red-600'
+                    }`}
                   >
                     {status}
                   </td>
