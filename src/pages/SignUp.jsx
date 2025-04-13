@@ -86,7 +86,7 @@ const SignUp = () => {
             Already have an account?{" "}
             <Link to="/login" className="text-orange-500 hover:underline">
               Log in
-            </Link>
+            </Link> 
           </p>
 
           <form onSubmit={handleSubmit} className="mt-6 space-y-4">
