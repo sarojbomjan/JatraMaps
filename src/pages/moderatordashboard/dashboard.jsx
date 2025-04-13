@@ -1,5 +1,4 @@
 import { Check, Edit, Trash2, Ban, Shield } from 'lucide-react'; 
-import backgroundImage from '../../assets/Shikali-Jatra.jpg'
 import { useState } from 'react';
 
 const initialComments = [
