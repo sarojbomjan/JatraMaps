@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Search,
   Filter,
@@ -12,16 +12,16 @@ import {
   ChevronDown,
   Mail,
   UserPlus,
-} from 'lucide-react';
-import UserFormModal from './user_form_modal';
-import axios from 'axios';
-import UserImg from "../../../assets/user.jpg"
+} from "lucide-react";
+import UserFormModal from "./user_form_modal";
+import axios from "axios";
+import UserImg from "../../../assets/user.jpg";
 
 export default function UserManagement() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filterRole, setFilterRole] = useState('all');
-  const [filterStatus, setFilterStatus] = useState('all');
-  const [sortBy, setSortBy] = useState('newest');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterRole, setFilterRole] = useState("all");
+  const [filterStatus, setFilterStatus] = useState("all");
+  const [sortBy, setSortBy] = useState("newest");
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [showUserModal, setShowUserModal] = useState(false);
   const [users, setUsers] = useState([]);
@@ -32,8 +32,8 @@ export default function UserManagement() {
     const fetchUsers = async () => {
       try {
         setLoading(true);
-        const response = await axios.get("http://localhost:5000/users"); 
-        setUsers(formatUserData(response.data)); 
+        const response = await axios.get("http://localhost:5000/users");
+        setUsers(formatUserData(response.data));
       } catch (err) {
         console.error("Error fetching users:", err);
         setError("Failed to load users. Please try again later.");
@@ -41,23 +41,23 @@ export default function UserManagement() {
         setLoading(false);
       }
     };
-  
+
     fetchUsers();
-  }, []);  
+  }, []);
 
   const formatUserData = (apiResponse) => {
     if (apiResponse.success && Array.isArray(apiResponse.users)) {
-      return apiResponse.users.map(user => ({
+      return apiResponse.users.map((user) => ({
         id: user._id || user.id,
-        name: user.username || user.name || 'Unknown',
+        name: user.username || user.name || "Unknown",
         email: user.email,
-        role: user.role || 'user',
-        status: user.status || 'active',
+        role: user.role || "user",
+        status: user.status || "active",
         events: user.events || 0,
         avatar: UserImg,
       }));
     }
-    
+
     console.error("Unexpected API response format:", apiResponse);
     return [];
   };
@@ -68,25 +68,26 @@ export default function UserManagement() {
       user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       user.email.toLowerCase().includes(searchQuery.toLowerCase());
 
-    const matchesRole = filterRole === 'all' || user.role === filterRole;
-    const matchesStatus = filterStatus === 'all' || user.status === filterStatus;
+    const matchesRole = filterRole === "all" || user.role === filterRole;
+    const matchesStatus =
+      filterStatus === "all" || user.status === filterStatus;
 
     return matchesSearch && matchesRole && matchesStatus;
   });
 
   // Sort users
   const sortedUsers = [...filteredUsers].sort((a, b) => {
-    if (sortBy === 'newest') {
+    if (sortBy === "newest") {
       return new Date(b.joined).getTime() - new Date(a.joined).getTime();
-    } else if (sortBy === 'oldest') {
+    } else if (sortBy === "oldest") {
       return new Date(a.joined).getTime() - new Date(b.joined).getTime();
-    } else if (sortBy === 'name-az') {
+    } else if (sortBy === "name-az") {
       return a.name.localeCompare(b.name);
-    } else if (sortBy === 'name-za') {
+    } else if (sortBy === "name-za") {
       return b.name.localeCompare(a.name);
-    } else if (sortBy === 'events-high') {
+    } else if (sortBy === "events-high") {
       return b.events - a.events;
-    } else if (sortBy === 'events-low') {
+    } else if (sortBy === "events-low") {
       return a.events - b.events;
     }
     return 0;
@@ -135,19 +136,19 @@ export default function UserManagement() {
 
   const getRoleBadge = (role) => {
     switch (role) {
-      case 'admin':
+      case "admin":
         return (
           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400">
             Admin
           </span>
         );
-      case 'moderator':
+      case "moderator":
         return (
           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400">
             Moderator
           </span>
         );
-      case 'customer':
+      case "customer":
         return (
           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">
             User
@@ -164,14 +165,14 @@ export default function UserManagement() {
 
   const getStatusBadge = (status) => {
     switch (status) {
-      case 'active':
+      case "active":
         return (
           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
             <CheckCircle className="w-3 h-3 mr-1" />
             Active
           </span>
         );
-      case 'bannned':
+      case "bannned":
         return (
           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400">
             <XCircle className="w-3 h-3 mr-1" />
@@ -197,7 +198,10 @@ export default function UserManagement() {
 
   if (error) {
     return (
-      <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+      <div
+        className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+        role="alert"
+      >
         <strong className="font-bold">Error: </strong>
         <span className="block sm:inline">{error}</span>
       </div>
@@ -208,17 +212,21 @@ export default function UserManagement() {
     <div>
       <div className="m-6 flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">User Management</h1>
-          <p className="text-gray-600 dark:text-gray-400">Manage and monitor user accounts</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+            User Management
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400">
+            Manage and monitor user accounts
+          </p>
         </div>
         <div>
-          <button
+          {/* <button
             onClick={() => setShowUserModal(true)}
             className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm font-medium transition-colors"
           >
             <UserPlus className="h-4 w-4 mr-2" />
             Add User
-          </button>
+          </button> */}
         </div>
       </div>
 
@@ -274,20 +282,26 @@ export default function UserManagement() {
                 <th className="p-3 text-left">
                   <input
                     type="checkbox"
-                    checked={selectedUsers.length === sortedUsers.length && sortedUsers.length > 0}
+                    checked={
+                      selectedUsers.length === sortedUsers.length &&
+                      sortedUsers.length > 0
+                    }
                     onChange={handleSelectAll}
                   />
                 </th>
                 <th className="p-3 text-left">Name</th>
                 <th className="p-3 text-left">Role</th>
                 <th className="p-3 text-left">Status</th>
-                <th className="p-3 text-left">Events</th>
+                {/* <th className="p-3 text-left">Events</th> */}
                 <th className="p-3 text-left">Actions</th>
               </tr>
             </thead>
             <tbody className="text-sm">
               {sortedUsers.map((user) => (
-                <tr key={user.id} className="border-t border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
+                <tr
+                  key={user.id}
+                  className="border-t border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700"
+                >
                   <td className="p-3">
                     <input
                       type="checkbox"
@@ -297,25 +311,29 @@ export default function UserManagement() {
                   </td>
                   <td className="p-3">
                     <div className="flex items-center">
-                      <img 
-                        src={user.avatar} 
-                        alt={user.name} 
+                      <img
+                        src={user.avatar}
+                        alt={user.name}
                         className="w-8 h-8 rounded-full mr-3"
                       />
                       <div>
-                        <div className="font-medium text-gray-900 dark:text-gray-100">{user.name}</div>
-                        <div className="text-gray-500 dark:text-gray-400">{user.email}</div>
+                        <div className="font-medium text-gray-900 dark:text-gray-100">
+                          {user.name}
+                        </div>
+                        <div className="text-gray-500 dark:text-gray-400">
+                          {user.email}
+                        </div>
                       </div>
                     </div>
                   </td>
                   <td className="p-3">{getRoleBadge(user.role)}</td>
                   <td className="p-3">{getStatusBadge(user.status)}</td>
-           
-                  <td className="p-3">{user.events}</td>
+
+                  {/* <td className="p-3">{user.events}</td> */}
                   <td className="p-3 flex items-center gap-2">
                     <button
                       className="text-blue-600 hover:text-blue-800 dark:hover:text-blue-400"
-                      onClick={() => alert('Edit User')}
+                      onClick={() => alert("Edit User")}
                       title="Edit"
                     >
                       <Edit className="w-5 h-5" />
@@ -327,7 +345,7 @@ export default function UserManagement() {
                     >
                       <Trash2 className="w-5 h-5" />
                     </button>
-                    <button 
+                    <button
                       className="text-gray-600 hover:text-gray-800 dark:hover:text-gray-400"
                       title="More options"
                     >
@@ -342,10 +360,10 @@ export default function UserManagement() {
       </div>
 
       {/* User Modal */}
-      <UserFormModal 
-        isOpen={showUserModal} 
-        onClose={() => setShowUserModal(false)} 
-        onSave={handleSaveUser} 
+      <UserFormModal
+        isOpen={showUserModal}
+        onClose={() => setShowUserModal(false)}
+        onSave={handleSaveUser}
       />
     </div>
   );

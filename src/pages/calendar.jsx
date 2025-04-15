@@ -18,47 +18,55 @@ function CalendarPage() {
     },
   ];
 
-  const getEventForDate = (date) =>{
-    const formattedDate = date.toISOString().split("T")[0]
-    return events.find((event)=> event.date === formattedDate)
-  }
+  const getEventForDate = (date) => {
+    const formattedDate = date.toISOString().split("T")[0];
+    return events.find((event) => event.date === formattedDate);
+  };
   return (
     <>
-  
       <div style={{ textAlign: "center", padding: "20px" }}>
         <h1 className="text-5xl">Event Calendar</h1>
         <Calendar
-  onChange={setDate}
-  value={date}
-  tileContent={({ date, view }) => {
-    const formattedDate = date.toISOString().split("T")[0];
-    const event = events.find((event) => event.date === formattedDate);
-    
-    return event ? (
-      <div style={{ 
-        background: "#ff5252", 
-        color: "white", 
-        padding: "5px", 
-        borderRadius: "5px",
-        fontWeight: "bold"
-      }}>
-        {event.title}
-      </div>
-    ) : null;
-  }}
-/>
+          onChange={setDate}
+          value={date}
+          tileContent={({ date, view }) => {
+            const formattedDate = date.toISOString().split("T")[0];
+            const event = events.find((event) => event.date === formattedDate);
 
-        <div style={{ marginTop: "20px", padding: "10px", background: "#f8f9fa", borderRadius: "8px" }}>
-        <h3>Selected Date: {date.toDateString()}</h3>
-        {getEventForDate(date) ? (
-          <div>
-            <h4>{getEventForDate(date).title}</h4>
-            <p>📍 Location: {getEventForDate(date).location}</p>
-          </div>
-        ) : (
-          <p>No events on this day.</p>
-        )}
-      </div>
+            return event ? (
+              <div
+                style={{
+                  background: "#ff5252",
+                  color: "white",
+                  padding: "5px",
+                  borderRadius: "5px",
+                  fontWeight: "bold",
+                }}
+              >
+                {event.title}
+              </div>
+            ) : null;
+          }}
+        />
+
+        <div
+          style={{
+            marginTop: "20px",
+            padding: "10px",
+            background: "#f8f9fa",
+            borderRadius: "8px",
+          }}
+        >
+          <h3>Selected Date: {date.toDateString()}</h3>
+          {getEventForDate(date) ? (
+            <div>
+              <h4>{getEventForDate(date).title}</h4>
+              <p>📍 Location: {getEventForDate(date).location}</p>
+            </div>
+          ) : (
+            <p>No events on this day.</p>
+          )}
+        </div>
         <button
           style={{
             marginTop: "20px",
@@ -73,7 +81,6 @@ function CalendarPage() {
           Back to Home
         </button>
       </div>
-  
     </>
   );
 }

@@ -1,5 +1,5 @@
-import { useParams, useNavigate } from 'react-router-dom';
-import { useEffect, useReducer, useState } from 'react';
+import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useReducer, useState } from "react";
 import {
   Calendar,
   MapPin,
@@ -12,13 +12,22 @@ import {
   Send,
   ChevronLeft,
   Building,
-  Ticket
+  Ticket,
 } from "lucide-react";
-import { addComment, getEventById, getEventComments, getEvents } from '../../../utils/eventService';
-import { getAccessToken } from '../../../utils/auth';
-import MyMap from '../../Customer/Map/Map';
-import { isBookmarked, removeBookmark, saveBookmark } from '../../../utils/bookmarkEventService';
-import UserImg from '../../../assets/user.jpg';
+import {
+  addComment,
+  getEventById,
+  getEventComments,
+  getEvents,
+} from "../../../utils/eventService";
+import { getAccessToken } from "../../../utils/auth";
+import MyMap from "../../Customer/Map/Map";
+import {
+  isBookmarked,
+  removeBookmark,
+  saveBookmark,
+} from "../../../utils/bookmarkEventService";
+import UserImg from "../../../assets/user.jpg";
 
 const EventDetail = () => {
   const { eventId } = useParams();
@@ -31,59 +40,56 @@ const EventDetail = () => {
   const [showMap, setShowMap] = useState(false);
   const [isSaved, setIsSaved] = useState(isBookmarked(eventId));
 
-  const [reducerValue, forceUpdate] = useReducer(x=> x+1,0);
-
+  const [reducerValue, forceUpdate] = useReducer((x) => x + 1, 0);
 
   const formatDate = (dateString) => {
     if (!dateString) return "Just now";
-    
+
     try {
       const date = new Date(dateString);
       if (isNaN(date.getTime())) return "Just now";
-      
-      const options = { 
-        year: 'numeric', 
-        month: 'short', 
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
+
+      const options = {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
       };
       return date.toLocaleDateString(undefined, options);
-    } catch { 
+    } catch {
       return "Just now";
     }
   };
 
-// fetch events
-useEffect(() => {
-  const fetchData = async () => {
-    try {
-      setIsLoading(true);
-      // Get event data
-      const eventData = await getEventById(eventId);
-      setEvent(eventData);
-      
-      // Get comments
-      const commentsResponse = await getEventComments(eventId);
-      const commentsArray = commentsResponse?.comments || [];
-      setComments(Array.isArray(commentsArray) ? commentsArray : []);
+  // fetch events
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+        // Get event data
+        const eventData = await getEventById(eventId);
+        setEvent(eventData);
 
-      // // checks if event is bookmark
-      // setIsSaved(isBookmarked(eventId));
-    } catch (error) {
-      console.error("Failed to fetch data", error);
-      if (error.response?.status === 404) {
-        navigate('/not-found');
+        // Get comments
+        const commentsResponse = await getEventComments(eventId);
+        const commentsArray = commentsResponse?.comments || [];
+        setComments(Array.isArray(commentsArray) ? commentsArray : []);
+
+        // // checks if event is bookmark
+        // setIsSaved(isBookmarked(eventId));
+      } catch (error) {
+        console.error("Failed to fetch data", error);
+        if (error.response?.status === 404) {
+          navigate("/not-found");
+        }
+      } finally {
+        setIsLoading(false);
       }
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    };
 
-  fetchData();
-}, [eventId, navigate, reducerValue]);
-
-
+    fetchData();
+  }, [eventId, navigate, reducerValue]);
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
@@ -102,8 +108,8 @@ useEffect(() => {
 
     try {
       const newComment = await addComment(eventId, commentText);
-      
-      setComments(prev => [...prev, newComment]);
+
+      setComments((prev) => [...prev, newComment]);
       setCommentText("");
       forceUpdate();
     } catch (error) {
@@ -128,13 +134,20 @@ useEffect(() => {
     setIsSaved(!isSaved);
   };
 
-
   if (isLoading) {
-    return <div className="flex justify-center items-center h-screen">Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        Loading...
+      </div>
+    );
   }
 
   if (!event) {
-    return <div className="flex justify-center items-center h-screen">Event not found</div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        Event not found
+      </div>
+    );
   }
 
   return (
@@ -145,24 +158,25 @@ useEffect(() => {
           onClick={() => navigate(-1)}
           className="inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-colors cursor-pointer"
         >
-          <ChevronLeft className="h-5 w-5 mr-1"/>
+          <ChevronLeft className="h-5 w-5 mr-1" />
           Back to events
         </button>
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-600 mt-4">{event.title}</h1>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-600 mt-4">
+          {event.title}
+        </h1>
       </div>
 
       {/* Event Card */}
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden mb-8">
         {/* Event Image */}
         <div className="relative h-80 w-full">
-          <img 
-            src={event.image?.url || "/placeholder-event.jpg"} 
-            alt={event.title} 
+          <img
+            src={event.image?.url || "/placeholder-event.jpg"}
+            alt={event.title}
             className="w-full h-full object-cover"
           />
           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
             <div className="flex flex-wrap gap-2">
-        
               <span className="bg-white/90 dark:bg-gray-700/90 text-gray-800 dark:text-white text-xs font-medium px-3 py-1 rounded-full backdrop-blur-sm">
                 {event.category}
               </span>
@@ -176,17 +190,21 @@ useEffect(() => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <div className="space-y-4">
               <div className="flex items-start">
-                <Calendar className="h-5 w-5 mt-1 mr-3 text-blue-600 dark:text-blue-400 flex-shrink-0"/>
+                <Calendar className="h-5 w-5 mt-1 mr-3 text-blue-600 dark:text-blue-400 flex-shrink-0" />
                 <div>
-                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Date</p>
+                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                    Date
+                  </p>
                   <p className="text-gray-900 dark:text-white">{event.date}</p>
                 </div>
               </div>
 
               <div className="flex items-start">
-                <Clock className="h-5 w-5 mt-1 mr-3 text-blue-600 dark:text-blue-400 flex-shrink-0"/>
+                <Clock className="h-5 w-5 mt-1 mr-3 text-blue-600 dark:text-blue-400 flex-shrink-0" />
                 <div>
-                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Time</p>
+                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                    Time
+                  </p>
                   <p className="text-gray-900 dark:text-white">{event.time}</p>
                 </div>
               </div>
@@ -194,18 +212,26 @@ useEffect(() => {
 
             <div className="space-y-4">
               <div className="flex items-start">
-                <MapPin className="h-5 w-5 mt-1 mr-3 text-blue-600 dark:text-blue-400 flex-shrink-0"/>
+                <MapPin className="h-5 w-5 mt-1 mr-3 text-blue-600 dark:text-blue-400 flex-shrink-0" />
                 <div>
-                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Location</p>
-                  <p className="text-gray-900 dark:text-white">{event.location}</p>
+                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                    Location
+                  </p>
+                  <p className="text-gray-900 dark:text-white">
+                    {event.location}
+                  </p>
                 </div>
               </div>
 
               <div className="flex items-start">
-                <Users className="h-5 w-5 mt-1 mr-3 text-blue-600 dark:text-blue-400 flex-shrink-0"/>
+                <Users className="h-5 w-5 mt-1 mr-3 text-blue-600 dark:text-blue-400 flex-shrink-0" />
                 <div>
-                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Attendees</p>
-                  <p className="text-gray-900 dark:text-white">{event.attendees.toLocaleString()} attending</p>
+                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                    Attendees
+                  </p>
+                  <p className="text-gray-900 dark:text-white">
+                    {event.attendees.toLocaleString()} attending
+                  </p>
                 </div>
               </div>
             </div>
@@ -214,17 +240,23 @@ useEffect(() => {
           {/* Secondary Info */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <div className="flex items-start">
-              <Building className="h-5 w-5 mt-1 mr-3 text-blue-600 dark:text-blue-400 flex-shrink-0"/>
+              <Building className="h-5 w-5 mt-1 mr-3 text-blue-600 dark:text-blue-400 flex-shrink-0" />
               <div>
-                <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Organizer</p>
-                <p className="text-gray-900 dark:text-white">{event.organizer}</p>
+                <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                  Organizer
+                </p>
+                <p className="text-gray-900 dark:text-white">
+                  {event.organizer}
+                </p>
               </div>
             </div>
 
             <div className="flex items-start">
-              <Ticket className="h-5 w-5 mt-1 mr-3 text-blue-600 dark:text-blue-400 flex-shrink-0"/>
+              <Ticket className="h-5 w-5 mt-1 mr-3 text-blue-600 dark:text-blue-400 flex-shrink-0" />
               <div>
-                <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Price</p>
+                <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                  Price
+                </p>
                 <p className="text-gray-900 dark:text-white">{event.price}</p>
               </div>
             </div>
@@ -232,53 +264,63 @@ useEffect(() => {
 
           {/* Description */}
           <div className="mb-8">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">About this event</h2>
-            <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{event.description}</p>
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+              About this event
+            </h2>
+            <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+              {event.description}
+            </p>
           </div>
 
-          
           {/* Action Buttons */}
           <div className="flex flex-wrap gap-4 mb-8">
-            <button onClick={() => setShowMap(!showMap)} className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-3 rounded-lg transition-colors shadow-md">
-                {showMap ? 'Hide Map' : 'Show Location'}
+            <button
+              onClick={() => setShowMap(!showMap)}
+              className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-3 rounded-lg transition-colors shadow-md"
+            >
+              {showMap ? "Hide Map" : "Show Location"}
             </button>
-            <button 
-  onClick={handleSaveEvent}
-  className={`flex items-center gap-2 border ${
-    isSaved 
-      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300' 
-      : 'border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200'
-  } hover:bg-gray-100 dark:hover:bg-gray-700 font-medium px-4 py-3 rounded-lg transition-colors`}
->
-  <Bookmark className={`h-5 w-5 ${isSaved ? 'fill-blue-500 text-blue-500' : ''}`} />
-  {isSaved ? 'Saved' : 'Save'}
-</button>
+            <button
+              onClick={handleSaveEvent}
+              className={`flex items-center gap-2 border ${
+                isSaved
+                  ? "border-blue-500 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300"
+                  : "border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200"
+              } hover:bg-gray-100 dark:hover:bg-gray-700 font-medium px-4 py-3 rounded-lg transition-colors`}
+            >
+              <Bookmark
+                className={`h-5 w-5 ${
+                  isSaved ? "fill-blue-500 text-blue-500" : ""
+                }`}
+              />
+              {isSaved ? "Saved" : "Save"}
+            </button>
           </div>
 
           {showMap && event?.location && (
             <div className="mb-8">
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Event Location</h2>
-            <MyMap location={event.location} />
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                Event Location
+              </h2>
+              <MyMap location={event.location} />
             </div>
           )}
         </div>
       </div>
 
-
-     {/* Comments Section */}
-     <div className="bg-white dark:bg-gray-800 rounded-lg shadow mt-8">
+      {/* Comments Section */}
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow mt-8">
         <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
             Comments ({comments.length})
           </h2>
         </div>
-        
+
         <div className="p-6">
           {/* Comment Form */}
           <form onSubmit={handleCommentSubmit} className="mb-6">
             <div className="flex items-start space-x-4">
               <div className="flex-shrink-0">
-  
                 <div className="h-10 w-10 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-700">
                   <img src={UserImg} alt="" />
                 </div>
@@ -310,20 +352,19 @@ useEffect(() => {
             </div>
           </form>
 
-         {/* Comments List */}
-         <div className="space-y-6">
+          {/* Comments List */}
+          <div className="space-y-6">
             {comments.length > 0 ? (
               comments.map((comment) => (
                 <div key={comment._id || comment.id} className="flex space-x-4">
                   <div className="flex-shrink-0">
                     <div className="h-10 w-10 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-700">
                       {/* {comment.user?.avatar && ( */}
-                        <img
-                          src={UserImg}
-                          alt={comment.user.name || 'User'}
-                          className="h-full w-full object-cover"
-                          
-                        />
+                      <img
+                        src={UserImg}
+                        alt={comment.user.name || "User"}
+                        className="h-full w-full object-cover"
+                      />
                       {/* // )} */}
                     </div>
                   </div>

@@ -1,23 +1,26 @@
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
-import { useEffect, useState } from 'react';
-import L from 'leaflet';
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import { useEffect, useState } from "react";
+import L from "leaflet";
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
-  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+  iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+  iconRetinaUrl:
+    "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
+  shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
 });
 
 const fetchCoordinates = async (location) => {
   try {
     let response = await fetch(
-      `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(location)}&countrycodes=np&limit=1`,
+      `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+        location
+      )}&countrycodes=np&limit=1`,
       {
         headers: {
-          'User-Agent': 'YourAppName/1.0 (your@email.com)' 
-        }
+          "User-Agent": "YourAppName/1.0 (your@email.com)",
+        },
       }
     );
 
@@ -26,18 +29,17 @@ const fetchCoordinates = async (location) => {
     if (data.length > 0) {
       return {
         lat: parseFloat(data[0].lat),
-        lng: parseFloat(data[0].lon)
+        lng: parseFloat(data[0].lon),
       };
     }
-    
+
     // Fallback to Kathmandu coordinates if specific location not found
     return {
-      lat: 27.7046,  
-      lng: 85.3072
+      lat: 27.7046,
+      lng: 85.3072,
     };
-    
   } catch (error) {
-    console.error('Error fetching coordinates:', error);
+    console.error("Error fetching coordinates:", error);
     return null;
   }
 };
@@ -51,7 +53,7 @@ const MyMap = ({ location }) => {
     const getCoords = async () => {
       setIsLoading(true);
       setError(null);
-      
+
       try {
         const coordinates = await fetchCoordinates(location);
         if (coordinates) {
@@ -70,14 +72,29 @@ const MyMap = ({ location }) => {
     getCoords();
   }, [location]);
 
-  if (isLoading) return <div className="h-80 flex items-center justify-center">Loading map...</div>;
-  if (error) return <div className="h-80 flex items-center justify-center text-red-500">{error}</div>;
-  if (!coords) return <div className="h-80 flex items-center justify-center">Map unavailable</div>;
+  if (isLoading)
+    return (
+      <div className="h-80 flex items-center justify-center">
+        Loading map...
+      </div>
+    );
+  if (error)
+    return (
+      <div className="h-80 flex items-center justify-center text-red-500">
+        {error}
+      </div>
+    );
+  if (!coords)
+    return (
+      <div className="h-80 flex items-center justify-center">
+        Map unavailable
+      </div>
+    );
 
   return (
-    <MapContainer 
-      center={[coords.lat, coords.lng]} 
-      zoom={16} 
+    <MapContainer
+      center={[coords.lat, coords.lng]}
+      zoom={16}
       className="h-80 w-full rounded-lg border border-gray-200"
     >
       <TileLayer

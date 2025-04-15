@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Eye, EyeOff } from "react-feather"; 
+import { Eye, EyeOff } from "react-feather";
 import "../index.css";
 import MachindranathImage from "../assets/Machindranath.jpg";
 import axios from "axios";
@@ -13,7 +13,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [rememberMe, setRememberMe] = useState(false);
-  const [showPassword, setShowPassword] = useState(false); 
+  const [showPassword, setShowPassword] = useState(false);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -47,16 +47,20 @@ const Login = () => {
     setError(null);
 
     try {
-      const response = await axios.post("http://localhost:5000/login", formData, {
-        headers: { "Content-Type": "application/json" },
-      });
+      const response = await axios.post(
+        "http://localhost:5000/login",
+        formData,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
 
       console.log("Success", response.data);
 
       if (response.data) {
         login(response.data.user, {
           accessToken: response.data.accessToken,
-          refreshToken: response.data.refreshToken
+          refreshToken: response.data.refreshToken,
         });
 
         if (rememberMe) {
@@ -88,12 +92,16 @@ const Login = () => {
       }
     } catch (error) {
       const errorMessage =
-        error.response?.data?.message || error.message || "Login failed. Please try again.";
+        error.response?.data?.message ||
+        error.message ||
+        "Login failed. Please try again.";
       setError(errorMessage);
 
       // Show error toast based on the error type
       if (error.response?.status === 401) {
-        if (error.response.data.message === "User with this email doesn't exist") {
+        if (
+          error.response.data.message === "User with this email doesn't exist"
+        ) {
           toast.error("User with this email doesn't exist");
         } else if (error.response.data.message === "Incorrect password") {
           toast.error("Incorrect password");
@@ -108,7 +116,7 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gray-800 dark:bg-gray-400">
-      <ToastContainer 
+      <ToastContainer
         position="top-right"
         autoClose={5000}
         hideProgressBar={false}
@@ -119,21 +127,25 @@ const Login = () => {
         draggable
         pauseOnHover
         theme="dark"
-
       />
       <div className="w-full max-w-4xl flex flex-col md:flex-row rounded-xl overflow-hidden shadow-xl bg-slate-800">
-        
         <div className="relative w-full md:w-1/2 h-60 md:h-auto">
           <div className="absolute inset-0 bg-black/30 flex items-start p-4">
             <h2 className="text-white text-xl font-semibold bg-black/40 px-3 py-1 rounded-md">
               JatraMaps
             </h2>
           </div>
-          <img src={MachindranathImage} alt="Machindranath festival" className="w-full h-full object-cover" />
+          <img
+            src={MachindranathImage}
+            alt="Machindranath festival"
+            className="w-full h-full object-cover"
+          />
         </div>
 
         <div className="w-full md:w-1/2 p-6 md:p-10">
-          <h1 className="text-white text-2xl font-semibold">Login to your account</h1>
+          <h1 className="text-white text-2xl font-semibold">
+            Login to your account
+          </h1>
           <p className="text-slate-400 text-sm mt-1">
             Don't have an account?{" "}
             <Link to="/signUp" className="text-orange-500 hover:underline">
@@ -181,7 +193,10 @@ const Login = () => {
                 />
                 <span>Remember me</span>
               </label>
-              <Link to="/forgot-password" className="text-orange-500 hover:underline">
+              <Link
+                to="/forgot-password"
+                className="text-orange-500 hover:underline"
+              >
                 Forgot password?
               </Link>
             </div>
@@ -193,7 +208,6 @@ const Login = () => {
               {loading ? "Logging in..." : "Login"}
             </button>
           </form>
-
         </div>
       </div>
     </div>

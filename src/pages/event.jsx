@@ -1,10 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const EventPage = () => {
-  return (
-    <div>
-    </div>
-  )
-}
+  return <div></div>;
+};
 
-export default EventPage
+export default EventPage;

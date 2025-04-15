@@ -1,5 +1,15 @@
 import React, { useState } from "react";
-import { X, User, Mail, Phone, MapPin, Shield, Save, Eye, EyeOff } from "lucide-react";
+import {
+  X,
+  User,
+  Mail,
+  Phone,
+  MapPin,
+  Shield,
+  Save,
+  Eye,
+  EyeOff,
+} from "lucide-react";
 
 function UserFormModal({ isOpen, onClose, onSave }) {
   const [formData, setFormData] = useState({
@@ -57,7 +67,9 @@ function UserFormModal({ isOpen, onClose, onSave }) {
     <div className="fixed inset-0 z-50 flex items-center justify-center ">
       <div className="bg-white dark:bg-gray-600 rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
         <div className="sticky top-0 bg-white dark:bg-gray-600 z-10 flex justify-between items-center border-b border-gray-200 dark:border-gray-900 px-6 py-4">
-          <h2 className="text-xl font-bold text-gray-600 dark:text-gray-100">Add New User</h2>
+          <h2 className="text-xl font-bold text-gray-600 dark:text-gray-100">
+            Add New User
+          </h2>
           <button
             onClick={() => {
               resetForm();
@@ -72,7 +84,10 @@ function UserFormModal({ isOpen, onClose, onSave }) {
         <form onSubmit={handleSubmit} className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label
+                htmlFor="name"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              >
                 <User className="inline-block h-4 w-4 mr-1" /> Full Name*
               </label>
               <input
@@ -88,7 +103,10 @@ function UserFormModal({ isOpen, onClose, onSave }) {
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              >
                 <Mail className="inline-block h-4 w-4 mr-1" /> Email*
               </label>
               <input
@@ -104,7 +122,10 @@ function UserFormModal({ isOpen, onClose, onSave }) {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              >
                 Password*
               </label>
               <div className="relative">
@@ -162,9 +183,13 @@ function UserFormModal({ isOpen, onClose, onSave }) {
                   )}
                 </button>
               </div>
-              {formData.password && formData.confirmPassword && formData.password !== formData.confirmPassword && (
-                <p className="mt-1 text-sm text-red-600 dark:text-red-400">Passwords don't match</p>
-              )}
+              {formData.password &&
+                formData.confirmPassword &&
+                formData.password !== formData.confirmPassword && (
+                  <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                    Passwords don't match
+                  </p>
+                )}
             </div>
 
             {/* <div>
@@ -198,7 +223,10 @@ function UserFormModal({ isOpen, onClose, onSave }) {
             </div> */}
 
             <div>
-              <label htmlFor="role" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label
+                htmlFor="role"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              >
                 <Shield className="inline-block h-4 w-4 mr-1" /> Role*
               </label>
               <select
@@ -216,7 +244,10 @@ function UserFormModal({ isOpen, onClose, onSave }) {
             </div>
 
             <div>
-              <label htmlFor="status" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label
+                htmlFor="status"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              >
                 Status*
               </label>
               <select
@@ -233,7 +264,10 @@ function UserFormModal({ isOpen, onClose, onSave }) {
             </div>
 
             <div>
-              <label htmlFor="avatar" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label
+                htmlFor="avatar"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              >
                 Avatar URL
               </label>
               <input

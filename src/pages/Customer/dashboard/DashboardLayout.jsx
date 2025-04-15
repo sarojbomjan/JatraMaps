@@ -1,117 +1,146 @@
-import { Outlet, useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import { Menu, X, User, Bell } from 'lucide-react';
+import { Outlet, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Menu, X, User, Bell } from "lucide-react";
 import { Link } from "react-router-dom";
 import Wheel from "../../../assets/Wheel.png";
-import { useAuth } from '../../../utils/authContext';
+import { useAuth } from "../../../utils/authContext";
+import { useNotification } from "../Notification/notificationcontext";
+import EventNotificationSystem from "../Notification/eventnotification";
 
 export default function DashboardLayout() {
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
   const { logout } = useAuth();
+  const { notifications } = useNotification();
 
   const handleLogout = () => {
-      logout();
+    logout();
   };
 
   return (
     <div className="dashboard min-h-screen bg-gray-50">
+      <EventNotificationSystem events={[]} />
 
       {/* Dashboard Navigation Bar */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white shadow-md">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center">
-            
             {/* Logo */}
             <img src={Wheel} alt="Logo" width={100} height={90} />
             <div className="flex-shrink-0 flex items-center">
-              <Link to="/customer/dashboard" className="text-xl md:text-2xl font-bold text-orange-600">
+              <Link
+                to="/customer/dashboard"
+                className="text-xl md:text-2xl font-bold text-orange-600"
+              >
                 JatraMaps
               </Link>
             </div>
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-4">
-              <Link to="/customer/dashboard" className="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-orange-600 rounded-md cursor-pointer">
+              <Link
+                to="/customer/dashboard"
+                className="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-orange-600 rounded-md cursor-pointer"
+              >
                 Dashboard
               </Link>
-              <Link to="events" className="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-orange-600 rounded-md cursor-pointer">
+              <Link
+                to="events"
+                className="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-orange-600 rounded-md cursor-pointer"
+              >
                 My Events
               </Link>
-              <Link to="saved-events" className="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-orange-600 rounded-md cursor-pointer">
+              <Link
+                to="saved-events"
+                className="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-orange-600 rounded-md cursor-pointer"
+              >
                 Saved Events
               </Link>
             </div>
 
             {/* Right side buttons */}
             <div className="flex items-center justify-between space-x-2">
-
-              {/* Notification Icon */}
-              <Link to='notification' className='p-2 rounded-md text-gray-700 hover:bg-gray-100 cursor-pointer'>
-                <Bell className='h-6 w-6'/>
+              {/* Notification Icon with badge */}
+              <Link
+                to="notification"
+                className="p-2 rounded-md text-gray-700 hover:bg-gray-100 cursor-pointer relative"
+              >
+                <Bell className="h-6 w-6" />
+                {notifications.filter((n) => !n.read).length > 0 && (
+                  <span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"></span>
+                )}
               </Link>
 
               {/* Profile Icon */}
-              <Link to='profile-page' className='p-2 rounded-md text-gray-700 hover:bg-gray-100 cursor-pointer'>
-                <User className='h-6 w-6'/>
+              <Link
+                to="profile-page"
+                className="p-2 rounded-md text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <User className="h-6 w-6" />
               </Link>
 
               {/* Logout Button */}
-              <button onClick={handleLogout} className="hidden md:block px-4 py-2 bg-white-100 text-black font-medium hover:bg-orange-600 hover:text-white rounded-md cursor-pointer">
+              <button
+                onClick={handleLogout}
+                className="hidden md:block px-4 py-2 bg-white-100 text-black font-medium hover:bg-orange-600 hover:text-white rounded-md cursor-pointer"
+              >
                 Logout
               </button>
-             
+
               {/* Hamburger Icon for Mobile */}
-              <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden p-2 rounded-md text-gray-700 hover:bg-gray-100">
-                {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="md:hidden p-2 rounded-md text-gray-700 hover:bg-gray-100"
+              >
+                {mobileMenuOpen ? (
+                  <X className="h-6 w-6" />
+                ) : (
+                  <Menu className="h-6 w-6" />
+                )}
               </button>
             </div>
           </div>
         </div>
       </nav>
-
       {/* Mobile Menu */}
-{mobileMenuOpen && (
-  <div className='mobile-menu fixed inset-0 bg-white bg-opacity-90'>
-    <div className='flex flex-col items-center justify-center h-full'> 
-      <div className='space-y-6 w-full px-4'> 
-        {/* Navigation Links in Mobile Menu */}
-        <Link 
-          to="/" 
-          className="block w-full text-center py-3 text-lg font-medium text-gray-700 hover:bg-gray-100 hover:text-orange-600 rounded-md"
-          onClick={() => setMobileMenuOpen(false)}
-        >
-          Dashboard
-        </Link>
-        <Link 
-          to="/events" 
-          className="block w-full text-center py-3 text-lg font-medium text-gray-700 hover:bg-gray-100 hover:text-orange-600 rounded-md"
-          onClick={() => setMobileMenuOpen(false)}
-        >
-          My Events
-        </Link>
-        <Link 
-          to="/saved" 
-          className="block w-full text-center py-3 text-lg font-medium text-gray-700 hover:bg-gray-100 hover:text-orange-600 rounded-md"
-          onClick={() => setMobileMenuOpen(false)}
-        >
-          Saved Events
-        </Link>
-        {/* Logout Button */}
-        <button 
-          onClick={handleLogout} 
-          className="block w-full text-center py-3 text-lg font-medium bg-white-100 text-black hover:bg-orange-600 hover:text-white rounded-md"
-        >
-          Logout
-        </button>
-      </div>
-    </div>
-  </div>
-)}
+      {mobileMenuOpen && (
+        <div className="mobile-menu fixed inset-0 bg-white bg-opacity-90">
+          <div className="flex flex-col items-center justify-center h-full">
+            <div className="space-y-6 w-full px-4">
+              <Link
+                to="/"
+                className="block w-full text-center py-3 text-lg font-medium text-gray-700 hover:bg-gray-100 hover:text-orange-600 rounded-md"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Dashboard
+              </Link>
+              <Link
+                to="/events"
+                className="block w-full text-center py-3 text-lg font-medium text-gray-700 hover:bg-gray-100 hover:text-orange-600 rounded-md"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                My Events
+              </Link>
+              <Link
+                to="/saved"
+                className="block w-full text-center py-3 text-lg font-medium text-gray-700 hover:bg-gray-100 hover:text-orange-600 rounded-md"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Saved Events
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="block w-full text-center py-3 text-lg font-medium bg-white-100 text-black hover:bg-orange-600 hover:text-white rounded-md"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pt-20 bg-gray-200">
-       <Outlet /> {/* This renders the nested routes */}
+        <Outlet /> {/* This renders the nested routes */}
       </main>
     </div>
   );

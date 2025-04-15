@@ -3,10 +3,7 @@ import GhodeJatra from "../assets/GhodeJatra.jpg";
 import Dashain from "../assets/dashain.jpg";
 import Machindranath from "../assets/Machindranath.jpg";
 import { Link, useNavigate } from "react-router-dom";
-import Home from "../pages/home";
-import HeroSection from "./hero_section";
-import FeaturedEvent from "./featured_event";
-import {Calendar} from "lucide-react";
+import { Calendar } from "lucide-react";
 
 const events = [
   {

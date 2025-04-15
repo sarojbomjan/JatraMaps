@@ -1,36 +1,28 @@
-import React, { useEffect, useState } from 'react';
-import { 
-  Camera,
-  User,
-  Mail,
-  Lock,
-  Save,
-  Trash2,
-  Loader2
-} from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { Camera, User, Mail, Lock, Save, Trash2, Loader2 } from "lucide-react";
 import UserLogo from "../../../assets/user.jpg";
-import axios from 'axios';
-import { getAccessToken, clearTokens } from '../../../utils/auth';
+import axios from "axios";
+import { getAccessToken, clearTokens } from "../../../utils/auth";
 
 const ProfilePage = () => {
   const [user, setUser] = useState({
-    username: '',
-    email: '',
-    bio: ''
+    username: "",
+    email: "",
+    bio: "",
   });
 
   const [activeTab, setActiveTab] = useState("profile");
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    bio: ''
+    username: "",
+    email: "",
+    bio: "",
   });
 
   const [passwordData, setPasswordData] = useState({
-    currentPassword: '',
-    newPassword: '',
-    confirmPassword: ''
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -42,37 +34,36 @@ const ProfilePage = () => {
       try {
         const token = getAccessToken();
         if (!token) {
-          setError('No authentication token found');
+          setError("No authentication token found");
           setLoading(false);
           return;
         }
 
-        const response = await axios.get('http://localhost:5000/profile', {
+        const response = await axios.get("http://localhost:5000/profile", {
           headers: {
             Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          }
+            "Content-Type": "application/json",
+          },
         });
-        
+
         const userData = {
-          username: response.data?.username ,
-          email: response.data?.email || 'No email set',
-          bio: response.data?.bio || ''
+          username: response.data?.username,
+          email: response.data?.email || "No email set",
+          bio: response.data?.bio || "",
         };
-        console.log('Processed User Data:', userData); 
+        console.log("Processed User Data:", userData);
         setUser(userData);
         setFormData(userData);
         setLoading(false);
-
       } catch (err) {
         if (err.response?.status === 401) {
           clearTokens();
-          setError('Session expired. Please login again.');
+          setError("Session expired. Please login again.");
         } else {
           setError(
             err.response?.data?.message ||
-            err.message ||
-            'Failed to fetch user data. Please try again later.'
+              err.message ||
+              "Failed to fetch user data. Please try again later."
           );
         }
         setLoading(false);
@@ -84,12 +75,12 @@ const ProfilePage = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handlePasswordChange = (e) => {
     const { name, value } = e.target;
-    setPasswordData(prev => ({ ...prev, [name]: value }));
+    setPasswordData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
@@ -98,33 +89,33 @@ const ProfilePage = () => {
       setError(null);
       setSuccessMessage(null);
       const token = getAccessToken();
-      
+
       const response = await axios.put(
-        'http://localhost:5000/profile',
+        "http://localhost:5000/profile",
         formData,
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
+            "Content-Type": "application/json",
+          },
         }
       );
-      
+
       const updatedUser = {
         username: response.data.username || user.username,
         email: response.data.email || user.email,
-        bio: response.data.bio || user.bio
+        bio: response.data.bio || user.bio,
       };
-      
+
       setUser(updatedUser);
-      setSuccessMessage('Profile updated successfully!');
+      setSuccessMessage("Profile updated successfully!");
       setIsEditing(false);
     } catch (err) {
       if (err.response?.status === 401) {
         clearTokens();
-        setError('Session expired. Please login again.');
+        setError("Session expired. Please login again.");
       } else {
-        setError(err.response?.data?.message || 'Failed to update profile');
+        setError(err.response?.data?.message || "Failed to update profile");
       }
     }
   };
@@ -134,7 +125,7 @@ const ProfilePage = () => {
     try {
       setError(null);
       setSuccessMessage(null);
-      
+
       if (passwordData.newPassword !== passwordData.confirmPassword) {
         setError("New passwords don't match");
         return;
@@ -142,31 +133,31 @@ const ProfilePage = () => {
 
       const token = getAccessToken();
       await axios.put(
-        'http://localhost:5000/users/change-password',
+        "http://localhost:5000/users/change-password",
         {
           currentPassword: passwordData.currentPassword,
-          newPassword: passwordData.newPassword
+          newPassword: passwordData.newPassword,
         },
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
+            "Content-Type": "application/json",
+          },
         }
       );
 
-      setSuccessMessage('Password changed successfully!');
+      setSuccessMessage("Password changed successfully!");
       setPasswordData({
-        currentPassword: '',
-        newPassword: '',
-        confirmPassword: ''
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: "",
       });
     } catch (err) {
       if (err.response?.status === 401) {
         clearTokens();
-        setError('Session expired. Please login again.');
+        setError("Session expired. Please login again.");
       } else {
-        setError(err.response?.data?.message || 'Failed to change password');
+        setError(err.response?.data?.message || "Failed to change password");
       }
     }
   };
@@ -189,7 +180,7 @@ const ProfilePage = () => {
     return (
       <div className="flex flex-col justify-center items-center h-screen text-red-500">
         <div className="mb-4">{error}</div>
-        <button 
+        <button
           onClick={() => window.location.reload()}
           className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
         >
@@ -201,9 +192,13 @@ const ProfilePage = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className='mt-6'>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-700">Profile Settings</h1>
-        <p className="text-gray-600 dark:text-gray-400">Manage your account settings</p>
+      <div className="mt-6">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-700">
+          Profile Settings
+        </h1>
+        <p className="text-gray-600 dark:text-gray-400">
+          Manage your account settings
+        </p>
       </div>
 
       {error && (
@@ -218,9 +213,9 @@ const ProfilePage = () => {
         </div>
       )}
 
-      <div className='bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden mt-6'>
-        <div className='border-b border-gray-200 dark:border-gray-700'>
-          <div className='flex'>
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden mt-6">
+        <div className="border-b border-gray-200 dark:border-gray-700">
+          <div className="flex">
             <button
               className={`px-4 py-3 text-sm font-medium ${
                 activeTab === "profile"
@@ -265,7 +260,7 @@ const ProfilePage = () => {
                     </div>
                   </div>
                   <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-                    {user.username || 'No username set'}
+                    {user.username || "No username set"}
                   </h2>
                 </div>
 
@@ -393,7 +388,9 @@ const ProfilePage = () => {
           {activeTab === "account" && (
             <div>
               <div className="mb-8">
-                <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Change Password</h3>
+                <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
+                  Change Password
+                </h3>
                 <form onSubmit={handlePasswordSubmit} className="space-y-4">
                   <div>
                     <label
@@ -479,16 +476,23 @@ const ProfilePage = () => {
               </div>
 
               <div className="border-t border-gray-200 dark:border-gray-700 pt-8">
-                <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Danger Zone</h3>
+                <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
+                  Danger Zone
+                </h3>
                 <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md p-4">
                   <div className="flex">
                     <div className="flex-shrink-0">
                       <Trash2 className="h-5 w-5 text-red-400" />
                     </div>
                     <div className="ml-3">
-                      <h3 className="text-sm font-medium text-red-800 dark:text-red-400">Delete Account</h3>
+                      <h3 className="text-sm font-medium text-red-800 dark:text-red-400">
+                        Delete Account
+                      </h3>
                       <div className="mt-2 text-sm text-red-700 dark:text-red-300">
-                        <p>Once you delete your account, there is no going back. Please be certain.</p>
+                        <p>
+                          Once you delete your account, there is no going back.
+                          Please be certain.
+                        </p>
                       </div>
                       <div className="mt-4">
                         <button

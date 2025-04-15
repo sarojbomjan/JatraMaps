@@ -30,7 +30,7 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    
+
     if (formData.password !== formData.confirmPassword) {
       toast.error("Passwords do not match!");
       setLoading(false);
@@ -44,7 +44,10 @@ const SignUp = () => {
         password: formData.password,
       };
 
-      const response = await axios.post("http://localhost:5000/register", userData);
+      const response = await axios.post(
+        "http://localhost:5000/register",
+        userData
+      );
 
       if (response.data) {
         toast.success("Registration Successful! Redirecting...");
@@ -68,7 +71,6 @@ const SignUp = () => {
       <Toaster position="top-center" />
 
       <div className="w-full max-w-5xl flex flex-col md:flex-row rounded-xl overflow-hidden shadow-2xl">
-        
         {/* Image Section */}
         <div className="relative w-full md:w-1/2 h-56 sm:h-64 md:h-auto">
           <div className="absolute inset-0 bg-black/30 flex items-start p-4">
@@ -76,17 +78,23 @@ const SignUp = () => {
               JatraMaps
             </h2>
           </div>
-          <img src={MachindranathImage} alt="Machindranath festival" className="w-full h-full object-cover" />
+          <img
+            src={MachindranathImage}
+            alt="Machindranath festival"
+            className="w-full h-full object-cover"
+          />
         </div>
 
         {/* Form Section */}
         <div className="w-full md:w-1/2 p-6 bg-slate-800">
-          <h1 className="text-white text-2xl font-medium">Create Your Account</h1>
+          <h1 className="text-white text-2xl font-medium">
+            Create Your Account
+          </h1>
           <p className="text-slate-400 text-sm mt-1">
             Already have an account?{" "}
             <Link to="/login" className="text-orange-500 hover:underline">
               Log in
-            </Link> 
+            </Link>
           </p>
 
           <form onSubmit={handleSubmit} className="mt-6 space-y-4">
@@ -112,7 +120,6 @@ const SignUp = () => {
               required
             />
 
-            
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
@@ -132,7 +139,6 @@ const SignUp = () => {
               </button>
             </div>
 
-            
             <div className="relative">
               <input
                 type={showConfirmPassword ? "text" : "password"}

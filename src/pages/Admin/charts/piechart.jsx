@@ -53,7 +53,7 @@ function PieChart({ data, title, height = 250 }) {
             padding: 10,
             font: {
               size: 12,
-              family: "'Inter', sans-serif"
+              family: "'Inter', sans-serif",
             },
             color: textColor,
           },
@@ -63,8 +63,8 @@ function PieChart({ data, title, height = 250 }) {
           text: title || "",
           font: {
             size: 16,
-            weight: '600',
-            family: "'Inter', sans-serif"
+            weight: "600",
+            family: "'Inter', sans-serif",
           },
           color: textColor,
           padding: {

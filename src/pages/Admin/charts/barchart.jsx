@@ -1,7 +1,12 @@
 import { useEffect, useRef } from "react";
 import { Chart } from "chart.js/auto";
 
-export default function BarChart({ data, title, height = 300, horizontal = false }) {
+export default function BarChart({
+  data,
+  title,
+  height = 300,
+  horizontal = false,
+}) {
   const chartRef = useRef(null);
   const chartInstance = useRef(null);
 
@@ -15,15 +20,23 @@ export default function BarChart({ data, title, height = 300, horizontal = false
     const ctx = chartRef.current.getContext("2d");
     if (!ctx) return;
 
-    const defaultColors = ["#3B82F6", "#10B981", "#8B5CF6", "#F59E0B", "#EF4444"];
+    const defaultColors = [
+      "#3B82F6",
+      "#10B981",
+      "#8B5CF6",
+      "#F59E0B",
+      "#EF4444",
+    ];
 
     const chartData = {
       labels: data.labels,
       datasets: data.datasets.map((dataset, index) => ({
         label: dataset.label,
         data: dataset.data,
-        backgroundColor: dataset.color || defaultColors[index % defaultColors.length],
-        borderColor: dataset.color || defaultColors[index % defaultColors.length],
+        backgroundColor:
+          dataset.color || defaultColors[index % defaultColors.length],
+        borderColor:
+          dataset.color || defaultColors[index % defaultColors.length],
         borderWidth: 1,
         borderRadius: 4,
         barPercentage: 0.6,
@@ -33,7 +46,9 @@ export default function BarChart({ data, title, height = 300, horizontal = false
 
     const isDark = document.documentElement.classList.contains("dark");
     const textColor = isDark ? "#E5E7EB" : "#111827";
-    const gridColor = isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.1)";
+    const gridColor = isDark
+      ? "rgba(255, 255, 255, 0.1)"
+      : "rgba(0, 0, 0, 0.1)";
 
     const options = {
       responsive: true,
@@ -46,9 +61,9 @@ export default function BarChart({ data, title, height = 300, horizontal = false
           labels: {
             usePointStyle: true,
             padding: 20,
-            font: { 
+            font: {
               size: 12,
-              family: "'Inter', sans-serif"
+              family: "'Inter', sans-serif",
             },
             color: textColor,
           },
@@ -56,10 +71,10 @@ export default function BarChart({ data, title, height = 300, horizontal = false
         title: {
           display: !!title,
           text: title || "",
-          font: { 
+          font: {
             size: 16,
-            weight: '600',
-            family: "'Inter', sans-serif"
+            weight: "600",
+            family: "'Inter', sans-serif",
           },
           color: textColor,
           padding: { top: 10, bottom: 20 },
@@ -74,11 +89,11 @@ export default function BarChart({ data, title, height = 300, horizontal = false
           cornerRadius: 6,
           displayColors: true,
           callbacks: {
-            label: function(context) {
+            label: function (context) {
               return `${context.dataset.label}: ${context.raw}`;
-            }
-          }
-        }
+            },
+          },
+        },
       },
       scales: {
         x: {
@@ -106,9 +121,9 @@ export default function BarChart({ data, title, height = 300, horizontal = false
               family: "'Inter', sans-serif",
               size: 12,
             },
-            callback: function(value) {
+            callback: function (value) {
               return value;
-            }
+            },
           },
         },
       },

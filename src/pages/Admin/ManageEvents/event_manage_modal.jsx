@@ -1,10 +1,18 @@
 import { useState, useRef } from "react";
-import { X, Calendar, Clock, MapPin, Tag, ImageIcon, Save, Upload } from "lucide-react";
+import {
+  X,
+  Calendar,
+  Clock,
+  MapPin,
+  Tag,
+  ImageIcon,
+  Save,
+  Upload,
+} from "lucide-react";
 import toast from "react-hot-toast";
 import { createEvent } from "../../../utils/eventService";
 
-export default function EventFormModal({ isOpen, onClose, onEventCreated}) {
-
+export default function EventFormModal({ isOpen, onClose, onEventCreated }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -27,7 +35,7 @@ export default function EventFormModal({ isOpen, onClose, onEventCreated}) {
   // Handle regular input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
@@ -41,11 +49,11 @@ export default function EventFormModal({ isOpen, onClose, onEventCreated}) {
       if (formData.previewImage) {
         URL.revokeObjectURL(formData.previewImage);
       }
-      
-      setFormData(prev => ({
+
+      setFormData((prev) => ({
         ...prev,
         image: file,
-        previewImage: URL.createObjectURL(file)
+        previewImage: URL.createObjectURL(file),
       }));
     }
   };
@@ -57,29 +65,29 @@ export default function EventFormModal({ isOpen, onClose, onEventCreated}) {
   // create event
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     setIsLoading(true);
     setError(null);
-  
+
     try {
       const formDataToSend = new FormData();
-      formDataToSend.append('title', formData.title);
-      formDataToSend.append('description', formData.description);
-      formDataToSend.append('date', formData.date);
-      formDataToSend.append('time', formData.time);
-      formDataToSend.append('location', formData.location);
-      formDataToSend.append('category', formData.category);
-      formDataToSend.append('organizer', formData.organizer);
-      formDataToSend.append('price', formData.price);
-      formDataToSend.append('status', formData.status);
-      
+      formDataToSend.append("title", formData.title);
+      formDataToSend.append("description", formData.description);
+      formDataToSend.append("date", formData.date);
+      formDataToSend.append("time", formData.time);
+      formDataToSend.append("location", formData.location);
+      formDataToSend.append("category", formData.category);
+      formDataToSend.append("organizer", formData.organizer);
+      formDataToSend.append("price", formData.price);
+      formDataToSend.append("status", formData.status);
+
       if (formData.image) {
-        formDataToSend.append('image', formData.image);
+        formDataToSend.append("image", formData.image);
       }
-  
+
       // Call createEvent with the form data
       const createdEvent = await createEvent(formDataToSend);
-      
+
       // Show success message
       toast.success("Event created successfully!", { id: "event-success" });
 
@@ -96,7 +104,7 @@ export default function EventFormModal({ isOpen, onClose, onEventCreated}) {
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
   const resetForm = () => {
     if (formData.previewImage) {
@@ -139,7 +147,10 @@ export default function EventFormModal({ isOpen, onClose, onEventCreated}) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Title */}
             <div className="md:col-span-2">
-              <label htmlFor="title" className="block text-sm font-medium text-gray-600 dark:text-gray-100 mb-1">
+              <label
+                htmlFor="title"
+                className="block text-sm font-medium text-gray-600 dark:text-gray-100 mb-1"
+              >
                 Event Title
               </label>
               <input
@@ -156,7 +167,10 @@ export default function EventFormModal({ isOpen, onClose, onEventCreated}) {
 
             {/* Description */}
             <div className="md:col-span-2">
-              <label htmlFor="description" className="block text-sm font-medium text-gray-600 dark:text-gray-100 mb-1">
+              <label
+                htmlFor="description"
+                className="block text-sm font-medium text-gray-600 dark:text-gray-100 mb-1"
+              >
                 Description
               </label>
               <textarea
@@ -173,7 +187,10 @@ export default function EventFormModal({ isOpen, onClose, onEventCreated}) {
 
             {/* Date */}
             <div>
-              <label htmlFor="date" className="block text-sm font-medium  text-gray-600 dark:text-gray-100 mb-1">
+              <label
+                htmlFor="date"
+                className="block text-sm font-medium  text-gray-600 dark:text-gray-100 mb-1"
+              >
                 <Calendar className="inline-block h-4 w-4 mr-1" /> Date
               </label>
               <input
@@ -189,7 +206,10 @@ export default function EventFormModal({ isOpen, onClose, onEventCreated}) {
 
             {/* Time */}
             <div>
-              <label htmlFor="time" className="block text-sm font-medium text-gray-600 dark:text-gray-100 mb-1">
+              <label
+                htmlFor="time"
+                className="block text-sm font-medium text-gray-600 dark:text-gray-100 mb-1"
+              >
                 <Clock className="inline-block h-4 w-4 mr-1" /> Time
               </label>
               <input
@@ -206,7 +226,10 @@ export default function EventFormModal({ isOpen, onClose, onEventCreated}) {
 
             {/* Location */}
             <div>
-              <label htmlFor="location" className="block text-sm font-medium  text-gray-600 dark:text-gray-100 mb-1">
+              <label
+                htmlFor="location"
+                className="block text-sm font-medium  text-gray-600 dark:text-gray-100 mb-1"
+              >
                 <MapPin className="inline-block h-4 w-4 mr-1" /> Location
               </label>
               <input
@@ -223,7 +246,10 @@ export default function EventFormModal({ isOpen, onClose, onEventCreated}) {
 
             {/* Category */}
             <div>
-              <label htmlFor="category" className="block text-sm font-medium text-gray-600 dark:text-gray-100 mb-1">
+              <label
+                htmlFor="category"
+                className="block text-sm font-medium text-gray-600 dark:text-gray-100 mb-1"
+              >
                 <Tag className="inline-block h-4 w-4 mr-1" /> Category
               </label>
               <select
@@ -247,7 +273,10 @@ export default function EventFormModal({ isOpen, onClose, onEventCreated}) {
 
             {/* Organizer */}
             <div>
-              <label htmlFor="organizer" className="block text-sm font-medium text-gray-600 dark:text-gray-100 mb-1">
+              <label
+                htmlFor="organizer"
+                className="block text-sm font-medium text-gray-600 dark:text-gray-100 mb-1"
+              >
                 Organizer
               </label>
               <input
@@ -264,32 +293,37 @@ export default function EventFormModal({ isOpen, onClose, onEventCreated}) {
 
             {/* Price */}
             <div>
-                <label htmlFor="price" className="block text-sm font-medium  text-gray-600 dark:text-gray-100 mb-1">
-                        Price
-                </label>
-                    <select
-                        id="price"
-                        name="price"
-                        alue={formData.price}
-                        onChange={handleChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                        >
-                        <option value="Free">Free</option>
-                        <option value="10">$10</option>
-                        <option value="20">$20</option>
-                        <option value="50">$50</option>
-                        <option value="custom">Custom Amount</option>
-                    </select>
-                        {formData.price === "custom" && (
-                        <input
-                             type="number"
-                              name="customPrice"
-                            placeholder="Enter custom price"
-                            className="mt-2 w-full px-3 py-2 border border-gray-300 rounded-md"
-                            onChange={(e) => setFormData({...formData, customPrice: e.target.value})}
-                            />
-                        )}
-                    </div>
+              <label
+                htmlFor="price"
+                className="block text-sm font-medium  text-gray-600 dark:text-gray-100 mb-1"
+              >
+                Price
+              </label>
+              <select
+                id="price"
+                name="price"
+                alue={formData.price}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="Free">Free</option>
+                <option value="10">$10</option>
+                <option value="20">$20</option>
+                <option value="50">$50</option>
+                <option value="custom">Custom Amount</option>
+              </select>
+              {formData.price === "custom" && (
+                <input
+                  type="number"
+                  name="customPrice"
+                  placeholder="Enter custom price"
+                  className="mt-2 w-full px-3 py-2 border border-gray-300 rounded-md"
+                  onChange={(e) =>
+                    setFormData({ ...formData, customPrice: e.target.value })
+                  }
+                />
+              )}
+            </div>
             {/* Image Upload */}
             <div>
               <label className="block text-sm font-medium text-gray-600 dark:text-gray-100 mb-1">
@@ -313,9 +347,9 @@ export default function EventFormModal({ isOpen, onClose, onEventCreated}) {
                 </button>
                 {formData.previewImage && (
                   <div className="w-16 h-16 rounded-md overflow-hidden border border-gray-200">
-                    <img 
-                      src={formData.previewImage} 
-                      alt="Preview" 
+                    <img
+                      src={formData.previewImage}
+                      alt="Preview"
                       className="w-full h-full object-cover"
                     />
                   </div>
@@ -328,7 +362,10 @@ export default function EventFormModal({ isOpen, onClose, onEventCreated}) {
 
             {/* Status */}
             <div>
-              <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="status"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Status
               </label>
               <select
@@ -342,7 +379,6 @@ export default function EventFormModal({ isOpen, onClose, onEventCreated}) {
                 <option value="pending">Pending</option>
                 <option value="active">Active</option>
                 <option value="ended">Ended</option>
-
               </select>
             </div>
           </div>

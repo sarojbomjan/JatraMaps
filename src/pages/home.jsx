@@ -1,12 +1,12 @@
-import React, {useRef} from "react";
+import React, { useRef } from "react";
 import HeroSection from "../components/hero_section";
 import FeaturedEvent from "../components/featured_event";
 import UpcomingEvents from "../components/upcoming_event";
 import AboutUs from "./about";
 
 const Home = () => {
-  const upcomingRef = useRef(null)
-  const aboutRef = useRef(null)
+  const upcomingRef = useRef(null);
+  const aboutRef = useRef(null);
   return (
     <>
       <HeroSection />
@@ -22,7 +22,7 @@ const Home = () => {
       </section>
 
       <section id="about-section" ref={aboutRef}>
-        <AboutUs/>
+        <AboutUs />
       </section>
 
       {/* Community Section

@@ -1,10 +1,13 @@
-import React from 'react';
+import React from "react";
 
 const HeroSection = () => {
   return (
-    <section className="relative bg-gradient-to-r from-orange-600 to-red-500 dark:from-orange-800 dark:to-red-800 text-white py-16 md:py-28" id='header-section'>
+    <section
+      className="relative bg-gradient-to-r from-orange-600 to-red-500 dark:from-orange-800 dark:to-red-800 text-white py-16 md:py-28"
+      id="header-section"
+    >
       {/* Background Image with Transparency */}
-      <div 
+      <div
         className="absolute inset-0 bg-cover bg-center opacity-50"
         style={{ backgroundImage: "url('/src/assets/ShwetBhairav.jpg')" }}
       ></div>
@@ -16,7 +19,9 @@ const HeroSection = () => {
             Celebrate Traditions That Inspire
           </h1>
           <p className="text-lg md:text-xl mb-8">
-            Discover and join vibrant Jatras in your community. Connect with culture, spirituality, and people who share your passion for Nepal’s rich heritage.
+            Discover and join vibrant Jatras in your community. Connect with
+            culture, spirituality, and people who share your passion for Nepal’s
+            rich heritage.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button className="bg-transparent border-2 border-white hover:bg-white/10 px-6 py-3 rounded-lg font-medium transition-colors cursor-pointer">
