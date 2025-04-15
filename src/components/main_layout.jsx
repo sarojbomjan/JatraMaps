@@ -8,7 +8,7 @@ export default function MainLayout() {
     <div className="main-layout">
       <Navbar />
       <main className="content">
-        <Outlet /> {/* This renders the child routes */}
+        <Outlet />
       </main>
       <Footer />
     </div>

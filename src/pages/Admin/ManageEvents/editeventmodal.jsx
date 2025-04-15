@@ -1,0 +1,285 @@
+import React, { useState, useEffect } from "react";
+import { X, Calendar, Clock, MapPin, Tag, ImageIcon, Save } from "lucide-react";
+
+export default function EditEventModal({ isOpen, onClose, onSave, event }) {
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    date: "",
+    time: "",
+    location: "",
+    category: "",
+    image: "",
+    organizer: "",
+    price: "Free",
+    status: "draft",
+  });
+
+  useEffect(() => {
+    if (event) {
+      setFormData({
+        title: event.title || "",
+        description: event.description || "",
+        date: event.date || "",
+        time: event.time || "",
+        location: event.location || "",
+        category: event.category || "",
+        image: event.image || "",
+        organizer: event.organizer || "",
+        price: event.price || "Free",
+        status: event.status || "draft",
+      });
+    }
+  }, [event]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSave({ ...formData, id: event?.id });
+  };
+
+  if (!isOpen || !event) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
+      <div className="bg-gray-200 dark:bg-gray-600 rounded-lg shadow-xl max-w-3xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+        <div className="sticky top-0 bg-white dark:bg-gray-600 z-10 flex justify-between items-center border-b border-gray-200 dark:border-gray-700 px-6 py-4">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+            Edit Event
+          </h2>
+          <button
+            onClick={onClose}
+            className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="p-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="md:col-span-2">
+              <label
+                htmlFor="title"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              >
+                Event Title*
+              </label>
+              <input
+                type="text"
+                id="title"
+                name="title"
+                value={formData.title}
+                onChange={handleChange}
+                required
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                placeholder="Enter event title"
+              />
+            </div>
+
+            <div className="md:col-span-2">
+              <label
+                htmlFor="description"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              >
+                Description*
+              </label>
+              <textarea
+                id="description"
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                required
+                rows={4}
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                placeholder="Describe your event"
+              ></textarea>
+            </div>
+
+            <div>
+              <label
+                htmlFor="date"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              >
+                <Calendar className="inline-block h-4 w-4 mr-1" /> Date*
+              </label>
+              <input
+                type="date"
+                id="date"
+                name="date"
+                value={formData.date}
+                onChange={handleChange}
+                required
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="time"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              >
+                <Clock className="inline-block h-4 w-4 mr-1" /> Time*
+              </label>
+              <input
+                type="text"
+                id="time"
+                name="time"
+                value={formData.time}
+                onChange={handleChange}
+                required
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                placeholder="e.g., 9:00 AM - 5:00 PM"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="location"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              >
+                <MapPin className="inline-block h-4 w-4 mr-1" /> Location*
+              </label>
+              <input
+                type="text"
+                id="location"
+                name="location"
+                value={formData.location}
+                onChange={handleChange}
+                required
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                placeholder="Enter event location"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="category"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              >
+                <Tag className="inline-block h-4 w-4 mr-1" /> Category*
+              </label>
+              <select
+                id="category"
+                name="category"
+                value={formData.category}
+                onChange={handleChange}
+                required
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+              >
+                <option value="">Select a category</option>
+                <option value="Technology">Technology</option>
+                <option value="Music">Music</option>
+                <option value="Art">Art</option>
+                <option value="Food">Food</option>
+                <option value="Sports">Sports</option>
+                <option value="Business">Business</option>
+                <option value="Education">Education</option>
+              </select>
+            </div>
+
+            <div>
+              <label
+                htmlFor="organizer"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              >
+                Organizer*
+              </label>
+              <input
+                type="text"
+                id="organizer"
+                name="organizer"
+                value={formData.organizer}
+                onChange={handleChange}
+                required
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                placeholder="Enter organizer name"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="price"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              >
+                Price
+              </label>
+              <input
+                type="text"
+                id="price"
+                name="price"
+                value={formData.price}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                placeholder="e.g., Free, $10, $25-$50"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="image"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              >
+                <ImageIcon className="inline-block h-4 w-4 mr-1" /> Image URL
+              </label>
+              <input
+                type="text"
+                id="image"
+                name="image"
+                value={formData.image}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                placeholder="Enter image URL"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="status"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              >
+                Status
+              </label>
+              <select
+                id="status"
+                name="status"
+                value={formData.status}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+              >
+                <option value="draft">Draft</option>
+                <option value="pending">Pending</option>
+                <option value="active">Active</option>
+                <option value="completed">Completed</option>
+                <option value="canceled">Canceled</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="mt-8 flex justify-end space-x-3">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 text-sm font-medium"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm font-medium flex items-center"
+            >
+              <Save className="h-4 w-4 mr-2" />
+              Save Changes
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}

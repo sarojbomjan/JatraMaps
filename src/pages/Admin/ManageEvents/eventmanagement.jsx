@@ -13,6 +13,8 @@ import {
   Download,
   Upload,
   MoreHorizontal,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import { useEffect, useReducer, useState } from "react";
 import EventFormModal from "./event_manage_modal";
@@ -20,6 +22,7 @@ import BisketJatra from "../../../assets/Bisketjatra.jpg";
 import { deleteEvent, getEvents } from "../../../utils/eventService";
 import toast, { Toaster } from "react-hot-toast";
 import { showConfirmationToast } from "../../../utils/toast";
+import EditEventModal from "./editeventmodal";
 
 export default function EventManagement() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -31,6 +34,8 @@ export default function EventManagement() {
   const [isLoading, setIsLoading] = useState(false);
   const [events, setEvents] = useState([]);
   const [error, setError] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [currentEvent, setCurrentEvent] = useState(null);
 
   const [reducerValue, forceUpdate] = useReducer((x) => x + 1, 0);
 
@@ -101,6 +106,11 @@ export default function EventManagement() {
     } else {
       setSelectedEvents(sortedEvents.map((event) => event._id));
     }
+  };
+
+  const handleEditEvent = (event) => {
+    setCurrentEvent(event);
+    setShowEditModal(true);
   };
 
   // Single delete
@@ -267,21 +277,6 @@ export default function EventManagement() {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3">
-            {/* <div className="flex gap-2">
-                            <button lassName="flex items-center gap-1 px-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded-md text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"> 
-                                <Download className="h-4 w-4" />
-                                <span className="hidden sm:inline">Export</span>    
-                            </button>
-                            <button className="flex items-center gap-1 px-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded-md text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">
-                                <Upload className="h-4 w-4" />
-                                <span className="hidden sm:inline">Import</span>
-                            </button>
-                            <button className="flex items-center gap-1 px-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded-md text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">
-                                <Filter className="h-4 w-4" />
-                                <span className="hidden sm:inline">Filter</span>
-                            </button>
-                        </div> */}
-
             <div className="relative">
               <select
                 value={sortBy}
@@ -450,7 +445,10 @@ export default function EventManagement() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <div className="flex space-x-2">
-                        <button className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300">
+                        <button
+                          className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
+                          onClick={() => handleEditEvent(event)}
+                        >
                           <Edit className="h-4 w-4" />
                         </button>
                         <button
@@ -512,19 +510,7 @@ export default function EventManagement() {
                 <button className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700">
                   <span className="sr-only">Previous</span>
                   {/* Chevron Left icon */}
-                  <svg
-                    className="h-5 w-5"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+                  <ChevronLeft />
                 </button>
                 <button
                   aria-current="page"
@@ -535,19 +521,7 @@ export default function EventManagement() {
                 <button className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700">
                   <span className="sr-only">Next</span>
                   {/* Chevron Right icon */}
-                  <svg
-                    className="h-5 w-5"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+                  <ChevronRight />
                 </button>
               </nav>
             </div>
@@ -560,6 +534,15 @@ export default function EventManagement() {
         isOpen={showEventModal}
         onClose={() => setShowEventModal(false)}
         onEventCreated={forceUpdate}
+      />
+
+      <EditEventModal
+        isOpen={showEditModal}
+        onClose={() => {
+          setShowEditModal(false);
+          setCurrentEvent(null);
+        }}
+        event={currentEvent}
       />
     </div>
   );
