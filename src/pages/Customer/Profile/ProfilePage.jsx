@@ -24,6 +24,10 @@ const ProfilePage = () => {
     newPassword: "",
     confirmPassword: "",
   });
+
+  const [passwordLoading, setPasswordLoading] = useState(false);
+  const [passwordChangeSuccess, setPasswordChangeSuccess] = useState(null);
+  const [passwordChangeError, setPasswordChangeError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
@@ -133,7 +137,7 @@ const ProfilePage = () => {
 
       const token = getAccessToken();
       await axios.put(
-        "http://localhost:5000/users/change-password",
+        "http://localhost:5000/changePassword",
         {
           currentPassword: passwordData.currentPassword,
           newPassword: passwordData.newPassword,
@@ -158,6 +162,7 @@ const ProfilePage = () => {
         setError("Session expired. Please login again.");
       } else {
         setError(err.response?.data?.message || "Failed to change password");
+        console.log(setError);
       }
     }
   };
@@ -388,90 +393,78 @@ const ProfilePage = () => {
           {activeTab === "account" && (
             <div>
               <div className="mb-8">
-                <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
-                  Change Password
-                </h3>
-                <form onSubmit={handlePasswordSubmit} className="space-y-4">
+                <form onSubmit={handlePasswordSubmit} className="space-y-6">
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">
+                    Change Password
+                  </h3>
+
                   <div>
-                    <label
-                      htmlFor="current-password"
-                      className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-                    >
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Current Password
                     </label>
-                    <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <Lock className="h-5 w-5 text-gray-400" />
-                      </div>
-                      <input
-                        type="password"
-                        id="current-password"
-                        name="currentPassword"
-                        value={passwordData.currentPassword}
-                        onChange={handlePasswordChange}
-                        required
-                        className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
-                      />
-                    </div>
+                    <input
+                      type="password"
+                      name="currentPassword"
+                      value={passwordData.currentPassword}
+                      onChange={handlePasswordChange}
+                      className="w-full px-4 py-2 border rounded-md border-gray-300 dark:border-gray-600 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                      required
+                    />
                   </div>
 
                   <div>
-                    <label
-                      htmlFor="new-password"
-                      className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-                    >
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       New Password
                     </label>
-                    <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <Lock className="h-5 w-5 text-gray-400" />
-                      </div>
-                      <input
-                        type="password"
-                        id="new-password"
-                        name="newPassword"
-                        value={passwordData.newPassword}
-                        onChange={handlePasswordChange}
-                        required
-                        minLength={6}
-                        className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
-                      />
-                    </div>
+                    <input
+                      type="password"
+                      name="newPassword"
+                      value={passwordData.newPassword}
+                      onChange={handlePasswordChange}
+                      className="w-full px-4 py-2 border rounded-md border-gray-300 dark:border-gray-600 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                      required
+                    />
                   </div>
 
                   <div>
-                    <label
-                      htmlFor="confirm-password"
-                      className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-                    >
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Confirm New Password
                     </label>
-                    <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <Lock className="h-5 w-5 text-gray-400" />
-                      </div>
-                      <input
-                        type="password"
-                        id="confirm-password"
-                        name="confirmPassword"
-                        value={passwordData.confirmPassword}
-                        onChange={handlePasswordChange}
-                        required
-                        minLength={6}
-                        className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
-                      />
-                    </div>
+                    <input
+                      type="password"
+                      name="confirmPassword"
+                      value={passwordData.confirmPassword}
+                      onChange={handlePasswordChange}
+                      className="w-full px-4 py-2 border rounded-md border-gray-300 dark:border-gray-600 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                      required
+                    />
                   </div>
 
-                  <div>
+                  <div className="flex justify-end">
                     <button
                       type="submit"
-                      className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                      className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                      disabled={passwordLoading}
                     >
-                      <Save className="h-4 w-4 mr-2" />
-                      Update Password
+                      {passwordLoading ? (
+                        <Loader2 className="h-5 w-5 animate-spin inline-block" />
+                      ) : (
+                        "Change Password"
+                      )}
                     </button>
                   </div>
+
+                  {passwordChangeError && (
+                    <div className="text-sm text-red-500">
+                      {passwordChangeError}
+                    </div>
+                  )}
+
+                  {passwordChangeSuccess && (
+                    <div className="text-sm text-green-500">
+                      {passwordChangeSuccess}
+                    </div>
+                  )}
                 </form>
               </div>
 
