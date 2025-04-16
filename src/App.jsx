@@ -14,6 +14,7 @@ import AdminDashboardLayout from './pages/Admin/dashboard/dashboard_layout';
 import AdminDashboardOverview from './pages/Admin/dashboard/dashboard_overview';
 import EventManagement from './pages/Admin/ManageEvents/eventmanagement';
 import { AuthProvider } from './utils/authContext';
+import UserManagement from './pages/Admin/users/user_management';
 
 const Home = lazy(() => import('./pages/home'));
 const AboutUs = lazy(() => import('./pages/about'));
@@ -50,6 +51,7 @@ const App = () => {
         <Route path='/admin/dashboard' element={<AdminDashboardLayout />}>
           <Route index element={<AdminDashboardOverview />}/>
           <Route path='manageevents' element={<EventManagement />}/>
+          <Route path='manageusers' element={<UserManagement />}/>
         </Route>
         
         

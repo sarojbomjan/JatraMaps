@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from "react-router-dom";
 import {
   Users,
@@ -13,397 +13,366 @@ import {
   Info,
   ArrowRight,
   Plus,
+  PieChart as PieChartIcon,
+  LineChart as LineChartIcon,
+  Clock,
+  ChevronDown,
 } from "lucide-react";
+
 import UserImg from "../../../assets/user.jpg"
+import { getEvents } from '../../../utils/eventService';
+import BarChart from '../charts/barchart';
+import PieChart from '../charts/piechart';
 
 const AdminDashboardOverview = () => {
-    const [timeRange, setTimeRange] = useState("month");
+  const [timeRange, setTimeRange] = useState("month");
+  const [users, setUsers] = useState([]);
+  const [events, setEvents] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [activePerformanceTab, setActivePerformanceTab] = useState("users");
 
-    const statsData = {
-      totalUsers: 300,
-      totalEvents: 150,
-      revenue: 2500,
-      pendingEvents: 23,
-      userGrowth: 12.5,
-      eventGrowth: 8.3,
-      revenueGrowth: 15.7
+  useEffect(() => {
+    // Fetch users from API
+    fetch("http://localhost:5000/users")
+      .then(response => response.json())
+      .then(data => {
+        if (data.success && Array.isArray(data.users)) {
+          setUsers(data.users);  
+        } else {
+          console.error("Failed to load users:", data.message);
+        }
+      })
+      .catch(error => console.error("Error fetching users:", error));
+
+    // Fetch events from API
+    const fetchEvents = async () => {
+      try {
+        setIsLoading(true);
+        const data = await getEvents();  
+        setEvents(data);
+        setError(null);
+      } catch (err) {
+        console.log("Failed to fetch events", err);
+        setError("Failed to load events. Please try again later.");
+      } finally {
+        setIsLoading(false);
+      }
     };
 
-    const recentUsers = [
-      {
-        id: "1",
-        name: "Sarah Johnson",
-        email: "sarah@example.com",
-        joined: "2 hours ago",
-        avatar: UserImg,
-      },
-      {
-        id: "2",
-        name: "Michael Chen",
-        email: "michael@example.com",
-        joined: "5 hours ago",
-        avatar: UserImg,
-      },
-      {
-        id: "3",
-        name: "Emily Rodriguez",
-        email: "emily@example.com",
-        joined: "1 day ago",
-        avatar: UserImg,
-      },
-    ]
-  
-    const pendingEvents = [
-      {
-        id: "1",
-        title: "Tech Startup Meetup",
-        organizer: "Tech Hub Inc.",
-        date: "June 28, 2024",
-        status: "pending",
-      },
-      {
-        id: "2",
-        title: "Annual Charity Run",
-        organizer: "Helping Hands",
-        date: "July 15, 2024",
-        status: "pending",
-      },
-      {
-        id: "3",
-        title: "Local Food Festival",
-        organizer: "Foodies Association",
-        date: "August 5, 2024",
-        status: "pending",
-      },
-    ]
-  
-    const recentActivity = [
-      {
-        id: "1",
-        type: "eventApproved",
-        message: "Event 'Tech Conference 2024' was approved",
-        time: "10 minutes ago",
-      },
-      {
-        id: "2",
-        type: "userRegistered",
-        message: "New user registered: John Smith",
-        time: "1 hour ago",
-      },
-      {
-        id: "3",
-        type: "eventCreated",
-        message: "New event created: Summer Music Festival",
-        time: "2 hours ago",
-      },
-      {
-        id: "4",
-        type: "categoryAdded",
-        message: "New category added: Workshops",
-        time: "3 hours ago",
-      },
-      {
-        id: "5",
-        type: "issueReported",
-        message: "Issue reported on event 'Art Exhibition'",
-        time: "5 hours ago",
-      },
-    ]
-  
-    const getActivityIcon = (type) => {
-      switch (type) {
-        case "eventApproved":
-          return <CheckCircle className="h-5 w-5 text-green-500" />
-        case "userRegistered":
-          return <User className="h-5 w-5 text-blue-500" />
-        case "eventCreated":
-          return <Calendar className="h-5 w-5 text-purple-500" />
-        case "categoryAdded":
-          return <Plus className="h-5 w-5 text-indigo-500" />
-        case "issueReported":
-          return <AlertTriangle className="h-5 w-5 text-yellow-500" />
-        case "eventRejected":
-          return <XCircle className="h-5 w-5 text-red-500" />
-        default:
-          return <Info className="h-5 w-5 text-gray-500" />
-      }
-    }
+    fetchEvents(); 
+  }, []); 
 
-  return (
-    <div className="w-full px-4 sm:px-6 lg:px-8">
-      {/* Header */}
-      <div className='py-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4'>
-        <div>
-            <h1 className='text-2xl font-bold text-gray-900 dark:text-gray-100'>Admin Dashboard</h1>
-            <p className='text-gray-600 dark:text-gray-400'>Welcome back</p>
-        </div>
-        
-        <div className='flex items-center space-x-2 w-full sm:w-auto'>
+  const statsData = {
+    totalUsers: users.length,
+    totalEvents: events.length,
+    revenue: 2500,
+    pendingEvents: events.filter(event => event.status === 'pending').length,
+    activeUsers: Math.floor(users.length * 0.7), // 70% of total users as active
+  };
+
+  const recentUsers = users.slice(0, 4); // Showing first 4 users for recent users section
+  const pendingEvents = events.filter(event => event.status === 'pending').slice(0, 3);
+
+
+  const performanceData = {
+    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+    datasets: [
+      {
+        label: "Events",
+        data: [65, 78, 90, 105, 112, 120],
+        color: "#8B5CF6",
+      },
+      {
+        label: "Revenue",
+        data: [1200, 1900, 2300, 2800, 3200, 3800],
+        color: "#F59E0B",
+      },
+    ],
+  }
+
+  const categoryData = {
+    labels: ["Cultural", "Technology", "Food", "Art", "Sports", "Business"],
+    values: [32, 28, 21, 18, 15, 12],
+    colors: ["#6366F1", "#3B82F6", "#EF4444", "#EC4899", "#10B981", "#F59E0B"],
+  }
+  
+  const userActivityData = {
+    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+    datasets: [
+      {
+        label: "New Users",
+        data: [120, 150, 180, 220, 280, 250],
+        color: "#3B82F6",
+        fill: true,
+      },
+      {
+        label: "Active Users",
+        data: [100, 120, 140, 160, 200, 220],
+        color: "#10B981",
+      },
+    ],
+  }
+
+  const revenueComparisonData = {
+    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+    datasets: [
+      {
+        label: "2023",
+        data: [900, 1200, 1500, 1800, 2100, 2400],
+        color: "#8B5CF6",
+      },
+      {
+        label: "2024",
+        data: [1200, 1900, 2300, 2800, 3200, 3800],
+        color: "#F59E0B",
+      },
+    ],
+  }
+
+return (
+  <div className="w-full px-4 sm:px-6 lg:px-8 pb-8">
+    {/* Header */}
+    <div className='py-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4'>
+      <div>
+          <h1 className='text-2xl font-bold text-gray-900 dark:text-gray-100'>Admin Dashboard</h1>
+          <p className='text-gray-600 dark:text-gray-400'>Welcome back! Here's what's happening today.</p>
+      </div>
+      
+      <div className='flex items-center space-x-2 w-full sm:w-auto'>
+        <div className="relative">
           <select 
             value={timeRange} 
             onChange={(e) => setTimeRange(e.target.value)} 
-            className="w-full sm:w-auto bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-md px-3 py-1 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            className="appearance-none w-full sm:w-40 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-md px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
           >
             <option value="today">Today</option>
             <option value="week">This Week</option>
             <option value="month">This Month</option>
             <option value="year">This Year</option>
           </select>
+          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
+            <ChevronDown className="h-4 w-4" />
+          </div>
         </div>
       </div>
+    </div>
 
-      {/* Stats Cards */}
-      <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-6'>
-        {/* Users Card */}
-        <div className='bg-white dark:bg-gray-500 rounded-lg shadow p-4'>
-          <div className='flex items-center justify-between'>
-            <div>
-              <p className='text-sm text-gray-500 dark:text-black'>Total Users</p>
-              <p className='text-2xl font-bold text-gray-900 dark:text-gray-700'>{statsData.totalUsers}</p>
-            </div>
-            <div className='bg-blue-100 dark:bg-blue-900/30 p-3 rounded-full'>
-              <Users className='h-6 w-6 text-blue-600 dark:text-blue-700'/>
+    {/* Stats Cards */}
+    <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-6'>
+      {/* Users Card */}
+      <div className='bg-white dark:bg-gray-700 rounded-lg shadow p-5 transition-all hover:shadow-md hover:-translate-y-0.5'>
+        <div className='flex items-center justify-between'>
+          <div>
+            <p className='text-sm font-medium text-gray-500 dark:text-gray-400'>Total Users</p>
+            <p className='text-2xl font-bold text-gray-900 dark:text-white mt-1'>{statsData.totalUsers}</p>
+            <div className="flex items-center mt-2">
+              <TrendingUp className="h-4 w-4 text-green-500" />
+              <span className="text-xs text-green-600 dark:text-green-400 ml-1">12% from last month</span>
             </div>
           </div>
-          <div className='mt-2 flex items-center text-xs'>
-            <span className={`flex items-center ${statsData.userGrowth >=0 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"}`}>
-              {statsData.userGrowth >=0 ? (
-                <TrendingUp className="h-3 w-3 mr-1" />
-              ) : (
-                <TrendingDown className="h-3 w-3 mr-1" />
-              )}
-              {Math.abs(statsData.userGrowth)}%
-            </span>
-            <span className="text-gray-500 dark:text-gray-900 ml-1">from last {timeRange}</span>
+          <div className='bg-blue-100 dark:bg-blue-900/30 p-3 rounded-full'>
+            <Users className='h-6 w-6 text-blue-600 dark:text-blue-400'/>
           </div>
         </div>
-        
-        {/* Event Card */}
-        <div className='bg-white dark:bg-gray-500 rounded-lg shadow p-4'>
-          <div className='flex items-center justify-between'>
-            <div>
-              <p className='text-sm text-gray-500 dark:text-black'>Total Events</p>
-              <p className='text-2xl font-bold text-gray-900 dark:text-gray-700'>{statsData.totalEvents}</p>
-            </div>
-            <div className='bg-blue-100 dark:bg-blue-900/30 p-3 rounded-full'>
-              <Calendar className='h-6 w-6 text-blue-600 dark:text-blue-700'/>
-            </div>
-          </div>
-          <div className='mt-2 flex items-center text-xs'>
-            <span className={`flex items-center ${statsData.eventGrowth >= 0 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"}`}>
-              {statsData.eventGrowth >= 0 ? (
-                <TrendingUp className="h-3 w-3 mr-1" />
-              ) : (
-                <TrendingDown className="h-3 w-3 mr-1" />
-              )}
-              {Math.abs(statsData.eventGrowth)}%
-            </span>
-            <span className="text-gray-500 dark:text-gray-900 ml-1">from last {timeRange}</span>
-          </div>
-        </div>
-
-        {/* Revenue Card */}
-        <div className='bg-white dark:bg-gray-500 rounded-lg shadow p-4'>
-          <div className='flex items-center justify-between'>
-            <div>
-              <p className='text-sm text-gray-500 dark:text-black'>Total Revenue</p>
-              <p className='text-2xl font-bold text-gray-900 dark:text-gray-700'>${statsData.revenue}</p>
-            </div>
-            <div className='bg-blue-100 dark:bg-blue-900/30 p-3 rounded-full'>
-              <DollarSign className='h-6 w-6 text-blue-600 dark:text-blue-700'/>
+      </div>
+      
+      {/* Event Card */}
+      <div className='bg-white dark:bg-gray-700 rounded-lg shadow p-5 transition-all hover:shadow-md hover:-translate-y-0.5'>
+        <div className='flex items-center justify-between'>
+          <div>
+            <p className='text-sm font-medium text-gray-500 dark:text-gray-400'>Total Events</p>
+            <p className='text-2xl font-bold text-gray-900 dark:text-white mt-1'>{statsData.totalEvents}</p>
+            <div className="flex items-center mt-2">
+              <TrendingUp className="h-4 w-4 text-green-500" />
+              <span className="text-xs text-green-600 dark:text-green-400 ml-1">8% from last month</span>
             </div>
           </div>
-          <div className='mt-2 flex items-center text-xs'>
-            <span className={`flex items-center ${statsData.revenueGrowth >=0 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"}`}>
-              {statsData.revenueGrowth >=0 ? (
-                <TrendingUp className="h-3 w-3 mr-1" />
-              ) : (
-                <TrendingDown className="h-3 w-3 mr-1" />
-              )}
-              {Math.abs(statsData.revenueGrowth)}%
-            </span>
-            <span className="text-gray-500 dark:text-gray-900 ml-1">from last {timeRange}</span>
-          </div>
-        </div>
-
-        {/* Pending Events Card */}
-        <div className="bg-white dark:bg-gray-500 rounded-lg shadow p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400">Pending Events</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{statsData.pendingEvents}</p>
-            </div>
-            <div className="bg-yellow-100 dark:bg-yellow-900/30 p-3 rounded-full">
-              <AlertTriangle className="h-6 w-6 text-yellow-600 dark:text-yellow-400" />
-            </div>
-          </div>
-          <div className="mt-2">
-            <Link to="#" className="text-blue-600 dark:text-blue-400 text-xs hover:underline">
-              Review pending events
-            </Link>
+          <div className='bg-purple-100 dark:bg-purple-900/30 p-3 rounded-full'>
+            <Calendar className='h-6 w-6 text-purple-600 dark:text-purple-400'/>
           </div>
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className='grid grid-cols-1 lg:grid-cols-3 gap-6'>
-        {/* Charts */}
-        <div className='lg:col-span-2 space-y-6'>
-          {/* Performance Overview */}
-          <div className='bg-white dark:bg-gray-600 rounded-lg shadow p-4'>
-            <div className='flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2'>
-              <h2 className='text-lg font-semibold text-gray-900 dark:text-gray-100'>Performance Overview</h2>
-              <select className="w-full sm:w-auto text-sm bg-transparent border border-gray-300 dark:border-gray-600 rounded-md px-2 py-1 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                <option value="users">Users</option>
-                <option value="events">Events</option>
-                <option value="revenue">Revenue</option>
+      {/* Revenue Card */}
+      <div className='bg-white dark:bg-gray-700 rounded-lg shadow p-5 transition-all hover:shadow-md hover:-translate-y-0.5'>
+        <div className='flex items-center justify-between'>
+          <div>
+            <p className='text-sm font-medium text-gray-500 dark:text-gray-400'>Total Revenue</p>
+            <p className='text-2xl font-bold text-gray-900 dark:text-white mt-1'>${statsData.revenue.toLocaleString()}</p>
+            <div className="flex items-center mt-2">
+              <TrendingUp className="h-4 w-4 text-green-500" />
+              <span className="text-xs text-green-600 dark:text-green-400 ml-1">24% from last month</span>
+            </div>
+          </div>
+          <div className='bg-green-100 dark:bg-green-900/30 p-3 rounded-full'>
+            <DollarSign className='h-6 w-6 text-green-600 dark:text-green-400'/>
+          </div>
+        </div>
+      </div>
+
+      {/* Pending Events Card */}
+      <div className="bg-white dark:bg-gray-700 rounded-lg shadow p-5 transition-all hover:shadow-md hover:-translate-y-0.5">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Pending Events</p>
+            <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">{statsData.pendingEvents}</p>
+            <div className="flex items-center mt-2">
+              <Clock className="h-4 w-4 text-yellow-500" />
+              <span className="text-xs text-yellow-600 dark:text-yellow-400 ml-1">Need review</span>
+            </div>
+          </div>
+          <div className="bg-yellow-100 dark:bg-yellow-900/30 p-3 rounded-full">
+            <AlertTriangle className="h-6 w-6 text-yellow-600 dark:text-yellow-400" />
+          </div>
+        </div>
+        <div className="mt-3">
+          <Link to="#" className="text-blue-600 dark:text-blue-400 text-sm hover:underline flex items-center">
+            Review now <ArrowRight className="ml-1 h-4 w-4" />
+          </Link>
+        </div>
+      </div>
+    </div>
+
+    {/* Main Content */}
+    <div className='grid grid-cols-1 lg:grid-cols-3 gap-6'>
+      {/* Charts */}
+      <div className='lg:col-span-2 space-y-6'>
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+          {/* Event Categories */}
+          <div className='bg-white dark:bg-gray-700 rounded-lg shadow p-5'>
+            <div className='flex justify-between items-center mb-4'>
+              <h2 className='text-lg font-semibold text-gray-900 dark:text-white'>Event Categories</h2>
+              <Link to="#" className="text-sm text-blue-600 dark:text-blue-400 hover:underline">
+                View all
+              </Link>
+            </div>
+            <div className='h-64'>
+              <PieChart 
+                data={categoryData} 
+                height={250}
+                showPercentage={true}
+              />
+            </div>
+          </div>
+
+          {/* Monthly Performance */}
+          <div className='bg-white dark:bg-gray-700 rounded-lg shadow p-5'>
+            <div className='flex justify-between items-center mb-4'>
+              <h2 className='text-lg font-semibold text-gray-200 dark:text-white'>Monthly Performance</h2>
+              <select className="text-sm bg-transparent border border-gray-300 dark:border-gray-600 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
               </select>
             </div>
             <div className='h-64'>
-              <div className="flex items-center justify-center h-full bg-gray-100 dark:bg-gray-700 rounded">
-                <p className="text-gray-500">Line Chart Placeholder</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Small Charts */}
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-            {/* Event Categories */}
-            <div className='bg-white dark:bg-gray-600 rounded-lg shadow p-4'>
-              <div className='flex justify-between items-center mb-4'>
-                <h2 className='text-lg font-semibold text-gray-900 dark:text-gray-100'>Event Categories</h2>
-              </div>
-              <div className='h-48'>
-                <div className='flex items-center justify-center h-full bg-gray-100 dark:bg-gray-700 rounded'>
-                  <p>Pie Chart Placeholder</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Monthly Performance */}
-            <div className='bg-white dark:bg-gray-600 rounded-lg shadow p-4'>
-              <div className='flex justify-between items-center mb-4'>
-                <h2 className='text-lg font-semibold text-gray-900 dark:text-gray-100'>Monthly Performance</h2>
-              </div>
-              <div className='h-48'>
-                <div className='flex items-center justify-center h-full bg-gray-100 dark:bg-gray-700 rounded'>
-                  <p>Bar Chart Placeholder</p>
-                </div>
-              </div>
+              <BarChart 
+                data={performanceData} 
+                height={250}
+                horizontal={false}
+              />
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Right Sidebar */}
-        <div className='space-y-6'>
-          {/* Recent Activity */}
-          <div className='bg-white dark:bg-gray-600 rounded-lg shadow'>
-            <div className='px-4 py-3 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center'>
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Recent Activities</h2>
-            </div>
-            <div className='p-4'>
+      {/* Right Sidebar */}
+      <div className='space-y-6'>
+
+        {/* Pending Events */}
+        <div className='bg-white dark:bg-gray-700 rounded-lg shadow'>
+          <div className='px-5 py-4 border-b border-gray-200 dark:border-gray-400 flex justify-between items-center'>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Pending Events</h2>
+            <span className="bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 text-xs font-medium px-2.5 py-0.5 rounded">
+              {pendingEvents.length} Pending
+            </span>
+          </div>
+          <div className='p-5'>
+            {pendingEvents.length > 0 ? (
               <div className='space-y-4'>
-                {recentActivity.map((activity) => (
-                  <div key={activity.id} className='flex items-start gap-3'> 
-                    <div className='h-8 w-8 rounded-full bg-gray-100 dark:bg-gray-300 flex items-center justify-center flex-shrink-0'>
-                      {getActivityIcon(activity.type)}
+                {pendingEvents.map((event) => (
+                  <div key={event.id} className='flex flex-col p-3 border border-gray-200 dark:border-gray-400 rounded-lg'>
+                    <div className='flex justify-between'>
+                      <h3 className='font-medium text-gray-900 dark:text-white truncate'>{event.title}</h3>
+                      <span className="bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 text-xs px-2 py-0.5 rounded whitespace-nowrap ml-2">Pending</span>
                     </div>
-                    <div className="min-w-0">
-                      <p className='text-sm text-gray-900 dark:text-gray-100 truncate'>{activity.message}</p>
-                      <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>{activity.time}</p>
+                    <div className='mt-2 text-sm text-gray-500 dark:text-gray-400'>
+                      <p className="truncate">Organizer: {event.organizer}</p>
+                      <p className="flex items-center mt-1">
+                        <Calendar className="h-3 w-3 mr-1" /> {event.date}
+                      </p>
+                    </div>
+                    <div className='mt-3 flex flex-wrap gap-2'>
+                      <button className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-xs rounded-md whitespace-nowrap transition-colors">
+                        Approve
+                      </button>
+                      <button className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-xs rounded-md whitespace-nowrap transition-colors">
+                        Reject
+                      </button>
+                      <button className="px-3 py-1 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 text-xs rounded-md whitespace-nowrap transition-colors">
+                        Details
+                      </button>
                     </div>
                   </div>
                 ))}
               </div>
-              <div className='mt-4 text-center'> 
-                <Link to="#" className='text-sm text-blue-600 dark:text-blue-400 hover:underline'>
-                  View all activity
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          {/* Pending Events */}
-          <div className='bg-white dark:bg-gray-600 rounded-lg shadow'>
-            <div className='px-4 py-3 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center'>
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Pending Events</h2>
-              <span className="bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 text-xs font-medium px-2.5 py-0.5 rounded">
-                {pendingEvents.length} Pending
-              </span>
-            </div>
-            <div className='p-4'>
-              {pendingEvents.length > 0 ? (
-                <div className='space-y-4'>
-                  {pendingEvents.map((event) => (
-                    <div key={event.id} className='flex flex-col p-3 border border-gray-200 dark:border-gray-400 rounded-lg'>
-                      <div className='flex justify-between'>
-                        <h3 className='font-medium text-gray-900 dark:text-gray-100 truncate'>{event.title}</h3>
-                        <span className="bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 text-xs px-2 py-0.5 rounded whitespace-nowrap ml-2">Pending</span>
-                      </div>
-                      <div className='mt-2 text-sm text-gray-100 dark:text-gray-400'>
-                        <p className="truncate">Organizer: {event.organizer}</p>
-                        <p>Date: {event.date}</p>
-                      </div>
-                      <div className='mt-3 flex flex-wrap gap-2'>
-                        <button className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-xs rounded whitespace-nowrap">Approve</button>
-                        <button className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-xs rounded whitespace-nowrap">
-                          Reject
-                        </button>
-                        <button className="px-3 py-1 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 text-xs rounded whitespace-nowrap">
-                          Review
-                        </button>
-                      </div>
-                    </div>
-                  ))}
+            ) : (
+              <div className="text-center py-4"> 
+                <div className="mx-auto bg-gray-100 dark:bg-gray-700 rounded-full p-3 w-12 h-12 flex items-center justify-center mb-3">
+                  <CheckCircle className="h-6 w-6 text-green-500" />
                 </div>
-              ) : (
-                <div className="text-center py-4"> 
-                  <p className="text-gray-500 dark:text-gray-400 text-sm">No pending events to review</p>
-                </div>
-              )}
-              <div className="mt-4 text-center">
-                <Link to="#" className="text-sm text-blue-600 dark:text-blue-400 hover:underline">
-                  Manage all events <ArrowRight className="inline h-4 w-4" />
-                </Link>
+                <p className="text-gray-500 dark:text-gray-400 text-sm">No pending events to review</p>
               </div>
-            </div>
+            )}
           </div>
+        </div>
 
-          {/* New Users */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
-            <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">New Users</h2>
-            </div>
-            <div className="p-4">
-              <div className="space-y-4">
-                {recentUsers.map((user) => (
+        {/* Recent Users */}
+        <div className="bg-white dark:bg-gray-700 rounded-lg shadow">
+          <div className="px-5 py-4 border-b border-gray-200 dark:border-gray-400 flex justify-between items-center">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Recent Users</h2>
+            <Link to="#" className="text-sm text-blue-600 dark:text-blue-400 hover:underline">
+              View all
+            </Link>
+          </div>
+          <div className="p-5">
+            <div className="space-y-4">
+              {recentUsers.length > 0 ? (
+                recentUsers.map((user) => (
                   <div key={user.id} className="flex items-center">
-                    <div className="flex-shrink-0 h-10 w-10 rounded-full overflow-hidden">
+                    <div className="flex-shrink-0 h-10 w-10 rounded-full overflow-hidden border-2 border-white dark:border-gray-400 shadow">
                       <img
-                        src={user.avatar || "/placeholder.svg"}
+                        src={UserImg}
                         alt={user.name}
                         className="h-full w-full object-cover"
                       />
                     </div>
                     <div className="ml-3 min-w-0">
-                      <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">{user.name}</p>
+                      <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{user.username}</p>
                       <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{user.email}</p>
                     </div>
-                    <span className="text-xs text-gray-500 dark:text-gray-400 ml-auto whitespace-nowrap">{user.joined}</span>
+                    <div className="ml-auto">
+                      <span className="text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-400 px-2 py-0.5 rounded">
+                        New
+                      </span>
+                    </div>
                   </div>
-                ))}
-              </div>
-              <div className="mt-4 text-center">
-                <Link to="#" className="text-sm text-blue-600 dark:text-blue-400 hover:underline">
-                  View all users
-                </Link>
-              </div>
+                ))
+              ) : (
+                <div className="text-center py-4">
+                  <div className="mx-auto bg-gray-100 dark:bg-gray-400 rounded-full p-3 w-12 h-12 flex items-center justify-center mb-3">
+                    <User className="h-6 w-6 text-gray-500 dark:text-gray-400" />
+                  </div>
+                  <p className="text-gray-500 dark:text-gray-400 text-sm">No recent users</p>
+                </div>
+              )}
             </div>
           </div>
         </div>
       </div>
     </div>
-  )
+  </div>
+)
 }
 
 export default AdminDashboardOverview
