@@ -88,7 +88,7 @@ export default function EditEventModal({
       const updatedEvent = await updateEvent(event.id, formData);
       console.log("Updated:", updatedEvent);
       toast.success("Event updated successfully");
-      onEventUpdated(updateEvent);
+      onEventUpdated(forceUpdate);
       onClose();
     } catch (err) {
       console.error("Failed to update event.", err);
