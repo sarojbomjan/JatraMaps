@@ -76,14 +76,14 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-white border-t border-gray-200">
+        <div className="mt-25 bg-white border-t border-gray-200">
           <div className="px-2 pt-2 pb-3 space-y-1">
-            <a
-              href="/"
-              className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100 rounded-md"
+            <Link
+              onClick={() => handleScrollToSection("header-section")}
+              className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100 hover:text-orange-600 rounded-md"
             >
               Home
-            </a>
+            </Link>
             <button
               onClick={() => handleScrollToSection("upcoming-section")}
               className="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-orange-600 rounded-md"
@@ -97,37 +97,16 @@ export default function Navbar() {
             >
               About Us
             </button>
-            <a
-              href="/blog"
-              className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100 rounded-md"
-            >
-              Blog
-            </a>
-            <a
-              href="/contact"
-              className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100 rounded-md"
-            >
-              Contact
-            </a>
 
             <div className="pt-4 pb-3 border-t border-gray-200">
-              <div className="flex items-center px-3">
-                <div className="flex-shrink-0">
-                  <User className="h-10 w-10 rounded-full bg-gray-200 p-2 text-gray-600" />
-                </div>
-                <div className="ml-3">
-                  <div className="text-base font-medium text-gray-800">
-                    Guest User
-                  </div>
-                </div>
-              </div>
+              <div className="flex items-center px-3"></div>
               <div className="mt-3 space-y-1">
-                <button className="block w-full text-left px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100 rounded-md">
+                <Link
+                  to={"/login"}
+                  className="block w-full text-left px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100 rounded-md"
+                >
                   Login
-                </button>
-                <button className="block w-full text-left px-3 py-2 text-base font-medium bg-blue-600 text-white hover:bg-blue-700 rounded-md">
-                  Register
-                </button>
+                </Link>
               </div>
             </div>
           </div>

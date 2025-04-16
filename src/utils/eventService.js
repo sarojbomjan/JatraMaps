@@ -136,3 +136,25 @@ export const getEventComments = async (eventId) => {
     throw error;
   }
 };
+
+export const approveEvent = async (eventId, status) => {
+  try {
+    const response = await axios.patch(
+      `${API_BASE_URL}/${eventId}/approve`,
+      { status },
+      { headers: { "Content-Type": "application/json" } }
+    );
+
+    // Log the response data
+    console.log("Response data:", response.data);
+
+    if (response.status !== 200) {
+      throw new Error("Failed to update event status");
+    }
+
+    return response.data;
+  } catch (error) {
+    console.error("Error in approveEvent:", error);
+    throw error;
+  }
+};

@@ -1,7 +1,25 @@
-import React, { useState, useEffect } from "react";
-import { X, Calendar, Clock, MapPin, Tag, ImageIcon, Save } from "lucide-react";
+import React, { useState, useEffect, useRef, useReducer } from "react";
+import {
+  X,
+  Calendar,
+  Clock,
+  MapPin,
+  Tag,
+  ImageIcon,
+  Save,
+  Upload,
+} from "lucide-react";
+import { updateEvent } from "../../../utils/eventService";
+import toast from "react-hot-toast";
 
-export default function EditEventModal({ isOpen, onClose, onSave, event }) {
+export default function EditEventModal({
+  isOpen,
+  onClose,
+  onEventUpdated,
+  event,
+}) {
+  const fileInputRef = useRef(null);
+  const [reducerValue, forceUpdate] = useReducer((x) => x + 1, 0);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -15,22 +33,26 @@ export default function EditEventModal({ isOpen, onClose, onSave, event }) {
     status: "draft",
   });
 
-  useEffect(() => {
-    if (event) {
-      setFormData({
-        title: event.title || "",
-        description: event.description || "",
-        date: event.date || "",
-        time: event.time || "",
-        location: event.location || "",
-        category: event.category || "",
-        image: event.image || "",
-        organizer: event.organizer || "",
-        price: event.price || "Free",
-        status: event.status || "draft",
-      });
-    }
-  }, [event]);
+  useEffect(
+    () => {
+      if (event) {
+        setFormData({
+          title: event.title || "",
+          description: event.description || "",
+          date: event.date || "",
+          time: event.time || "",
+          location: event.location || "",
+          category: event.category || "",
+          image: event.image || "",
+          organizer: event.organizer || "",
+          price: event.price || "Free",
+          status: event.status || "draft",
+        });
+      }
+    },
+    [event],
+    [reducerValue]
+  );
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -40,9 +62,38 @@ export default function EditEventModal({ isOpen, onClose, onSave, event }) {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Revoke previous image URL if exists
+      if (formData.previewImage) {
+        URL.revokeObjectURL(formData.previewImage);
+      }
+
+      setFormData((prev) => ({
+        ...prev,
+        image: file,
+        previewImage: URL.createObjectURL(file),
+      }));
+    }
+  };
+
+  const triggerFileInput = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSave({ ...formData, id: event?.id });
+    try {
+      const updatedEvent = await updateEvent(event.id, formData);
+      console.log("Updated:", updatedEvent);
+      toast.success("Event updated successfully");
+      onEventUpdated(updateEvent);
+      onClose();
+    } catch (err) {
+      console.error("Failed to update event.", err);
+      toast.error("Failed to update event. ");
+    }
   };
 
   if (!isOpen || !event) return null;
@@ -174,7 +225,7 @@ export default function EditEventModal({ isOpen, onClose, onSave, event }) {
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
               >
                 <option value="">Select a category</option>
-                <option value="Technology">Technology</option>
+                <option value="Cultural">Cultural</option>
                 <option value="Music">Music</option>
                 <option value="Art">Art</option>
                 <option value="Food">Food</option>
@@ -222,21 +273,38 @@ export default function EditEventModal({ isOpen, onClose, onSave, event }) {
             </div>
 
             <div>
-              <label
-                htmlFor="image"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-              >
-                <ImageIcon className="inline-block h-4 w-4 mr-1" /> Image URL
+              <label className="block text-sm font-medium text-gray-600 dark:text-gray-100 mb-1">
+                <ImageIcon className="inline-block h-4 w-4 mr-1" /> Event Image
               </label>
               <input
-                type="text"
-                id="image"
-                name="image"
-                value={formData.image}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
-                placeholder="Enter image URL"
+                type="file"
+                ref={fileInputRef}
+                onChange={handleImageChange}
+                accept="image/*"
+                className="hidden"
               />
+              <div className="flex items-center gap-4">
+                <button
+                  type="button"
+                  onClick={triggerFileInput}
+                  className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-md text-gray-600 dark:text-gray-100 hover:bg-gray-800 hover:text-gray-400"
+                >
+                  <Upload className="h-4 w-4" />
+                  Upload Image
+                </button>
+                {formData.previewImage && (
+                  <div className="w-16 h-16 rounded-md overflow-hidden border border-gray-200">
+                    <img
+                      src={formData.previewImage}
+                      alt="Preview"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
+              </div>
+              <p className="mt-1 text-xs text-gray-500">
+                Upload a high-quality image for your event (JPG, PNG)
+              </p>
             </div>
 
             <div>

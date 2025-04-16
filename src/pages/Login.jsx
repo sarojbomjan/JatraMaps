@@ -166,7 +166,7 @@ const Login = () => {
 
             <div className="relative">
               <input
-                type={showPassword ? "text" : "password"} // Toggle type based on state
+                type={showPassword ? "text" : "password"}
                 name="password"
                 value={formData.password}
                 onChange={handleChange}

@@ -3,18 +3,11 @@ import { Link } from "react-router-dom";
 import {
   Users,
   Calendar,
-  DollarSign,
   TrendingUp,
-  TrendingDown,
   User,
   CheckCircle,
-  XCircle,
   AlertTriangle,
-  Info,
   ArrowRight,
-  Plus,
-  PieChart as PieChartIcon,
-  LineChart as LineChartIcon,
   Clock,
   ChevronDown,
 } from "lucide-react";
@@ -199,7 +192,7 @@ const AdminDashboardOverview = () => {
           </div>
           <div className="mt-3">
             <Link
-              to="#"
+              to="/admin/dashboard/manageevents"
               className="text-blue-600 dark:text-blue-400 text-sm hover:underline flex items-center"
             >
               Review now <ArrowRight className="ml-1 h-4 w-4" />

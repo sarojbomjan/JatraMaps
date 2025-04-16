@@ -182,13 +182,6 @@ const AdminDashboardLayout = () => {
                   <MessageSquare className="h-6 w-6" />
                   <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500"></span>
                 </button>
-                {/* <button 
-                  className='flex items-center px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-md font-medium transition-colors'
-                  onClick={() => navigate('/admin/events/create')}
-                >
-                  <PlusCircle className='h-4 w-4 mr-1'/>
-                  Create Event
-                </button> */}
               </div>
             </div>
           </div>

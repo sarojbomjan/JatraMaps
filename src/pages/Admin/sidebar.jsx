@@ -1,14 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import {
-  ChevronFirst,
-  ChevronLast,
-  LayoutDashboard,
-  Calendar,
-  Users,
-  Settings,
-  Tag,
-  MoreVertical,
-} from "lucide-react";
+import { ChevronFirst, ChevronLast, MoreVertical } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Userimg from "../../assets/user.jpg";
 

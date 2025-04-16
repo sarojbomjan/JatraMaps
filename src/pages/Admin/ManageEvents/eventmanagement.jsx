@@ -1,6 +1,5 @@
 import {
   Search,
-  Filter,
   Users,
   Clock,
   Plus,
@@ -9,17 +8,17 @@ import {
   CheckCircle,
   AlertTriangle,
   XCircle,
-  ChevronDown,
-  Download,
-  Upload,
   MoreHorizontal,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
 import { useEffect, useReducer, useState } from "react";
 import EventFormModal from "./event_manage_modal";
-import BisketJatra from "../../../assets/Bisketjatra.jpg";
-import { deleteEvent, getEvents } from "../../../utils/eventService";
+import {
+  approveEvent,
+  deleteEvent,
+  getEvents,
+} from "../../../utils/eventService";
 import toast, { Toaster } from "react-hot-toast";
 import { showConfirmationToast } from "../../../utils/toast";
 import EditEventModal from "./editeventmodal";
@@ -204,6 +203,38 @@ export default function EventManagement() {
     }
   };
 
+  const handleApproveEvents = async () => {
+    if (selectedEvents.length === 0) {
+      toast.error("Please select events to approve");
+      return;
+    }
+
+    showConfirmationToast(
+      `Are you sure you want to approve ${selectedEvents.length} selected events?`,
+      async () => {
+        try {
+          await Promise.all(
+            selectedEvents.map((id) => approveEvent(id, "active"))
+          );
+
+          setEvents((prevEvents) =>
+            prevEvents.map((event) =>
+              selectedEvents.includes(event._id)
+                ? { ...event, status: "active" }
+                : event
+            )
+          );
+
+          setSelectedEvents([]);
+          toast.success("Selected events approved successfully");
+        } catch (error) {
+          console.error("Approval failed:", error);
+          toast.error("Failed to approve selected events");
+        }
+      }
+    );
+  };
+
   return (
     <div>
       <Toaster position="top-center" />
@@ -305,7 +336,10 @@ export default function EventManagement() {
             </span>
           </div>
           <div className="flex gap-2">
-            <button className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded">
+            <button
+              onClick={handleApproveEvents}
+              className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded"
+            >
               Approve
             </button>
             <button
@@ -543,6 +577,7 @@ export default function EventManagement() {
           setCurrentEvent(null);
         }}
         event={currentEvent}
+        onEventUpdated={forceUpdate}
       />
     </div>
   );
