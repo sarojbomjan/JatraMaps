@@ -139,7 +139,7 @@ const handleCommentSubmit = async (e) => {
           <img 
             src={event.image?.url || "/placeholder-event.jpg"} 
             alt={event.title} 
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover" loading="lazy"
           />
           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
             <div className="flex flex-wrap gap-2">
