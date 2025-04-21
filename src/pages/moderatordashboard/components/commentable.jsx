@@ -19,13 +19,26 @@ export default function CommentTable({
   setShowBanModal,
   setCurrentAction,
   setCurrentUserId,
+  handleAction,
+  handleSave,
 }) {
   const handleSelectAll = (event) => {
-    if (event.target.checked) {
-      setSelectedComments(comments.map((comment) => comment._id));
+    const checked = event.target.checked;
+    if (checked) {
+      setSelectedComments(comments.map((comment) => comment._commentid));
     } else {
       setSelectedComments([]);
     }
+  };
+
+  const handleRowSelect = (commentId) => {
+    setSelectedComments((prevSelected) => {
+      if (prevSelected.includes(commentId)) {
+        return prevSelected.filter((id) => id !== commentId); // Deselect
+      } else {
+        return [...prevSelected, commentId]; // Select
+      }
+    });
   };
 
   return (
@@ -78,8 +91,6 @@ export default function CommentTable({
           </div>
         </div>
       </div>
-
-      {/* Bulk Actions would go here */}
 
       <div className="bg-white rounded-lg shadow overflow-hidden">
         <div className="overflow-x-auto">
@@ -144,17 +155,19 @@ export default function CommentTable({
               ) : comments.length > 0 ? (
                 comments.map((comment) => (
                   <CommentRow
-                    key={comment._id}
+                    key={comment._commentid}
                     comment={comment}
-                    selectedComments={selectedComments}
+                    isSelected={selectedComments.includes(comment._commentid)}
+                    onSelect={handleRowSelect}
                     editingId={editingId}
                     editedText={editedText}
-                    setSelectedComments={setSelectedComments}
                     setEditingId={setEditingId}
                     setEditedText={setEditedText}
                     setShowBanModal={setShowBanModal}
                     setCurrentAction={setCurrentAction}
                     setCurrentUserId={setCurrentUserId}
+                    handleAction={handleAction}
+                    handleSave={handleSave}
                   />
                 ))
               ) : (

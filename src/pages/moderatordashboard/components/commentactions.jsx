@@ -7,14 +7,13 @@ export default function CommentActions({
   expanded,
   setEditingId,
   setEditedText,
-  setShowBanModal,
-  setCurrentAction,
-  setCurrentUserId,
   toggleExpansion,
+  handleAction,
+  handleSave,
 }) {
   const handleEdit = (e) => {
     e.stopPropagation();
-    setEditingId(comment._id);
+    setEditingId(comment._commentid);
     setEditedText(comment.text);
   };
 
@@ -24,21 +23,19 @@ export default function CommentActions({
     setEditedText("");
   };
 
-  const handleDelete = (e) => {
+  const handleDeleteClick = (e) => {
     e.stopPropagation();
-    setCurrentAction("Deleted");
-    setCurrentUserId(comment.userId);
-    setShowBanModal(true);
+    handleAction(comment._commentid, "Deleted", comment.userId, e);
   };
 
   return (
     <div className="flex space-x-2">
-      {editingId === comment._id ? (
+      {editingId === comment._commentid ? (
         <>
           <button
             onClick={(e) => {
               e.stopPropagation();
-              // Save logic would go here
+              handleSave(comment._commentid);
             }}
             className="text-blue-600 hover:text-blue-900"
           >
@@ -60,7 +57,7 @@ export default function CommentActions({
         </button>
       )}
       <button
-        onClick={handleDelete}
+        onClick={handleDeleteClick}
         className="text-red-600 hover:text-red-900"
       >
         <Trash2 className="h-4 w-4" />

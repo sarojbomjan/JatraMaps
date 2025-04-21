@@ -10,34 +10,25 @@ export default function BanModal({
 }) {
   const confirmBanAction = async () => {
     try {
-      const endpoint = currentAction === "Banned" ? "ban" : "unban";
-      const response = await fetch(
-        `http://localhost:5000/comments/${endpoint}/${currentUserId}`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body:
-            currentAction === "Banned"
-              ? JSON.stringify({ reason: banReason })
-              : undefined,
-        }
-      );
-
-      if (!response.ok)
-        throw new Error(`Failed to ${currentAction.toLowerCase()} user`);
-      await fetchComments();
+      await fetch(`http://localhost:5000/comments/ban/${currentUserId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reason: banReason }),
+      });
+      alert("User has been banned.");
       setShowBanModal(false);
       setBanReason("");
-    } catch (err) {
-      console.error(`${currentAction} failed:`, err);
-      alert(`Failed to ${currentAction.toLowerCase()} user. Please try again.`);
+      fetchComments();
+    } catch (error) {
+      console.error("Error banning user:", error);
+      alert("Failed to ban user. Please try again.");
     }
   };
 
   if (!showBanModal) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
+    <div className="fixed inset-0 flex items-center justify-center z-20">
       <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
         <h2 className="text-xl font-bold mb-2">
           {currentAction === "Banned" ? "Ban User" : "Unban User"}

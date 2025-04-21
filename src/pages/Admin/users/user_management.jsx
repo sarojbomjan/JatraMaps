@@ -52,7 +52,7 @@ export default function UserManagement() {
         name: user.username || user.name || "Unknown",
         email: user.email,
         role: user.role || "user",
-        status: user.status || "active",
+        status: user.isBanned ? "banned" : "active",
         events: user.events || 0,
         avatar: UserImg,
       }));
@@ -172,7 +172,7 @@ export default function UserManagement() {
             Active
           </span>
         );
-      case "bannned":
+      case "banned":
         return (
           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400">
             <XCircle className="w-3 h-3 mr-1" />
@@ -219,15 +219,7 @@ export default function UserManagement() {
             Manage and monitor user accounts
           </p>
         </div>
-        <div>
-          {/* <button
-            onClick={() => setShowUserModal(true)}
-            className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm font-medium transition-colors"
-          >
-            <UserPlus className="h-4 w-4 mr-2" />
-            Add User
-          </button> */}
-        </div>
+        <div></div>
       </div>
 
       {/* Filters and Search */}

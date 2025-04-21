@@ -62,16 +62,23 @@ export default function ModeratorDashboard() {
           method: "DELETE",
         });
         setComments((prev) =>
-          prev.filter((comment) => comment._id !== commentId)
+          prev.filter((comment) => comment._commentid !== commentId)
         );
         setSelectedComments((prev) => prev.filter((id) => id !== commentId));
-        setExpandedCommentId(null);
-      } else if (action === "Banned" || action === "Unbanned") {
+      } else if (action === "Banned") {
+        if (!userId) {
+          throw new Error("No user ID provided for ban action");
+        }
         setCurrentAction(action);
         setCurrentUserId(userId);
         setShowBanModal(true);
-      } else {
-        // Handle approve directly
+      } else if (action === "Unbanned") {
+        await fetch(`http://localhost:5000/comments/unban/${userId}`, {
+          method: "PUT",
+        });
+        alert("User has been unbanned.");
+        fetchComments();
+      } else if (action === "Approved" || action === "Rejected") {
         await fetch(`http://localhost:5000/comments/status/${commentId}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -79,13 +86,43 @@ export default function ModeratorDashboard() {
         });
         setComments((prev) =>
           prev.map((comment) =>
-            comment._id === commentId ? { ...comment, status: action } : comment
+            comment._commentid === commentId
+              ? { ...comment, status: action }
+              : comment
           )
         );
       }
     } catch (err) {
       console.error("Action failed:", err);
       alert("Failed to perform action. Please try again.");
+    }
+  };
+
+  const handleSaveComment = async (commentId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:5000/comments/${commentId}/edit`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text: editedText }),
+        }
+      );
+
+      if (!response.ok) throw new Error("Failed to update comment");
+
+      setComments((prev) =>
+        prev.map((comment) =>
+          comment._commentid === commentId
+            ? { ...comment, text: editedText }
+            : comment
+        )
+      );
+      setEditingId(null);
+      setEditedText("");
+    } catch (error) {
+      console.error("Error updating comment:", error);
+      alert("Failed to update comment. Please try again.");
     }
   };
 
@@ -119,6 +156,7 @@ export default function ModeratorDashboard() {
             setCurrentAction={setCurrentAction}
             setCurrentUserId={setCurrentUserId}
             handleAction={handleAction}
+            handleSave={handleSaveComment}
           />
         </div>
       </div>
