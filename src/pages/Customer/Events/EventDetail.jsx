@@ -170,10 +170,11 @@ const EventDetail = () => {
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden mb-8">
         {/* Event Image */}
         <div className="relative h-80 w-full">
-          <img 
-            src={event.image?.url || "/placeholder-event.jpg"} 
-            alt={event.title} 
-            className="w-full h-full object-cover" loading="lazy"
+          <img
+            src={event.image?.url || "/placeholder-event.jpg"}
+            alt={event.title}
+            className="w-full h-full object-cover"
+            loading="lazy"
           />
           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
             <div className="flex flex-wrap gap-2">
@@ -354,47 +355,52 @@ const EventDetail = () => {
 
           {/* Comments List */}
           <div className="space-y-6">
-            {comments.length > 0 ? (
-              comments.map((comment) => (
-                <div key={comment._id || comment.id} className="flex space-x-4">
-                  <div className="flex-shrink-0">
-                    <div className="h-10 w-10 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-700">
-                      {/* {comment.user?.avatar && ( */}
-                      <img
-                        src={UserImg}
-                        alt={comment.user.name || "User"}
-                        className="h-full w-full object-cover"
-                      />
-                      {/* // )} */}
-                    </div>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div>
-                      <div className="flex items-center">
-                        <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                          {comment.user?.username || "Anonymous"}
-                        </h3>
-                        <span className="ml-2 text-xs text-gray-500 dark:text-gray-400">
-                          {formatDate(comment.createdAt || comment.date)}
-                        </span>
-                      </div>
-                      <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
-                        {comment.text || comment.content}
-                      </p>
-                    </div>
-                    <div className="mt-2 flex items-center space-x-4">
-                      <button className="flex items-center text-xs text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200">
-                        <Heart className="h-4 w-4 mr-1" />
-                        <span>Like</span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))
-            ) : (
+            {comments.filter((comment) => comment.status === "Approved")
+              .length === 0 ? (
               <p className="text-gray-500 dark:text-gray-400 text-center py-4">
                 No comments yet. Be the first to comment!
               </p>
+            ) : (
+              comments
+                .filter((comment) => comment.status === "Approved")
+                .map((comment) => (
+                  <div
+                    key={comment._id || comment.id}
+                    className="flex space-x-4"
+                  >
+                    <div className="flex-shrink-0">
+                      <div className="h-10 w-10 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-700">
+                        <img
+                          src={UserImg}
+                          z
+                          alt={comment.user?.name || "User"}
+                          className="h-full w-full object-cover"
+                        />
+                      </div>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div>
+                        <div className="flex items-center">
+                          <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                            {comment.user?.username || "Anonymous"}
+                          </h3>
+                          <span className="ml-2 text-xs text-gray-500 dark:text-gray-400">
+                            {formatDate(comment.createdAt || comment.date)}
+                          </span>
+                        </div>
+                        <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
+                          {comment.text || comment.content}
+                        </p>
+                      </div>
+                      <div className="mt-2 flex items-center space-x-4">
+                        <button className="flex items-center text-xs text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200">
+                          <Heart className="h-4 w-4 mr-1" />
+                          <span>Like</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))
             )}
           </div>
         </div>
