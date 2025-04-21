@@ -69,6 +69,26 @@ export default function EventFormModal({ isOpen, onClose, onEventCreated }) {
     setIsLoading(true);
     setError(null);
 
+    // Validation: Check for whitespace in form fields
+    const trimmedData = {
+      title: formData.title.trim(),
+      description: formData.description.trim(),
+      date: formData.date.trim(),
+      time: formData.time.trim(),
+      location: formData.location.trim(),
+      category: formData.category.trim(),
+      organizer: formData.organizer.trim(),
+    };
+
+    // Check if any field is empty or has only whitespace
+    for (let key in trimmedData) {
+      if (!trimmedData[key]) {
+        toast.error(`Please enter a valid ${key}`);
+        setIsLoading(false);
+        return;
+      }
+    }
+
     try {
       const formDataToSend = new FormData();
       formDataToSend.append("title", formData.title);
@@ -99,7 +119,6 @@ export default function EventFormModal({ isOpen, onClose, onEventCreated }) {
       onClose();
     } catch (error) {
       console.error("Error creating event", error);
-      //setError(error.message || "Failed to create event");
       toast.error("Failed to create event");
     } finally {
       setIsLoading(false);

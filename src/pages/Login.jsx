@@ -46,6 +46,12 @@ const Login = () => {
     setLoading(true);
     setError(null);
 
+    if (!formData.email || !formData.password) {
+      toast.error("Please fill in all fields");
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await axios.post(
         "http://localhost:5000/login",

@@ -31,6 +31,35 @@ const SignUp = () => {
     e.preventDefault();
     setLoading(true);
 
+    // Basic validations
+    const emailRegex = /^[^\s@]+@gmail\.com$/;
+    const hasWhitespace = /\s/;
+
+    if (!emailRegex.test(formData.email)) {
+      toast.error(
+        "Please enter a valid Gmail address (e.g., example@gmail.com)"
+      );
+      setLoading(false);
+      return;
+    }
+
+    if (formData.password.length <= 6) {
+      toast.error("Password must be longer than 6 characters");
+      setLoading(false);
+      return;
+    }
+
+    if (
+      hasWhitespace.test(formData.name) ||
+      hasWhitespace.test(formData.email) ||
+      hasWhitespace.test(formData.password) ||
+      hasWhitespace.test(formData.confirmPassword)
+    ) {
+      toast.error("Inputs must not contain whitespace");
+      setLoading(false);
+      return;
+    }
+
     if (formData.password !== formData.confirmPassword) {
       toast.error("Passwords do not match!");
       setLoading(false);
