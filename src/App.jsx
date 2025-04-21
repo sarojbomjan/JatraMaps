@@ -16,6 +16,7 @@ import EventManagement from "./pages/Admin/ManageEvents/eventmanagement";
 import { AuthProvider } from "./utils/authContext";
 import UserManagement from "./pages/Admin/users/user_management";
 import { NotificationProvider } from "./pages/Customer/Notification/notificationcontext";
+import ProtectedRoute from "./utils/protectedRoute";
 
 const Home = lazy(() => import("./pages/home"));
 const AboutUs = lazy(() => import("./pages/about"));
@@ -29,7 +30,7 @@ const App = () => {
       <NotificationProvider>
         <Suspense fallback={<div className="text-center">Loading...</div>}>
           <Routes>
-            {/* Main routes with layout */}
+            {/* Public Main Layout */}
             <Route element={<MainLayout />}>
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<AboutUs />} />
@@ -39,26 +40,34 @@ const App = () => {
               <Route path="/calendar" element={<Calendar />} />
             </Route>
 
-            {/* Customer Dashboard routes with its own layout */}
-            <Route path="/customer/dashboard" element={<DashboardLayout />}>
-              <Route index element={<DashboardOverview />} />
-              <Route path="events" element={<EventsPage />} />
-              <Route path="events/:eventId" element={<EventDetail />} />
-              <Route path="saved-events" element={<SavedEvent />} />
-              <Route path="profile-page" element={<ProfilePage />} />
-              <Route path="notification" element={<Notification />} />
+            {/* 🛡️ Protected Customer Dashboard */}
+            <Route element={<ProtectedRoute allowedRoles={["customer"]} />}>
+              <Route path="/customer/dashboard" element={<DashboardLayout />}>
+                <Route index element={<DashboardOverview />} />
+                <Route path="events" element={<EventsPage />} />
+                <Route path="events/:eventId" element={<EventDetail />} />
+                <Route path="saved-events" element={<SavedEvent />} />
+                <Route path="profile-page" element={<ProfilePage />} />
+                <Route path="notification" element={<Notification />} />
+              </Route>
             </Route>
 
-            <Route path="/admin/dashboard" element={<AdminDashboardLayout />}>
-              <Route index element={<AdminDashboardOverview />} />
-              <Route path="manageevents" element={<EventManagement />} />
-              <Route path="manageusers" element={<UserManagement />} />
+            {/* 🛡️ Protected Admin Dashboard */}
+            <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
+              <Route path="/admin/dashboard" element={<AdminDashboardLayout />}>
+                <Route index element={<AdminDashboardOverview />} />
+                <Route path="manageevents" element={<EventManagement />} />
+                <Route path="manageusers" element={<UserManagement />} />
+              </Route>
             </Route>
 
-            <Route
-              path="/moderator/dashboard"
-              element={<ModeratorDashboard />}
-            />
+            {/* 🛡️ Protected Moderator Dashboard */}
+            <Route element={<ProtectedRoute allowedRoles={["moderator"]} />}>
+              <Route
+                path="/moderator/dashboard"
+                element={<ModeratorDashboard />}
+              />
+            </Route>
           </Routes>
         </Suspense>
       </NotificationProvider>

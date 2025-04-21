@@ -1,9 +1,12 @@
 // Navbar.jsx
 import { Menu, LogOut } from "lucide-react";
+import { useAuth } from "../../../utils/authContext";
 
 export default function Navbar({ sidebarOpen, setSidebarOpen, Wheel }) {
+  const { logout } = useAuth();
+
   const handleLogout = () => {
-    console.log("Logging out...");
+    logout();
   };
 
   return (
