@@ -27,84 +27,29 @@ const SignUp = () => {
     }));
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   setLoading(true);
-
-  //   // Basic validations
-  //   const emailRegex = /^[^\s@]+@gmail\.com$/;
-  //   const hasWhitespace = /\s/;
-
-  //   if (!emailRegex.test(formData.email)) {
-  //     toast.error(
-  //       "Please enter a valid Gmail address (e.g., example@gmail.com)"
-  //     );
-  //     setLoading(false);
-  //     return;
-  //   }
-
-  //   if (formData.password.length <= 6) {
-  //     toast.error("Password must be longer than 6 characters");
-  //     setLoading(false);
-  //     return;
-  //   }
-
-  //   if (
-  //     hasWhitespace.test(formData.name) ||
-  //     hasWhitespace.test(formData.email) ||
-  //     hasWhitespace.test(formData.password) ||
-  //     hasWhitespace.test(formData.confirmPassword)
-  //   ) {
-  //     toast.error("Inputs must not contain whitespace");
-  //     setLoading(false);
-  //     return;
-  //   }
-
-  //   if (formData.password !== formData.confirmPassword) {
-  //     toast.error("Passwords do not match!");
-  //     setLoading(false);
-  //     return;
-  //   }
-
-  //   try {
-  //     const userData = {
-  //       username: formData.name,
-  //       email: formData.email,
-  //       password: formData.password,
-  //     };
-
-  //     const response = await axios.post(
-  //       "http://localhost:5000/register",
-  //       userData
-  //     );
-
-  //     if (response.data) {
-  //       toast.success("Registration Successful! Redirecting...");
-  //       setFormData({
-  //         name: "",
-  //         email: "",
-  //         password: "",
-  //         confirmPassword: "",
-  //       });
-  //       setTimeout(() => navigate("/login"), 2000);
-  //     }
-  //   } catch (e) {
-  //     toast.error(e.response?.data?.message || "Registration failed");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
+    if (
+      formData.name.trim() === "" ||
+      formData.email.trim() === "" ||
+      formData.password.trim() === "" ||
+      formData.confirmPassword.trim() === ""
+    ) {
+      toast.error("Fields cannot have leading or trailing whitespaces!");
+      setLoading(false);
+      return;
+    }
+
+    // Check if passwords match
     if (formData.password !== formData.confirmPassword) {
       toast.error("Passwords do not match!");
       setLoading(false);
       return;
     }
 
+    // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
       toast.error("Please provide a valid email address");
