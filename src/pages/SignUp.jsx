@@ -99,9 +99,15 @@ const SignUp = () => {
     e.preventDefault();
     setLoading(true);
 
-    // Basic validations
     if (formData.password !== formData.confirmPassword) {
       toast.error("Passwords do not match!");
+      setLoading(false);
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      toast.error("Please provide a valid email address");
       setLoading(false);
       return;
     }
@@ -118,7 +124,7 @@ const SignUp = () => {
         userData
       );
 
-      if (response.data) {
+      if (response.data.success) {
         toast.success(
           "Registration successful. Please check your email to verify."
         );
@@ -128,15 +134,23 @@ const SignUp = () => {
           password: "",
           confirmPassword: "",
         });
-        // Redirect to verify-email page with email as state
+
         setTimeout(
           () => navigate("/verify-email", { state: { email: formData.email } }),
           2000
         );
       }
     } catch (e) {
-      toast.error(e.response?.data?.message || "Registration failed");
-      console.error("Error registering ", e);
+      const errorMessage =
+        e.response?.data?.message || e.message || "Registration failed";
+
+      if (errorMessage.toLowerCase().includes("valid email")) {
+        toast.error("Please use a valid email address");
+      } else {
+        toast.error(errorMessage);
+      }
+
+      console.error("Error registering:", e);
     } finally {
       setLoading(false);
     }
