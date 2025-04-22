@@ -36,40 +36,31 @@ const ProfilePage = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
+        setError(null);
+        setLoading(true);
         const token = getAccessToken();
-        if (!token) {
-          setError("No authentication token found");
-          setLoading(false);
-          return;
-        }
+        console.log("Token being sent:", token);
 
         const response = await axios.get("http://localhost:5000/profile", {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
           },
         });
 
-        const userData = {
-          username: response.data?.username,
-          email: response.data?.email || "No email set",
-          bio: response.data?.bio || "",
-        };
-        console.log("Processed User Data:", userData);
-        setUser(userData);
-        setFormData(userData);
-        setLoading(false);
+        setUser(response.data.user);
+        setFormData({
+          username: response.data.user.username,
+          email: response.data.user.email,
+          bio: response.data.user.bio || "",
+        });
       } catch (err) {
         if (err.response?.status === 401) {
           clearTokens();
-          setError("Session expired. Please login again.");
+          //navigate("/login", { state: { from: "/profile" } });
         } else {
-          setError(
-            err.response?.data?.message ||
-              err.message ||
-              "Failed to fetch user data. Please try again later."
-          );
+          setError(err.response?.data?.message || "Failed to fetch profile");
         }
+      } finally {
         setLoading(false);
       }
     };
@@ -90,8 +81,6 @@ const ProfilePage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      setError(null);
-      setSuccessMessage(null);
       const token = getAccessToken();
 
       const response = await axios.put(
@@ -100,24 +89,17 @@ const ProfilePage = () => {
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
           },
         }
       );
 
-      const updatedUser = {
-        username: response.data.username || user.username,
-        email: response.data.email || user.email,
-        bio: response.data.bio || user.bio,
-      };
-
-      setUser(updatedUser);
-      setSuccessMessage("Profile updated successfully!");
+      setUser(response.data.user);
+      setSuccessMessage("Profile updated successfully");
       setIsEditing(false);
     } catch (err) {
       if (err.response?.status === 401) {
         clearTokens();
-        setError("Session expired. Please login again.");
+        navigate("/login", { state: { from: "/profile" } });
       } else {
         setError(err.response?.data?.message || "Failed to update profile");
       }
@@ -359,7 +341,7 @@ const ProfilePage = () => {
                             </div>
                           </div>
 
-                          <div className="md:col-span-2">
+                          {/* <div className="md:col-span-2">
                             <label
                               htmlFor="bio"
                               className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
@@ -380,7 +362,7 @@ const ProfilePage = () => {
                               } dark:text-white`}
                               placeholder="Tell us about yourself..."
                             />
-                          </div>
+                          </div>*/}
                         </div>
                       </div>
                     </div>

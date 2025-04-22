@@ -17,6 +17,7 @@ import { AuthProvider } from "./utils/authContext";
 import UserManagement from "./pages/Admin/users/user_management";
 import { NotificationProvider } from "./pages/Customer/Notification/notificationcontext";
 import ProtectedRoute from "./utils/protectedRoute";
+import VerifyEmailPage from "./pages/emailVerification";
 
 const Home = lazy(() => import("./pages/home"));
 const AboutUs = lazy(() => import("./pages/about"));
@@ -38,6 +39,7 @@ const App = () => {
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<SignUp />} />
               <Route path="/calendar" element={<Calendar />} />
+              <Route path="/verify-email" element={<VerifyEmailPage />} />
             </Route>
 
             {/* 🛡️ Protected Customer Dashboard */}

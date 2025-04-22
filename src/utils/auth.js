@@ -1,9 +1,23 @@
 export const getAccessToken = () => {
-  return localStorage.getItem("accessToken");
+  const token = localStorage.getItem("token");
+  if (!token) {
+    return null;
+  }
+  return token;
+};
+
+export const isAuthenticated = () => {
+  return !!localStorage.getItem("token");
 };
 
 export const clearTokens = () => {
-  localStorage.removeItem("accessToken");
+  localStorage.removeItem("token");
   localStorage.removeItem("refreshToken");
-  localStorage.removeItem("user");
+};
+
+export const setTokens = (accessToken, refreshToken = null) => {
+  localStorage.setItem("token", accessToken);
+  if (refreshToken) {
+    localStorage.setItem("refreshToken", refreshToken);
+  }
 };

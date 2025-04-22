@@ -6,6 +6,7 @@ import MachindranathImage from "../assets/Machindranath.jpg";
 import axios from "axios";
 import { useAuth } from "../utils/authContext";
 import { toast, ToastContainer } from "react-toastify";
+import { setTokens } from "../utils/auth";
 
 const Login = () => {
   const { login } = useAuth();
@@ -64,6 +65,7 @@ const Login = () => {
       console.log("Success", response.data);
 
       if (response.data) {
+        setTokens(response.data.accessToken, response.data.refreshToken);
         login(response.data.user, {
           accessToken: response.data.accessToken,
           refreshToken: response.data.refreshToken,
@@ -109,7 +111,7 @@ const Login = () => {
           error.response.data.message === "User with this email doesn't exist"
         ) {
           toast.error("User with this email doesn't exist");
-        } else if (error.response.data.message === "Incorrect password") {
+        } else if (error.response.data.message === "Invalid credentials") {
           toast.error("Incorrect password");
         }
       } else {
