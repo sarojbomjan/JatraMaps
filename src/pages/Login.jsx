@@ -105,7 +105,6 @@ const Login = () => {
         "Login failed. Please try again.";
       setError(errorMessage);
 
-      // Show error toast based on the error type
       if (error.response?.status === 401) {
         if (
           error.response.data.message === "User with this email doesn't exist"

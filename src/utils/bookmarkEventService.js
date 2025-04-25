@@ -1,4 +1,4 @@
-// Save event ID to bookmarks
+// Save event
 export const saveBookmark = (eventId) => {
   const bookmarks = getBookmarks();
   if (!bookmarks.includes(eventId)) {
@@ -7,14 +7,14 @@ export const saveBookmark = (eventId) => {
   }
 };
 
-// Remove event ID from bookmarks
+// Remove event
 export const removeBookmark = (eventId) => {
   const bookmarks = getBookmarks();
   const updatedBookmarks = bookmarks.filter((id) => id !== eventId);
   localStorage.setItem("bookmarkedEvents", JSON.stringify(updatedBookmarks));
 };
 
-// Get all bookmarked event IDs
+// Get all saved events
 export const getBookmarks = () => {
   if (typeof window === "undefined") return [];
   const bookmarks = localStorage.getItem("bookmarkedEvents");

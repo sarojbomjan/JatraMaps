@@ -56,7 +56,6 @@ const ProfilePage = () => {
       } catch (err) {
         if (err.response?.status === 401) {
           clearTokens();
-          //navigate("/login", { state: { from: "/profile" } });
         } else {
           setError(err.response?.data?.message || "Failed to fetch profile");
         }
@@ -340,29 +339,6 @@ const ProfilePage = () => {
                               />
                             </div>
                           </div>
-
-                          {/* <div className="md:col-span-2">
-                            <label
-                              htmlFor="bio"
-                              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-                            >
-                              Bio
-                            </label>
-                            <textarea
-                              id="bio"
-                              name="bio"
-                              rows={4}
-                              value={formData.bio}
-                              onChange={handleInputChange}
-                              disabled={!isEditing}
-                              className={`w-full px-4 py-2 border rounded-md ${
-                                isEditing
-                                  ? "border-gray-300 dark:border-gray-600 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700"
-                                  : "border-transparent bg-gray-100 dark:bg-gray-700"
-                              } dark:text-white`}
-                              placeholder="Tell us about yourself..."
-                            />
-                          </div>*/}
                         </div>
                       </div>
                     </div>

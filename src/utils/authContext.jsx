@@ -9,7 +9,6 @@ export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check for user data in localStorage when app loads
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       try {

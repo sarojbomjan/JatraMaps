@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Eye, EyeOff } from "react-feather"; // Import Feather icons
+import { Eye, EyeOff } from "react-feather";
 import "../index.css";
 import MachindranathImage from "../assets/Machindranath.jpg";
 import axios from "axios";

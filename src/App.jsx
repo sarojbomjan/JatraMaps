@@ -42,7 +42,7 @@ const App = () => {
               <Route path="/verify-email" element={<VerifyEmailPage />} />
             </Route>
 
-            {/* 🛡️ Protected Customer Dashboard */}
+            {/* Customer Dashboard */}
             <Route element={<ProtectedRoute allowedRoles={["customer"]} />}>
               <Route path="/customer/dashboard" element={<DashboardLayout />}>
                 <Route index element={<DashboardOverview />} />
@@ -54,7 +54,7 @@ const App = () => {
               </Route>
             </Route>
 
-            {/* 🛡️ Protected Admin Dashboard */}
+            {/* Admin Dashboard */}
             <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
               <Route path="/admin/dashboard" element={<AdminDashboardLayout />}>
                 <Route index element={<AdminDashboardOverview />} />
@@ -63,7 +63,7 @@ const App = () => {
               </Route>
             </Route>
 
-            {/* 🛡️ Protected Moderator Dashboard */}
+            {/* Moderator Dashboard */}
             <Route element={<ProtectedRoute allowedRoles={["moderator"]} />}>
               <Route
                 path="/moderator/dashboard"
