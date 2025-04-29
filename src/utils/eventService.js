@@ -44,7 +44,7 @@ export const createEvent = async (formData) => {
 export const updateEvent = async (id, eventData) => {
   try {
     const formData = new FormData();
-    // Append all event data to formData
+
     Object.keys(eventData).forEach((key) => {
       if (key === "image" && eventData[key]) {
         formData.append("image", eventData[key]);

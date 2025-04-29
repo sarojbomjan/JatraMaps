@@ -45,22 +45,35 @@ function PieChart({ data, title, height = 250 }) {
     const options = {
       responsive: true,
       maintainAspectRatio: false,
+      layout: {
+        padding: {
+          top: title ? 30 : 10,
+          bottom: 10,
+          left: 10,
+          right: 10,
+        },
+      },
       plugins: {
         legend: {
           position: "right",
+          align: "center",
           labels: {
             usePointStyle: true,
-            padding: 10,
+            padding: 16,
             font: {
               size: 12,
               family: "'Inter', sans-serif",
             },
             color: textColor,
+            boxWidth: 12,
+            boxHeight: 12,
           },
         },
         title: {
           display: !!title,
           text: title || "",
+          position: "top",
+          align: "center",
           font: {
             size: 16,
             weight: "600",
@@ -108,7 +121,7 @@ function PieChart({ data, title, height = 250 }) {
   }, [data, title]);
 
   return (
-    <div style={{ height: `${height}px` }}>
+    <div style={{ height: `${height}px`, position: "relative" }}>
       <canvas ref={chartRef}></canvas>
     </div>
   );

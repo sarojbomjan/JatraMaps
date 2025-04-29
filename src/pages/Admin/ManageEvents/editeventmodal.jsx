@@ -11,6 +11,9 @@ import {
 } from "lucide-react";
 import { updateEvent } from "../../../utils/eventService";
 import toast from "react-hot-toast";
+import TimePicker from "react-time-picker";
+import "react-time-picker/dist/TimePicker.css";
+import "react-clock/dist/Clock.css";
 
 export default function EditEventModal({
   isOpen,
@@ -82,17 +85,59 @@ export default function EditEventModal({
     fileInputRef.current.click();
   };
 
+  const formatTimeTo12Hour = (timeString) => {
+    if (!timeString) return "";
+
+    const [hours, minutes] = timeString.split(":");
+    const hourInt = parseInt(hours, 10);
+
+    const period = hourInt >= 12 ? "PM" : "AM";
+    const hour12 = hourInt % 12 || 12;
+
+    return `${hour12}:${minutes} ${period}`;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const trimmedFormData = {
+      ...formData,
+      title: formData.title.trim(),
+      description: formData.description.trim(),
+      date: formData.date.trim(),
+      time: formatTimeTo12Hour(formData.time.trim()),
+      location: formData.location.trim(),
+      category: formData.category.trim(),
+      organizer: formData.organizer.trim(),
+      price: formData.price.trim(),
+      status: formData.status.trim(),
+    };
+
+    const requiredFields = [
+      "title",
+      "description",
+      "date",
+      "location",
+      "category",
+      "organizer",
+    ];
+
+    for (let field of requiredFields) {
+      const value = trimmedFormData[field];
+      if (!value) {
+        toast.error(`Please enter a valid ${field}`);
+        return;
+      }
+    }
+
     try {
-      const updatedEvent = await updateEvent(event.id, formData);
-      console.log("Updated:", updatedEvent);
+      const updatedEvent = await updateEvent(event.id, trimmedFormData);
       toast.success("Event updated successfully");
       onEventUpdated(forceUpdate);
       onClose();
     } catch (err) {
       console.error("Failed to update event.", err);
-      toast.error("Failed to update event. ");
+      toast.error("Failed to update event.");
     }
   };
 
@@ -172,21 +217,15 @@ export default function EditEventModal({
             </div>
 
             <div>
-              <label
-                htmlFor="time"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-              >
-                <Clock className="inline-block h-4 w-4 mr-1" /> Time*
+              <label className="block text-sm font-medium text-gray-600 dark:text-gray-100 mb-1">
+                <Clock className="inline-block h-4 w-4 mr-1" /> Time
               </label>
-              <input
-                type="text"
-                id="time"
-                name="time"
+              <TimePicker
+                onChange={(time) => setFormData({ ...formData, time })}
                 value={formData.time}
-                onChange={handleChange}
-                required
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
-                placeholder="e.g., 9:00 AM - 5:00 PM"
+                disableClock={true}
+                className="w-full [&>div]:border-gray-300 [&>div]:rounded-md"
+                clearIcon={null}
               />
             </div>
 

@@ -160,7 +160,7 @@ const AdminDashboardLayout = () => {
           <div className="lg:hidden h-16"></div>
 
           {/* Top Bar */}
-          <div className="sticky top-0 z-20 flex-shrink-0 h-16 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 hidden lg:block">
+          {/* <div className="sticky top-0 z-20 flex-shrink-0 h-16 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 hidden lg:block">
             <div className="flex items-center justify-between h-full px-6">
               <div className="flex items-center">
                 <div className="relative w-64">
@@ -184,7 +184,7 @@ const AdminDashboardLayout = () => {
                 </button>
               </div>
             </div>
-          </div>
+          </div> */}
 
           {/* Main content */}
           <main className="flex-1 overflow-auto">

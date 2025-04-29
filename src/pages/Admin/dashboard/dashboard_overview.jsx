@@ -67,26 +67,10 @@ const AdminDashboardOverview = () => {
     .filter((event) => event.status === "pending")
     .slice(0, 3);
 
-  const performanceData = {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-    datasets: [
-      {
-        label: "Events",
-        data: [65, 78, 90, 105, 112, 120],
-        color: "#8B5CF6",
-      },
-      {
-        label: "Revenue",
-        data: [1200, 1900, 2300, 2800, 3200, 3800],
-        color: "#F59E0B",
-      },
-    ],
-  };
-
   const categoryData = {
-    labels: ["Cultural", "Technology", "Food", "Art", "Sports", "Business"],
-    values: [32, 28, 21, 18, 15, 12],
-    colors: ["#6366F1", "#3B82F6", "#EF4444", "#EC4899", "#10B981", "#F59E0B"],
+    labels: ["Cultural", "Food", "Art", "Sports"],
+    values: [32, 28, 21, 18],
+    colors: ["#6366F1", "#3B82F6", "#EF4444", "#EC4899"],
   };
 
   return (
@@ -100,24 +84,6 @@ const AdminDashboardOverview = () => {
           <p className="text-gray-600 dark:text-gray-400">
             Welcome back! Here's what's happening today.
           </p>
-        </div>
-
-        <div className="flex items-center space-x-2 w-full sm:w-auto">
-          <div className="relative">
-            <select
-              value={timeRange}
-              onChange={(e) => setTimeRange(e.target.value)}
-              className="appearance-none w-full sm:w-40 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-md px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
-            >
-              <option value="today">Today</option>
-              <option value="week">This Week</option>
-              <option value="month">This Month</option>
-              <option value="year">This Year</option>
-            </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
-              <ChevronDown className="h-4 w-4" />
-            </div>
-          </div>
         </div>
       </div>
 
@@ -133,12 +99,6 @@ const AdminDashboardOverview = () => {
               <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
                 {statsData.totalUsers}
               </p>
-              <div className="flex items-center mt-2">
-                <TrendingUp className="h-4 w-4 text-green-500" />
-                <span className="text-xs text-green-600 dark:text-green-400 ml-1">
-                  12% from last month
-                </span>
-              </div>
             </div>
             <div className="bg-blue-100 dark:bg-blue-900/30 p-3 rounded-full">
               <Users className="h-6 w-6 text-blue-600 dark:text-blue-400" />
@@ -156,12 +116,6 @@ const AdminDashboardOverview = () => {
               <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
                 {statsData.totalEvents}
               </p>
-              <div className="flex items-center mt-2">
-                <TrendingUp className="h-4 w-4 text-green-500" />
-                <span className="text-xs text-green-600 dark:text-green-400 ml-1">
-                  8% from last month
-                </span>
-              </div>
             </div>
             <div className="bg-purple-100 dark:bg-purple-900/30 p-3 rounded-full">
               <Calendar className="h-6 w-6 text-purple-600 dark:text-purple-400" />
@@ -205,46 +159,32 @@ const AdminDashboardOverview = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Charts */}
         <div className="lg:col-span-2 space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
             {/* Event Categories */}
             <div className="bg-white dark:bg-gray-700 rounded-lg shadow p-5">
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  Event Categories
+                  Event Categories Distribution
                 </h2>
-                <Link
-                  to="#"
-                  className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
-                >
-                  View all
-                </Link>
+                <div className="flex items-center">
+                  <Link
+                    to="/admin/dashboard/manageevents"
+                    className="text-sm text-blue-600 dark:text-blue-400 hover:underline flex items-center"
+                  >
+                    View details <ArrowRight className="ml-1 h-4 w-4" />
+                  </Link>
+                </div>
               </div>
-              <div className="h-64">
-                <PieChart
-                  data={categoryData}
-                  height={250}
-                  showPercentage={true}
-                />
+              <div className="h-80">
+                <PieChart data={categoryData} height={320} />
               </div>
-            </div>
-
-            {/* Monthly Performance */}
-            <div className="bg-white dark:bg-gray-700 rounded-lg shadow p-5">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-semibold text-gray-200 dark:text-white">
-                  Monthly Performance
-                </h2>
-                <select className="text-sm bg-transparent border border-gray-300 dark:border-gray-600 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                  <option value="2024">2024</option>
-                  <option value="2023">2023</option>
-                </select>
-              </div>
-              <div className="h-64">
-                <BarChart
-                  data={performanceData}
-                  height={250}
-                  horizontal={false}
-                />
+              <div className="mt-4 text-sm text-gray-500 dark:text-gray-400">
+                <p>
+                  Top category:{" "}
+                  <span className="font-medium text-gray-900 dark:text-white">
+                    Cultural (32%)
+                  </span>
+                </p>
               </div>
             </div>
           </div>

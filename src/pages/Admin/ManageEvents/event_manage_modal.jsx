@@ -11,6 +11,9 @@ import {
 } from "lucide-react";
 import toast from "react-hot-toast";
 import { createEvent } from "../../../utils/eventService";
+import TimePicker from "react-time-picker";
+import "react-time-picker/dist/TimePicker.css";
+import "react-clock/dist/Clock.css";
 
 export default function EventFormModal({ isOpen, onClose, onEventCreated }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -32,12 +35,11 @@ export default function EventFormModal({ isOpen, onClose, onEventCreated }) {
 
   const fileInputRef = useRef(null);
 
-  // Handle regular input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: value.startsWith(" ") ? value.trimStart() : value,
     }));
   };
 
@@ -45,7 +47,6 @@ export default function EventFormModal({ isOpen, onClose, onEventCreated }) {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Revoke previous image URL if exists
       if (formData.previewImage) {
         URL.revokeObjectURL(formData.previewImage);
       }
@@ -62,6 +63,18 @@ export default function EventFormModal({ isOpen, onClose, onEventCreated }) {
     fileInputRef.current.click();
   };
 
+  const formatTimeTo12Hour = (timeString) => {
+    if (!timeString) return "";
+
+    const [hours, minutes] = timeString.split(":");
+    const hourInt = parseInt(hours, 10);
+
+    const period = hourInt >= 12 ? "PM" : "AM";
+    const hour12 = hourInt % 12 || 12;
+
+    return `${hour12}:${minutes} ${period}`;
+  };
+
   // create event
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -69,20 +82,29 @@ export default function EventFormModal({ isOpen, onClose, onEventCreated }) {
     setIsLoading(true);
     setError(null);
 
-    // Validation: Check for whitespace in form fields
     const trimmedData = {
-      title: formData.title.trim(),
-      description: formData.description.trim(),
-      date: formData.date.trim(),
-      time: formData.time.trim(),
-      location: formData.location.trim(),
-      category: formData.category.trim(),
-      organizer: formData.organizer.trim(),
+      title: String(formData.title || "").trim(),
+      description: String(formData.description || "").trim(),
+      date: String(formData.date || "").trim(),
+      time: String(formData.time || "").trim(),
+      location: String(formData.location || "").trim(),
+      category: String(formData.category || "").trim(),
+      organizer: String(formData.organizer || "").trim(),
     };
 
-    // Check if any field is empty or has only whitespace
-    for (let key in trimmedData) {
-      if (!trimmedData[key]) {
+    const requiredFields = [
+      "title",
+      "description",
+      "date",
+      "time",
+      "location",
+      "category",
+      "organizer",
+    ];
+
+    for (let key of requiredFields) {
+      const value = formData[key];
+      if (!value || value.trim().length === 0 || value !== value.trim()) {
         toast.error(`Please enter a valid ${key}`);
         setIsLoading(false);
         return;
@@ -91,13 +113,15 @@ export default function EventFormModal({ isOpen, onClose, onEventCreated }) {
 
     try {
       const formDataToSend = new FormData();
-      formDataToSend.append("title", formData.title);
-      formDataToSend.append("description", formData.description);
-      formDataToSend.append("date", formData.date);
-      formDataToSend.append("time", formData.time);
-      formDataToSend.append("location", formData.location);
-      formDataToSend.append("category", formData.category);
-      formDataToSend.append("organizer", formData.organizer);
+      const formattedTime = formatTimeTo12Hour(formData.time);
+
+      formDataToSend.append("title", trimmedData.title);
+      formDataToSend.append("description", trimmedData.description);
+      formDataToSend.append("date", trimmedData.date);
+      formDataToSend.append("time", formattedTime);
+      formDataToSend.append("location", trimmedData.location);
+      formDataToSend.append("category", trimmedData.category);
+      formDataToSend.append("organizer", trimmedData.organizer);
       formDataToSend.append("price", formData.price);
       formDataToSend.append("status", formData.status);
 
@@ -105,16 +129,13 @@ export default function EventFormModal({ isOpen, onClose, onEventCreated }) {
         formDataToSend.append("image", formData.image);
       }
 
-      // Call createEvent with the form data
       const createdEvent = await createEvent(formDataToSend);
 
-      // Show success message
       toast.success("Event created successfully!", { id: "event-success" });
 
       if (onEventCreated) {
-        onEventCreated();
+        onEventCreated(createdEvent);
       }
-      // Reset the form after successful submission
       resetForm();
       onClose();
     } catch (error) {
@@ -225,22 +246,25 @@ export default function EventFormModal({ isOpen, onClose, onEventCreated }) {
 
             {/* Time */}
             <div>
-              <label
-                htmlFor="time"
-                className="block text-sm font-medium text-gray-600 dark:text-gray-100 mb-1"
-              >
+              <label className="block text-sm font-medium text-gray-600 dark:text-gray-100 mb-1">
                 <Clock className="inline-block h-4 w-4 mr-1" /> Time
               </label>
-              <input
-                type="text"
-                id="time"
-                name="time"
-                value={formData.time}
-                onChange={handleChange}
-                required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                placeholder="e.g., 9:00 AM - 5:00 PM"
-              />
+              <div className="react-time-picker-wrapper">
+                <TimePicker
+                  onChange={(time) => setFormData({ ...formData, time })}
+                  value={formData.time}
+                  disableClock={true}
+                  className="w-full [&>div]:border-gray-300 [&>div]:rounded-md [&>div]:py-2 [&>div]:px-3"
+                  clearIcon={null}
+                  format="h:mm a"
+                  required
+                />
+              </div>
+              {!formData.time && (
+                <p className="mt-1 text-xs text-red-500">
+                  Please select a time
+                </p>
+              )}
             </div>
 
             {/* Location */}
@@ -321,7 +345,7 @@ export default function EventFormModal({ isOpen, onClose, onEventCreated }) {
               <select
                 id="price"
                 name="price"
-                alue={formData.price}
+                value={formData.price}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               >
