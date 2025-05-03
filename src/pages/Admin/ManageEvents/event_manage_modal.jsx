@@ -29,7 +29,6 @@ export default function EventFormModal({ isOpen, onClose, onEventCreated }) {
     image: null,
     previewImage: "",
     organizer: "",
-    price: "Free",
     status: "draft",
   });
 
@@ -43,7 +42,6 @@ export default function EventFormModal({ isOpen, onClose, onEventCreated }) {
     }));
   };
 
-  // Handle image file selection
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -122,7 +120,6 @@ export default function EventFormModal({ isOpen, onClose, onEventCreated }) {
       formDataToSend.append("location", trimmedData.location);
       formDataToSend.append("category", trimmedData.category);
       formDataToSend.append("organizer", trimmedData.organizer);
-      formDataToSend.append("price", formData.price);
       formDataToSend.append("status", formData.status);
 
       if (formData.image) {
@@ -146,6 +143,13 @@ export default function EventFormModal({ isOpen, onClose, onEventCreated }) {
     }
   };
 
+  const isPastDate = (dateString) => {
+    const selectedDate = new Date(dateString);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return selectedDate < today;
+  };
+
   const resetForm = () => {
     if (formData.previewImage) {
       URL.revokeObjectURL(formData.previewImage);
@@ -160,7 +164,6 @@ export default function EventFormModal({ isOpen, onClose, onEventCreated }) {
       image: null,
       previewImage: "",
       organizer: "",
-      price: "Free",
       status: "draft",
     });
   };
@@ -305,12 +308,8 @@ export default function EventFormModal({ isOpen, onClose, onEventCreated }) {
               >
                 <option value="">Select a category</option>
                 <option value="Cultural">Cultural</option>
-                <option value="Music">Music</option>
-                <option value="Art">Art</option>
                 <option value="Food">Food</option>
-                <option value="Sports">Sports</option>
-                <option value="Business">Business</option>
-                <option value="Education">Education</option>
+                <option value="Music">Music</option>
               </select>
             </div>
 
@@ -334,39 +333,37 @@ export default function EventFormModal({ isOpen, onClose, onEventCreated }) {
               />
             </div>
 
-            {/* Price */}
+            {/* Status */}
             <div>
               <label
-                htmlFor="price"
-                className="block text-sm font-medium  text-gray-600 dark:text-gray-100 mb-1"
+                htmlFor="status"
+                className="block text-sm font-medium text-gray-700 mb-1"
               >
-                Price
+                Status
               </label>
               <select
-                id="price"
-                name="price"
-                value={formData.price}
+                id="status"
+                name="status"
+                value={formData.status}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               >
-                <option value="Free">Free</option>
-                <option value="10">$10</option>
-                <option value="20">$20</option>
-                <option value="50">$50</option>
-                <option value="custom">Custom Amount</option>
+                {formData.date && isPastDate(formData.date) ? (
+                  <>
+                    <option value="active">Active</option>
+                    <option value="ended">Ended</option>
+                  </>
+                ) : (
+                  <>
+                    <option value="draft">Draft</option>
+                    <option value="pending">Pending</option>
+                    <option value="active">Active</option>
+                    <option value="ended">Ended</option>
+                  </>
+                )}
               </select>
-              {formData.price === "custom" && (
-                <input
-                  type="number"
-                  name="customPrice"
-                  placeholder="Enter custom price"
-                  className="mt-2 w-full px-3 py-2 border border-gray-300 rounded-md"
-                  onChange={(e) =>
-                    setFormData({ ...formData, customPrice: e.target.value })
-                  }
-                />
-              )}
             </div>
+
             {/* Image Upload */}
             <div>
               <label className="block text-sm font-medium text-gray-600 dark:text-gray-100 mb-1">
@@ -401,28 +398,6 @@ export default function EventFormModal({ isOpen, onClose, onEventCreated }) {
               <p className="mt-1 text-xs text-gray-500">
                 Upload a high-quality image for your event (JPG, PNG)
               </p>
-            </div>
-
-            {/* Status */}
-            <div>
-              <label
-                htmlFor="status"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Status
-              </label>
-              <select
-                id="status"
-                name="status"
-                value={formData.status}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option value="draft">Draft</option>
-                <option value="pending">Pending</option>
-                <option value="active">Active</option>
-                <option value="ended">Ended</option>
-              </select>
             </div>
           </div>
 

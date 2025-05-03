@@ -32,7 +32,6 @@ export default function EditEventModal({
     category: "",
     image: "",
     organizer: "",
-    price: "Free",
     status: "draft",
   });
 
@@ -43,12 +42,11 @@ export default function EditEventModal({
           title: event.title || "",
           description: event.description || "",
           date: event.date || "",
-          time: event.time || "",
+          time: event.time ? convert12to24(event.time) : "",
           location: event.location || "",
           category: event.category || "",
           image: event.image || "",
           organizer: event.organizer || "",
-          price: event.price || "Free",
           status: event.status || "draft",
         });
       }
@@ -88,6 +86,10 @@ export default function EditEventModal({
   const formatTimeTo12Hour = (timeString) => {
     if (!timeString) return "";
 
+    if (timeString.includes("AM") || timeString.includes("PM")) {
+      return timeString;
+    }
+
     const [hours, minutes] = timeString.split(":");
     const hourInt = parseInt(hours, 10);
 
@@ -95,6 +97,28 @@ export default function EditEventModal({
     const hour12 = hourInt % 12 || 12;
 
     return `${hour12}:${minutes} ${period}`;
+  };
+
+  const convert12to24 = (time12h) => {
+    if (!time12h) return "";
+
+    const [time, period] = time12h.split(" ");
+    let [hours, minutes] = time.split(":");
+
+    if (period === "PM" && hours !== "12") {
+      hours = parseInt(hours, 10) + 12;
+    } else if (period === "AM" && hours === "12") {
+      hours = "00";
+    }
+
+    return `${hours}:${minutes}`;
+  };
+
+  const isPastDate = (dateString) => {
+    const selectedDate = new Date(dateString);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return selectedDate < today;
   };
 
   const handleSubmit = async (e) => {
@@ -105,11 +129,13 @@ export default function EditEventModal({
       title: formData.title.trim(),
       description: formData.description.trim(),
       date: formData.date.trim(),
-      time: formatTimeTo12Hour(formData.time.trim()),
+      time:
+        formData.time.includes("AM") || formData.time.includes("PM")
+          ? formData.time.trim()
+          : formatTimeTo12Hour(formData.time.trim()),
       location: formData.location.trim(),
       category: formData.category.trim(),
       organizer: formData.organizer.trim(),
-      price: formData.price.trim(),
       status: formData.status.trim(),
     };
 
@@ -266,11 +292,7 @@ export default function EditEventModal({
                 <option value="">Select a category</option>
                 <option value="Cultural">Cultural</option>
                 <option value="Music">Music</option>
-                <option value="Art">Art</option>
                 <option value="Food">Food</option>
-                <option value="Sports">Sports</option>
-                <option value="Business">Business</option>
-                <option value="Education">Education</option>
               </select>
             </div>
 
@@ -293,22 +315,35 @@ export default function EditEventModal({
               />
             </div>
 
+            {/* Status */}
             <div>
               <label
-                htmlFor="price"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                htmlFor="status"
+                className="block text-sm font-medium text-gray-700 mb-1"
               >
-                Price
+                Status
               </label>
-              <input
-                type="text"
-                id="price"
-                name="price"
-                value={formData.price}
+              <select
+                id="status"
+                name="status"
+                value={formData.status}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
-                placeholder="e.g., Free, $10, $25-$50"
-              />
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              >
+                {formData.date && isPastDate(formData.date) ? (
+                  <>
+                    <option value="active">Active</option>
+                    <option value="ended">Ended</option>
+                  </>
+                ) : (
+                  <>
+                    <option value="draft">Draft</option>
+                    <option value="pending">Pending</option>
+                    <option value="active">Active</option>
+                    <option value="ended">Ended</option>
+                  </>
+                )}
+              </select>
             </div>
 
             <div>
@@ -344,28 +379,6 @@ export default function EditEventModal({
               <p className="mt-1 text-xs text-gray-500">
                 Upload a high-quality image for your event (JPG, PNG)
               </p>
-            </div>
-
-            <div>
-              <label
-                htmlFor="status"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-              >
-                Status
-              </label>
-              <select
-                id="status"
-                name="status"
-                value={formData.status}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
-              >
-                <option value="draft">Draft</option>
-                <option value="pending">Pending</option>
-                <option value="active">Active</option>
-                <option value="completed">Completed</option>
-                <option value="canceled">Canceled</option>
-              </select>
             </div>
           </div>
 

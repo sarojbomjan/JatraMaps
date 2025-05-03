@@ -1,21 +1,10 @@
 import React, { useState, useEffect } from "react";
-import {
-  Search,
-  Filter,
-  Edit,
-  Trash2,
-  MoreHorizontal,
-  Download,
-  CheckCircle,
-  XCircle,
-  AlertTriangle,
-  ChevronDown,
-  Mail,
-  UserPlus,
-} from "lucide-react";
-import UserFormModal from "./user_form_modal";
+import { Search, CheckCircle, XCircle, Shield, ShieldOff } from "lucide-react";
+
 import axios from "axios";
 import UserImg from "../../../assets/user.jpg";
+import BanModal from "../banmodal";
+import { ToastContainer } from "react-toastify";
 
 export default function UserManagement() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -23,10 +12,13 @@ export default function UserManagement() {
   const [filterStatus, setFilterStatus] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
   const [selectedUsers, setSelectedUsers] = useState([]);
-  const [showUserModal, setShowUserModal] = useState(false);
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showBanModal, setShowBanModal] = useState(false);
+  const [banReason, setBanReason] = useState("");
+  const [currentUserId, setCurrentUserId] = useState(null);
+  const [currentAction, setCurrentAction] = useState("Banned");
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -109,31 +101,6 @@ export default function UserManagement() {
     }
   };
 
-  const handleSaveUser = async (userData) => {
-    // try {
-    //   // In a real app, make API call to create user
-    //   const response = await axios.post("/api/users", userData);
-    //   const newUser = formatUserData([response.data])[0];
-    //   setUsers([...users, newUser]);
-    //   setShowUserModal(false);
-    // } catch (err) {
-    //   console.error("Error creating user:", err);
-    //   setError("Failed to create user. Please try again.");
-    // }
-  };
-
-  const handleDeleteUser = async (userId) => {
-    // if (window.confirm("Are you sure you want to delete this user?")) {
-    //   try {
-    //     await axios.delete(`http://localhost:500/users/${userId}`);
-    //     setUsers(users.filter(user => user.id !== userId));
-    //   } catch (err) {
-    //     console.error("Error deleting user:", err);
-    //     setError("Failed to delete user. Please try again.");
-    //   }
-    // }
-  };
-
   const getRoleBadge = (role) => {
     switch (role) {
       case "admin":
@@ -210,6 +177,18 @@ export default function UserManagement() {
 
   return (
     <div>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+
       <div className="m-6 flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
@@ -321,27 +300,25 @@ export default function UserManagement() {
                   <td className="p-3">{getRoleBadge(user.role)}</td>
                   <td className="p-3">{getStatusBadge(user.status)}</td>
 
-                  {/* <td className="p-3">{user.events}</td> */}
                   <td className="p-3 flex items-center gap-2">
                     <button
-                      className="text-blue-600 hover:text-blue-800 dark:hover:text-blue-400"
-                      onClick={() => alert("Edit User")}
-                      title="Edit"
-                    >
-                      <Edit className="w-5 h-5" />
-                    </button>
-                    <button
                       className="text-red-600 hover:text-red-800 dark:hover:text-red-400"
-                      onClick={() => handleDeleteUser(user.id)}
-                      title="Delete"
+                      onClick={() => {
+                        setCurrentUserId(user.id);
+                        setCurrentAction(
+                          user.status === "banned" ? "Unbanned" : "Banned"
+                        );
+                        setShowBanModal(true);
+                      }}
+                      title={
+                        user.status === "banned" ? "Unban User" : "Ban User"
+                      }
                     >
-                      <Trash2 className="w-5 h-5" />
-                    </button>
-                    <button
-                      className="text-gray-600 hover:text-gray-800 dark:hover:text-gray-400"
-                      title="More options"
-                    >
-                      <MoreHorizontal className="w-5 h-5" />
+                      {user.status === "banned" ? (
+                        <ShieldOff className="w-5 h-5" />
+                      ) : (
+                        <Shield className="w-5 h-5" />
+                      )}
                     </button>
                   </td>
                 </tr>
@@ -351,11 +328,19 @@ export default function UserManagement() {
         )}
       </div>
 
-      {/* User Modal */}
-      <UserFormModal
-        isOpen={showUserModal}
-        onClose={() => setShowUserModal(false)}
-        onSave={handleSaveUser}
+      <BanModal
+        showBanModal={showBanModal}
+        setShowBanModal={setShowBanModal}
+        currentAction={currentAction}
+        banReason={banReason}
+        setBanReason={setBanReason}
+        currentUserId={currentUserId}
+        fetchComments={() => {
+          axios
+            .get("http://localhost:5000/users")
+            .then((response) => setUsers(formatUserData(response.data)))
+            .catch((err) => console.error("Error fetching users:", err));
+        }}
       />
     </div>
   );

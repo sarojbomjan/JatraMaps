@@ -1,32 +1,12 @@
-import React, { useState, useContext, createContext } from "react";
-import {
-  Link,
-  Outlet,
-  replace,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import React, { useState } from "react";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
   Calendar,
   Users,
-  BarChart2,
-  Settings,
   LogOut,
   Menu,
   X,
-  Sun,
-  Moon,
-  Search,
-  Bell,
-  MessageSquare,
-  PlusCircle,
-  Home,
-  Globe,
-  Tag,
   LayoutDashboard,
-  ChevronFirst,
-  ChevronLast,
-  MoreVertical,
 } from "lucide-react";
 
 import { Sidebar, SidebarContext, SidebarItem } from "../sidebar";
@@ -34,7 +14,6 @@ import { useAuth } from "../../../utils/authContext";
 
 const AdminDashboardLayout = () => {
   const [expanded, setExpanded] = useState(false);
-  const navigate = useNavigate();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -158,33 +137,6 @@ const AdminDashboardLayout = () => {
 
           {/* Mobile top bar spacer */}
           <div className="lg:hidden h-16"></div>
-
-          {/* Top Bar */}
-          {/* <div className="sticky top-0 z-20 flex-shrink-0 h-16 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 hidden lg:block">
-            <div className="flex items-center justify-between h-full px-6">
-              <div className="flex items-center">
-                <div className="relative w-64">
-                  <input
-                    type="text"
-                    placeholder="Search..."
-                    className="w-full h-9 pl-10 pr-4 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                  <Search className="absolute left-3 top-2 h-5 w-5 text-gray-400" />
-                </div>
-              </div>
-
-              <div className="flex items-center space-x-3">
-                <button className="p-2 rounded-full text-gray-500 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-gray-300 dark:hover:bg-gray-700 relative">
-                  <Bell className="h-6 w-6" />
-                  <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500"></span>
-                </button>
-                <button className="p-2 rounded-full text-gray-500 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-gray-300 dark:hover:bg-gray-700 relative">
-                  <MessageSquare className="h-6 w-6" />
-                  <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500"></span>
-                </button>
-              </div>
-            </div>
-          </div> */}
 
           {/* Main content */}
           <main className="flex-1 overflow-auto">

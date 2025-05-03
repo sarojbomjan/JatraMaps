@@ -16,9 +16,9 @@ import UserImg from "../../../assets/user.jpg";
 import { getEvents } from "../../../utils/eventService";
 import BarChart from "../charts/barchart";
 import PieChart from "../charts/piechart";
+import EventCategoryPieChart from "../charts/event_category";
 
 const AdminDashboardOverview = () => {
-  const [timeRange, setTimeRange] = useState("month");
   const [users, setUsers] = useState([]);
   const [events, setEvents] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -62,15 +62,15 @@ const AdminDashboardOverview = () => {
     activeUsers: Math.floor(users.length * 0.7),
   };
 
-  const recentUsers = users.slice(0, 4); // Showing first 4 users for recent users section
+  const recentUsers = users.slice(0, 4);
   const pendingEvents = events
     .filter((event) => event.status === "pending")
     .slice(0, 3);
 
   const categoryData = {
-    labels: ["Cultural", "Food", "Art", "Sports"],
-    values: [32, 28, 21, 18],
-    colors: ["#6366F1", "#3B82F6", "#EF4444", "#EC4899"],
+    labels: ["Cultural", "Food"],
+    values: [32, 28],
+    colors: ["#6366F1", "#EF4444"],
   };
 
   return (
@@ -160,31 +160,29 @@ const AdminDashboardOverview = () => {
         {/* Charts */}
         <div className="lg:col-span-2 space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
-            {/* Event Categories */}
+            {/* Event Categories Chart */}
             <div className="bg-white dark:bg-gray-700 rounded-lg shadow p-5">
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                   Event Categories Distribution
                 </h2>
-                <div className="flex items-center">
-                  <Link
-                    to="/admin/dashboard/manageevents"
-                    className="text-sm text-blue-600 dark:text-blue-400 hover:underline flex items-center"
-                  >
-                    View details <ArrowRight className="ml-1 h-4 w-4" />
-                  </Link>
-                </div>
+                <Link
+                  to="/admin/dashboard/manageevents"
+                  className="text-sm text-blue-600 dark:text-blue-400 hover:underline flex items-center"
+                >
+                  View details <ArrowRight className="ml-1 h-4 w-4" />
+                </Link>
               </div>
-              <div className="h-80">
-                <PieChart data={categoryData} height={320} />
-              </div>
+              <EventCategoryPieChart />
               <div className="mt-4 text-sm text-gray-500 dark:text-gray-400">
-                <p>
-                  Top category:{" "}
-                  <span className="font-medium text-gray-900 dark:text-white">
-                    Cultural (32%)
-                  </span>
-                </p>
+                {events.length > 0 && (
+                  <p>
+                    Total events:{" "}
+                    <span className="font-medium text-gray-900 dark:text-white">
+                      {events.length}
+                    </span>
+                  </p>
+                )}
               </div>
             </div>
           </div>

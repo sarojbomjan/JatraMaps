@@ -16,19 +16,19 @@ function PieChart({ data, title, height = 250 }) {
     if (!ctx) return;
 
     const defaultColors = [
-      "#3B82F6", // blue-500
-      "#6366F1", // indigo-500
-      "#8B5CF6", // violet-500
-      "#EC4899", // pink-500
-      "#EF4444", // red-500
-      "#F59E0B", // amber-500
-      "#10B981", // emerald-500
-      "#06B6D4", // cyan-500
+      "#3B82F6",
+      "#6366F1",
+      "#10B981",
+      "#F59E0B",
+      "#EF4444",
     ];
-
     const colors = data.colors || defaultColors;
-    const isDark = document.documentElement.classList.contains("dark");
-    const textColor = isDark ? "#E5E7EB" : "#111827";
+
+    const isDark = () => document.documentElement.classList.contains("dark");
+
+    const textColor = isDark ? "#FFFFFF" : "#000000";
+    const borderColor = isDark ? "#374151" : "#D1D5DB";
+    const tooltipBg = isDark ? "#111827" : "#FFFFFF";
 
     const chartData = {
       labels: data.labels,
@@ -37,7 +37,7 @@ function PieChart({ data, title, height = 250 }) {
           data: data.values,
           backgroundColor: colors.slice(0, data.values.length),
           borderWidth: 1,
-          borderColor: isDark ? "#1F2937" : "#FFFFFF",
+          borderColor: borderColor,
         },
       ],
     };
@@ -86,10 +86,10 @@ function PieChart({ data, title, height = 250 }) {
           },
         },
         tooltip: {
-          backgroundColor: isDark ? "#1F2937" : "#FFFFFF",
+          backgroundColor: tooltipBg,
           titleColor: textColor,
           bodyColor: textColor,
-          borderColor: isDark ? "#374151" : "#E5E7EB",
+          borderColor: borderColor,
           borderWidth: 1,
           padding: 10,
           cornerRadius: 6,
