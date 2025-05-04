@@ -1,4 +1,3 @@
-// Navbar.jsx
 import { Menu, LogOut } from "lucide-react";
 import { useAuth } from "../../../utils/authContext";
 
@@ -10,14 +9,14 @@ export default function Navbar({ sidebarOpen, setSidebarOpen, Wheel }) {
   };
 
   return (
-    <nav className="bg-white text-gray-800 p-2 md:p-4 flex justify-between items-center fixed w-full top-0 shadow-md z-10">
+    <nav className="dark:bg-white bg-gray-300 text-gray-800 p-2 md:p-4 flex justify-between items-center fixed w-full top-0 shadow-md z-10">
       <div className="flex items-center gap-2 md:gap-4">
-        <button
+        {/* <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
           className="md:hidden p-1 hover:bg-gray-100 rounded-full"
         >
           <Menu size={20} />
-        </button>
+        </button> */}
         <div className="flex items-center">
           <img src={Wheel} alt="Logo" className="h-8 w-auto md:h-10" />
           <span className="ml-2 text-lg md:text-xl font-semibold text-orange-600">

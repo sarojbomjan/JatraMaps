@@ -5,9 +5,7 @@ import {
   MapPin,
   Users,
   Clock,
-  Share2,
   Bookmark,
-  MessageSquare,
   Heart,
   Send,
   ChevronLeft,
@@ -18,7 +16,6 @@ import {
   addComment,
   getEventById,
   getEventComments,
-  getEvents,
 } from "../../../utils/eventService";
 import { getAccessToken } from "../../../utils/auth";
 import MyMap from "../../Customer/Map/Map";
@@ -62,7 +59,7 @@ const EventDetail = () => {
     }
   };
 
-  // fetch events
+  // fetch data
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -75,9 +72,6 @@ const EventDetail = () => {
         const commentsResponse = await getEventComments(eventId);
         const commentsArray = commentsResponse?.comments || [];
         setComments(Array.isArray(commentsArray) ? commentsArray : []);
-
-        // // checks if event is bookmark
-        // setIsSaved(isBookmarked(eventId));
       } catch (error) {
         console.error("Failed to fetch data", error);
         if (error.response?.status === 404) {
@@ -90,6 +84,10 @@ const EventDetail = () => {
 
     fetchData();
   }, [eventId, navigate, reducerValue]);
+
+  const approvedCommentsCount = comments.filter(
+    (comment) => comment.status === "Approved"
+  ).length;
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
@@ -313,7 +311,7 @@ const EventDetail = () => {
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow mt-8">
         <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-            Comments ({comments.length})
+            Comments ({approvedCommentsCount})
           </h2>
         </div>
 

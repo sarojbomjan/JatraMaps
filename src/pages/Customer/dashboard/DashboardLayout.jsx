@@ -33,11 +33,11 @@ export default function DashboardLayout() {
   }, [location.pathname]);
 
   return (
-    <div className="dashboard min-h-screen bg-gray-50">
+    <div className="dashboard min-h-screen dark:bg-gray-50 bg-gray-300">
       <EventNotificationSystem events={[]} />
 
       {/* Dashboard Navigation Bar */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white shadow-md">
+      <nav className="fixed top-0 left-0 right-0 z-50 dark:bg-white bg-gray-200 shadow-md">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center h-16">
             {/* Logo */}

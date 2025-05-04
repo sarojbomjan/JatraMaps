@@ -1,4 +1,3 @@
-// Sidebar.jsx
 import { X } from "lucide-react";
 
 export default function Sidebar({ sidebarOpen, setSidebarOpen }) {

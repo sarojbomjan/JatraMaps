@@ -1,14 +1,11 @@
-// ModeratorDashboard.jsx
 import React, { useState, useEffect } from "react";
 import Wheel from "../../assets/Wheel.png";
 import BanModal from "./components/banmodal";
 import CommentTable from "./components/commentable";
-import Sidebar from "./components/sidebar";
 import Navbar from "./components/navbar";
 
 export default function ModeratorDashboard() {
   const [comments, setComments] = useState([]);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showBanModal, setShowBanModal] = useState(false);
   const [banReason, setBanReason] = useState("");
   const [currentAction, setCurrentAction] = useState(null);
@@ -127,15 +124,11 @@ export default function ModeratorDashboard() {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gray-50 text-gray-900">
-      <Navbar
-        sidebarOpen={sidebarOpen}
-        setSidebarOpen={setSidebarOpen}
-        Wheel={Wheel}
-      />
+    <div className="flex flex-col h-screen bg-gray-200 text-gray-900">
+      <Navbar Wheel={Wheel} />
 
       <div className="flex flex-1 pt-16">
-        <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+        {/* <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} /> */}
 
         <div className="flex-1 p-4 md:p-6 overflow-auto">
           <CommentTable

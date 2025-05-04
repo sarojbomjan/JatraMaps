@@ -1,6 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
+import LoginPromptModal from "./showLoginPopup";
 
 const HeroSection = () => {
+  const [showModal, setShowModal] = useState(false);
+
+  const handleExploreEvents = () => {
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
   return (
     <section
       className="relative bg-gradient-to-r from-orange-600 to-red-500 dark:from-orange-800 dark:to-red-800 text-white py-16 md:py-28"
@@ -24,15 +34,17 @@ const HeroSection = () => {
             rich heritage.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-transparent border-2 border-white hover:bg-white/10 px-6 py-3 rounded-lg font-medium transition-colors cursor-pointer">
+            <button
+              onClick={handleExploreEvents}
+              className="bg-transparent border-2 border-white hover:bg-white/10 px-6 py-3 rounded-lg font-medium transition-colors cursor-pointer"
+            >
               Explore Events
-            </button>
-            <button className="bg-transparent border-2 border-white hover:bg-white/10 px-6 py-3 rounded-lg font-medium transition-colors cursor-pointer">
-              Create Event
             </button>
           </div>
         </div>
       </div>
+
+      <LoginPromptModal isOpen={showModal} onClose={closeModal} />
     </section>
   );
 };

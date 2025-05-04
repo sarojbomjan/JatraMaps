@@ -95,7 +95,7 @@ export default function EventCalendar({ events }) {
   };
 
   return (
-    <div className="p-6 bg-[#e8f4f1] dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden text-gray-200">
+    <div className="p-6 bg-[#e8f4f1] dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden dark:text-gray-200 text-black">
       {/* Calendar header */}
       <div className="grid grid-cols-3 items-center mb-4 relative z-10">
         <div className="flex justify-start">

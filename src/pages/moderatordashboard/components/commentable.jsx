@@ -1,18 +1,13 @@
-// CommentTable.jsx
 import { RefreshCw, Search } from "lucide-react";
 import CommentRow from "./commentrow";
+import { useState, useEffect } from "react";
 
 export default function CommentTable({
-  comments,
+  comments: initialComments,
   isLoading,
   selectedComments,
   editingId,
   editedText,
-  searchTerm,
-  filterStatus,
-  setSearchTerm,
-  setFilterStatus,
-  fetchComments,
   setSelectedComments,
   setEditingId,
   setEditedText,
@@ -21,11 +16,41 @@ export default function CommentTable({
   setCurrentUserId,
   handleAction,
   handleSave,
+  fetchComments,
 }) {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterStatus, setFilterStatus] = useState("all");
+  const [filteredComments, setFilteredComments] = useState(initialComments);
+
+  useEffect(() => {
+    const filtered = initialComments.filter((comment) => {
+      // Filter by status
+      const statusMatch =
+        filterStatus === "all" ||
+        comment.status.toLowerCase() === filterStatus.toLowerCase();
+
+      // Filter by search term
+      const searchMatch =
+        comment.text?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        comment.event?.title
+          ?.toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        comment.user?.username
+          ?.toLowerCase()
+          .includes(searchTerm.toLowerCase());
+
+      return statusMatch && searchMatch;
+    });
+
+    setFilteredComments(filtered);
+  }, [searchTerm, filterStatus, initialComments]);
+
   const handleSelectAll = (event) => {
     const checked = event.target.checked;
     if (checked) {
-      setSelectedComments(comments.map((comment) => comment._commentid));
+      setSelectedComments(
+        filteredComments.map((comment) => comment._commentid)
+      );
     } else {
       setSelectedComments([]);
     }
@@ -34,9 +59,9 @@ export default function CommentTable({
   const handleRowSelect = (commentId) => {
     setSelectedComments((prevSelected) => {
       if (prevSelected.includes(commentId)) {
-        return prevSelected.filter((id) => id !== commentId); // Deselect
+        return prevSelected.filter((id) => id !== commentId);
       } else {
-        return [...prevSelected, commentId]; // Select
+        return [...prevSelected, commentId];
       }
     });
   };
@@ -53,6 +78,7 @@ export default function CommentTable({
       <div className="bg-white rounded-lg shadow p-4 mb-6">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+            {/* Search Input */}
             <div className="relative w-full sm:w-64">
               <input
                 type="text"
@@ -63,6 +89,8 @@ export default function CommentTable({
               />
               <Search className="absolute left-3 top-2 h-5 w-5 text-gray-400" />
             </div>
+
+            {/* Status Filter */}
             <div className="flex items-center gap-2">
               <div className="relative">
                 <select
@@ -80,6 +108,7 @@ export default function CommentTable({
             </div>
           </div>
 
+          {/* Refresh Button */}
           <div className="flex flex-col sm:flex-row gap-3">
             <button
               onClick={fetchComments}
@@ -90,6 +119,11 @@ export default function CommentTable({
             </button>
           </div>
         </div>
+      </div>
+
+      {/* Results Count */}
+      <div className="mb-2 text-sm text-gray-500">
+        Showing {filteredComments.length} of {initialComments.length} comments
       </div>
 
       <div className="bg-white rounded-lg shadow overflow-hidden">
@@ -106,7 +140,7 @@ export default function CommentTable({
                     className="h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300 rounded"
                     checked={
                       selectedComments.length > 0 &&
-                      selectedComments.length === comments.length
+                      selectedComments.length === filteredComments.length
                     }
                     onChange={handleSelectAll}
                   />
@@ -152,8 +186,8 @@ export default function CommentTable({
                     </div>
                   </td>
                 </tr>
-              ) : comments.length > 0 ? (
-                comments.map((comment) => (
+              ) : filteredComments.length > 0 ? (
+                filteredComments.map((comment) => (
                   <CommentRow
                     key={comment._commentid}
                     comment={comment}
@@ -176,7 +210,7 @@ export default function CommentTable({
                     colSpan={6}
                     className="px-6 py-4 text-center text-sm text-gray-500"
                   >
-                    No comments found. Try adjusting your search or filters.
+                    No comments match your search criteria.
                   </td>
                 </tr>
               )}

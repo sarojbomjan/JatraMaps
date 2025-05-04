@@ -7,7 +7,7 @@ export default function LoginPromptModal({ isOpen, onClose }) {
     <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
       <div className="bg-white dark:bg-gray-400 rounded-lg shadow-lg p-6 w-80 text-center pointer-events-auto">
         <p className="text-lg font-semibold mb-4 text-gray-800 dark:text-white">
-          Please login to view event details.
+          Please login to view details.
         </p>
         <button
           onClick={onClose}

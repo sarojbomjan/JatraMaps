@@ -1,4 +1,3 @@
-// BanModal.jsx
 export default function BanModal({
   showBanModal,
   setShowBanModal,

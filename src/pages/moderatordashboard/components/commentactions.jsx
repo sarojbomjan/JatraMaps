@@ -1,4 +1,3 @@
-// CommentActions.jsx
 import { Edit, Trash2, ChevronUp, ChevronDown, Save, X } from "lucide-react";
 
 export default function CommentActions({

@@ -33,30 +33,6 @@ const DashboardOverview = () => {
   const allEvents = [...upcomingEvents, ...pastEvents];
   const { notifications = [] } = useNotification() || {};
 
-  const recentActivity = [
-    {
-      id: "1",
-      type: "comment",
-      event: "Dashain",
-      date: "May 10, 2024",
-      content: "Looking",
-    },
-    {
-      id: "2",
-      type: "rsvp",
-      event: "Music Festival",
-      date: "1 day ago",
-      content: "You RSVP'd to this event",
-    },
-    {
-      id: "3",
-      type: "save",
-      event: "Charity Run",
-      date: "3 days ago",
-      content: "You saved this event",
-    },
-  ];
-
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -74,12 +50,16 @@ const DashboardOverview = () => {
           },
         });
 
-        if (response.data && response.data.username) {
+        if (
+          response.data &&
+          response.data.user &&
+          response.data.user.username
+        ) {
           setUser({
-            username: response.data.username,
+            username: response.data.user.username,
           });
           setFormData({
-            username: response.data.username,
+            username: response.data.user.username,
           });
         } else {
           setError("Username not found in response");
@@ -114,7 +94,7 @@ const DashboardOverview = () => {
         setPastEvents(past);
 
         setStats([
-          { label: "Events Attended", value: past.length },
+          { label: "Past Events", value: past.length },
           { label: "Upcoming Events", value: upcoming.length },
           { label: "Saved Events", value: bookmarks.length },
           {
@@ -134,7 +114,6 @@ const DashboardOverview = () => {
     fetchEvents();
   }, []);
 
-  // Update notifications count when notifications change
   useEffect(() => {
     setStats((prev) =>
       prev.map((stat) =>
@@ -154,7 +133,7 @@ const DashboardOverview = () => {
             Dashboard
           </h1>
           <p className="text-gray-600 dark:text-gray-500">
-            Welcome back, {user.username}
+            Welcome back, {user?.username}
           </p>
         </div>
       </div>
@@ -330,7 +309,7 @@ const DashboardOverview = () => {
       </div>
 
       {/* Recent Activity */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
+      {/* <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
         <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
           <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">
             Recent Activity
@@ -368,7 +347,7 @@ const DashboardOverview = () => {
             </div>
           )}
         </div>
-      </div>
+      </div> */}
       <div className="bg-white dark:bg-gray-200 rounded-lg shadow mt-6">
         <EventCalendar events={allEvents} />
       </div>

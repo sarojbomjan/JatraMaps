@@ -1,4 +1,3 @@
-// StatusBadge.jsx
 import {
   CheckCircle,
   XCircle,

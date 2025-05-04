@@ -102,7 +102,7 @@ const SignUp = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gray-800 dark:bg-gray-400">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-gray-300 dark:bg-gray-400">
       <Toaster position="top-center" />
 
       <div className="w-full max-w-5xl flex flex-col md:flex-row rounded-xl overflow-hidden shadow-2xl">

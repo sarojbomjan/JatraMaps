@@ -122,7 +122,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gray-800 dark:bg-gray-400">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-gray-300 dark:bg-gray-400">
       <ToastContainer
         position="top-right"
         autoClose={5000}
