@@ -113,11 +113,17 @@ const Login = () => {
         } else if (error.response.data.message === "Invalid credentials") {
           toast.error("Incorrect password");
         }
+      } else if (error.response?.status === 403) {
+        if (error.response.data.message === "This account has been banned") {
+          toast.error("Your account has been banned");
+        } else if (
+          error.response.data.message === "Please verify your email first"
+        ) {
+          toast.error("Please verify your email first");
+        }
       } else {
         toast.error("Login Failed");
       }
-    } finally {
-      setLoading(false);
     }
   };
 

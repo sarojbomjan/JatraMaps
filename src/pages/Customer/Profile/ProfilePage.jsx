@@ -3,6 +3,7 @@ import { Camera, User, Mail, Lock, Save, Trash2, Loader2 } from "lucide-react";
 import UserLogo from "../../../assets/user.jpg";
 import axios from "axios";
 import { getAccessToken, clearTokens } from "../../../utils/auth";
+import DeleteModal from "./deletemodal";
 
 const ProfilePage = () => {
   const [user, setUser] = useState({
@@ -31,6 +32,9 @@ const ProfilePage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState(null);
 
   // Fetch profile data
   useEffect(() => {
@@ -139,12 +143,37 @@ const ProfilePage = () => {
       });
     } catch (err) {
       if (err.response?.status === 401) {
-        clearTokens();
-        setError("Session expired. Please login again.");
+        if (err.response?.data?.message === "Current password is incorrect") {
+          setError("Current password is incorrect");
+        } else {
+          clearTokens();
+          setError("Session expired. Please login again.");
+        }
       } else {
         setError(err.response?.data?.message || "Failed to change password");
-        console.log(setError);
       }
+    }
+  };
+
+  const handleDeleteAccount = async (deletePassword) => {
+    try {
+      setIsDeleting(true);
+      setDeleteError(null);
+
+      const token = getAccessToken();
+      await axios.delete("http://localhost:5000/deleteAccount", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        data: { password: deletePassword },
+      });
+
+      clearTokens();
+      window.location.href = "/";
+    } catch (err) {
+      setDeleteError(err.response?.data?.message || "Failed to delete account");
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -186,19 +215,16 @@ const ProfilePage = () => {
           Manage your account settings
         </p>
       </div>
-
       {error && (
         <div className="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
           {error}
         </div>
       )}
-
       {successMessage && (
         <div className="mt-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
           {successMessage}
         </div>
       )}
-
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden mt-6">
         <div className="border-b border-gray-200 dark:border-gray-700">
           <div className="flex">
@@ -330,7 +356,7 @@ const ProfilePage = () => {
                                 name="email"
                                 value={formData.email}
                                 onChange={handleInputChange}
-                                disabled={!isEditing}
+                                disabled={true}
                                 className={`w-full pl-10 pr-4 py-2 border rounded-md ${
                                   isEditing
                                     ? "border-gray-300 dark:border-gray-600 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700"
@@ -447,6 +473,7 @@ const ProfilePage = () => {
                       </div>
                       <div className="mt-4">
                         <button
+                          onClick={() => setShowDeleteModal(true)}
                           type="button"
                           className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 dark:bg-red-900 dark:text-red-300 dark:hover:bg-red-800"
                         >
@@ -461,6 +488,13 @@ const ProfilePage = () => {
           )}
         </div>
       </div>
+      <DeleteModal
+        showModal={showDeleteModal}
+        setShowModal={setShowDeleteModal}
+        handleDeleteAccount={handleDeleteAccount}
+        isDeleting={isDeleting}
+        deleteError={deleteError}
+      />
     </div>
   );
 };

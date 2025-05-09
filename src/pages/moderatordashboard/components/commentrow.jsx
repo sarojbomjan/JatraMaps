@@ -1,7 +1,8 @@
-import { useState } from "react";
-import { Shield, CheckCircle, Trash2 } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Shield, CheckCircle, Trash2, ShieldOff } from "lucide-react";
 import StatusBadge from "./statusbadge";
 import CommentActions from "./commentactions";
+import axios from "axios";
 
 export default function CommentRow({
   comment,
@@ -18,6 +19,8 @@ export default function CommentRow({
   setCurrentUserId,
 }) {
   const [expanded, setExpanded] = useState(false);
+  const [users, setUsers] = useState(null);
+  const [loadingUsers, setLoadingUsers] = useState(true);
 
   const toggleExpansion = (e) => {
     e.stopPropagation();
@@ -28,6 +31,35 @@ export default function CommentRow({
     e.stopPropagation();
     onSelect(comment._commentid, e.target.checked);
   };
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/users");
+        if (response.data.success) {
+          setUsers(response.data.users);
+        }
+      } catch (err) {
+        console.error("Failed to fetch users:", err);
+      } finally {
+        setLoadingUsers(false);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
+  const commentUser = users?.find((user) => user._id === comment.userId);
+
+  if (loadingUsers) {
+    return (
+      <tr>
+        <td colSpan={6} className="px-6 py-4 text-center">
+          Loading user data...
+        </td>
+      </tr>
+    );
+  }
 
   return (
     <>
@@ -48,7 +80,7 @@ export default function CommentRow({
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
           <div className="text-sm font-medium text-gray-900">
-            {comment.user}
+            {commentUser?.username || "Unknown User"}
           </div>
           <div className="text-xs text-gray-500">{comment.userId}</div>
         </td>
@@ -90,17 +122,7 @@ export default function CommentRow({
           <td colSpan={6} className="px-6 py-4">
             <div className="flex flex-col md:flex-row justify-end gap-4">
               <div className="flex flex-wrap gap-2 items-start">
-                {comment.status === "Banned" ? (
-                  <button
-                    onClick={(e) =>
-                      handleAction(null, "Unbanned", comment.userId, e)
-                    }
-                    className="flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white hover:bg-blue-500 rounded-md text-sm"
-                  >
-                    <Shield size={16} />
-                    <span>Unban User</span>
-                  </button>
-                ) : (
+                {commentUser?.commentStatus === "Allowed" ? (
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -112,6 +134,19 @@ export default function CommentRow({
                   >
                     <Shield size={16} />
                     <span>Ban User</span>
+                  </button>
+                ) : (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setCurrentAction("Allowed");
+                      setCurrentUserId(comment.userId);
+                      setShowBanModal(true);
+                    }}
+                    className="flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white hover:bg-blue-500 rounded-md text-sm"
+                  >
+                    <ShieldOff size={16} />
+                    <span>Unban User</span>
                   </button>
                 )}
 

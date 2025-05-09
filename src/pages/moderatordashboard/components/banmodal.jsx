@@ -9,18 +9,27 @@ export default function BanModal({
 }) {
   const confirmBanAction = async () => {
     try {
-      await fetch(`http://localhost:5000/comments/ban/${currentUserId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ reason: banReason }),
-      });
-      alert("User has been banned.");
+      await fetch(
+        `http://localhost:5000/comments/${
+          currentAction === "Banned" ? "ban" : "unban"
+        }/${currentUserId}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ reason: banReason }),
+        }
+      );
+      alert(
+        currentAction === "Banned"
+          ? "User has been banned from commenting."
+          : "User is now allowed to comment."
+      );
       setShowBanModal(false);
       setBanReason("");
       fetchComments();
     } catch (error) {
-      console.error("Error banning user:", error);
-      alert("Failed to ban user. Please try again.");
+      console.error("Error banning/unbanning user:", error);
+      alert("Failed to update comment permissions. Please try again.");
     }
   };
 

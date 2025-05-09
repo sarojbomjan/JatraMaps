@@ -3,19 +3,15 @@ import { Link } from "react-router-dom";
 import {
   Users,
   Calendar,
-  TrendingUp,
   User,
   CheckCircle,
   AlertTriangle,
   ArrowRight,
   Clock,
-  ChevronDown,
 } from "lucide-react";
 
 import UserImg from "../../../assets/user.jpg";
 import { getEvents } from "../../../utils/eventService";
-import BarChart from "../charts/barchart";
-import PieChart from "../charts/piechart";
 import EventCategoryPieChart from "../charts/event_category";
 
 const AdminDashboardOverview = () => {
@@ -256,7 +252,7 @@ const AdminDashboardOverview = () => {
                 Recent Users
               </h2>
               <Link
-                to="#"
+                to="/admin/dashboard/manageusers"
                 className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
               >
                 View all
