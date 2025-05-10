@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Search, CheckCircle, XCircle, Shield, ShieldOff } from "lucide-react";
-
 import axios from "axios";
 import UserImg from "../../../assets/user.jpg";
 import BanModal from "../banmodal";
@@ -19,13 +18,18 @@ export default function UserManagement() {
   const [banReason, setBanReason] = useState("");
   const [currentUserId, setCurrentUserId] = useState(null);
   const [currentAction, setCurrentAction] = useState("Banned");
+  const [currentAdmin, setCurrentAdmin] = useState(null);
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         setLoading(true);
         const response = await axios.get("http://localhost:5000/users");
-        setUsers(formatUserData(response.data));
+        const allUsers = formatUserData(response.data);
+        setUsers(allUsers);
+
+        const adminUser = allUsers.find((user) => user.role === "admin");
+        setCurrentAdmin(adminUser);
       } catch (err) {
         console.error("Error fetching users:", err);
         setError("Failed to load users. Please try again later.");
@@ -45,6 +49,7 @@ export default function UserManagement() {
         email: user.email,
         role: user.role || "user",
         status: user.isBanned ? "banned" : "active",
+        isBanned: user.isBanned,
         events: user.events || 0,
         avatar: UserImg,
       }));
@@ -54,7 +59,6 @@ export default function UserManagement() {
     return [];
   };
 
-  // Filter users based on search query, role and status
   const filteredUsers = users.filter((user) => {
     const matchesSearch =
       user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -67,7 +71,6 @@ export default function UserManagement() {
     return matchesSearch && matchesRole && matchesStatus;
   });
 
-  // Sort users
   const sortedUsers = [...filteredUsers].sort((a, b) => {
     if (sortBy === "newest") {
       return new Date(b.joined).getTime() - new Date(a.joined).getTime();
@@ -84,6 +87,45 @@ export default function UserManagement() {
     }
     return 0;
   });
+
+  const canBanUser = (targetUser) => {
+    if (!currentAdmin) return false;
+
+    // Admin can't ban themselves
+    if (targetUser.id === currentAdmin.id) {
+      return false;
+    }
+
+    // Admin can't ban other admins
+    if (targetUser.role === "admin") {
+      return false;
+    }
+
+    // Only admin can ban users
+    return currentAdmin.role === "admin";
+  };
+
+  const getBanButtonTitle = (user) => {
+    if (!currentAdmin) return "Loading user data...";
+
+    if (user.id === currentAdmin.id) {
+      return "Cannot ban yourself";
+    }
+
+    if (user.role === "admin") {
+      return "Cannot ban other admins";
+    }
+
+    return user.status === "banned" ? "Unban User" : "Ban User";
+  };
+
+  const handleBanClick = (user) => {
+    if (!canBanUser(user)) return;
+
+    setCurrentUserId(user.id);
+    setCurrentAction(user.status === "banned" ? "Unbanned" : "Banned");
+    setShowBanModal(true);
+  };
 
   const handleSelectUser = (id) => {
     if (selectedUsers.includes(id)) {
@@ -302,22 +344,25 @@ export default function UserManagement() {
 
                   <td className="p-3 flex items-center gap-2">
                     <button
-                      className="text-red-600 hover:text-red-800 dark:hover:text-red-400"
-                      onClick={() => {
-                        setCurrentUserId(user.id);
-                        setCurrentAction(
-                          user.status === "banned" ? "Unbanned" : "Banned"
-                        );
-                        setShowBanModal(true);
-                      }}
-                      title={
-                        user.status === "banned" ? "Unban User" : "Ban User"
-                      }
+                      className={`flex items-center ${
+                        canBanUser(user)
+                          ? "text-red-600 hover:text-red-800 dark:hover:text-red-400"
+                          : "text-gray-400 cursor-not-allowed"
+                      }`}
+                      onClick={() => handleBanClick(user)}
+                      title={getBanButtonTitle(user)}
+                      disabled={!canBanUser(user)}
                     >
-                      {user.status === "banned" ? (
-                        <ShieldOff className="w-5 h-5" />
+                      {user.isBanned ? (
+                        <>
+                          <ShieldOff className="w-5 h-5 mr-1" />
+                          Unban User
+                        </>
                       ) : (
-                        <Shield className="w-5 h-5" />
+                        <>
+                          <Shield className="w-5 h-5 mr-1" />
+                          Ban User
+                        </>
                       )}
                     </button>
                   </td>

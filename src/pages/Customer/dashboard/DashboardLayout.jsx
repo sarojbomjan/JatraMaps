@@ -122,14 +122,6 @@ export default function DashboardLayout() {
       {mobileMenuOpen && (
         <div className="mobile-menu fixed inset-0 z-40 bg-white pt-16">
           <div className="flex flex-col h-full">
-            {/* Menu Header */}
-            <div className="flex items-center p-4 border-b border-gray-100">
-              <img src={Wheel} alt="Logo" width={32} height={32} />
-              <span className="ml-2 text-lg font-bold text-orange-600">
-                JatraMaps
-              </span>
-            </div>
-
             {/* Menu Items */}
             <div className="flex-1 p-4 space-y-2">
               <MobileMenuItem
@@ -138,12 +130,12 @@ export default function DashboardLayout() {
                 text="Dashboard"
               />
               <MobileMenuItem
-                to="/events"
+                to="/customer/dashboard/events"
                 icon={<Calendar className="h-5 w-5" />}
                 text="My Events"
               />
               <MobileMenuItem
-                to="/saved"
+                to="/customer/dashboard/saved-events"
                 icon={<Bookmark className="h-5 w-5" />}
                 text="Saved Events"
               />
